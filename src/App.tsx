@@ -1,11 +1,25 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
 import React from 'react';
+import WalkingMain from './pages/WalkingMain';
+import BaseLayout from './layouts/Layout';
 
 function App() {
-    return (
-        <div className="App">
-            <header className="App-header" />
-        </div>
-    );
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<div>Home</div>} />
+        <Route
+          path="/walking_main"
+          element={
+            <BaseLayout>
+              <WalkingMain />
+            </BaseLayout>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
