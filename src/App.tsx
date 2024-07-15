@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import React from 'react';
-import WalkingMain from './pages/WalkingMain';
+import WalkingMain from './pages/walkingMain/WalkingMain';
 import BaseLayout from './layouts/Layout';
 
 function App() {

@@ -4,12 +4,13 @@ const BaseBox = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: start;
   align-items: center;
-  background-color: green;
   min-width: 376px;
   min-height: 812px;
-  margin: 50px 0;
+  position: relative;
+  border: 1px solid ${(props) => props.theme.colors.offGray};
 `;
 
 export default BaseBox;
