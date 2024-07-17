@@ -1,10 +1,14 @@
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { RecoilRoot } from 'recoil';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import GlobalStyle from './styles/GlobalStyle';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { RecoilRoot } from 'recoil';
 
 const queryClient = new QueryClient();
 
@@ -13,12 +17,14 @@ const root = ReactDOM.createRoot(
 );
 root.render(
     <React.StrictMode>
+        <BrowserRouter>
         <RecoilRoot>
             <QueryClientProvider client={queryClient}>
                 <GlobalStyle />
                 <App />
             </QueryClientProvider>
         </RecoilRoot>
+        </BrowserRouter>
     </React.StrictMode>
 );
 
