@@ -80,12 +80,12 @@ export const MyLocation = styled.button`
   cursor: pointer;
 `;
 
-export const StartButton = styled.button`
+export const StartButton = styled.button<{ isModalOpen: boolean }>`
   position: absolute;
   width: 335px;
   height: 63px;
-  bottom: 109px;
-  padding: 23px 103px 23px 103px;
+  bottom: ${(props) => (props.isModalOpen ? '50px' : '109px')};
+  padding: 23px 103px;
   gap: 10px;
   border-radius: 100px;
   opacity: 0px;
