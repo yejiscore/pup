@@ -8,6 +8,11 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { theme } from './styles/theme/theme';
 
+declare global {
+  interface Window {
+    Tmapv2: any;
+  }
+}
 const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(

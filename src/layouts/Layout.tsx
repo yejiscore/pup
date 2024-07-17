@@ -5,7 +5,7 @@ import styled from 'styled-components';
 const BaseLayoutStyled = styled.div`
   background-color: ${(props) => props.theme.colors.background};
   height: 100vh;
-  width: 100%;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   justify-content: start;
@@ -15,12 +15,15 @@ const BaseLayoutStyled = styled.div`
 const Main = styled.main`
   width: 100%;
   max-width: 376px;
-  min-height: 812px;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: start;
   align-items: center;
+
+  @media (max-width: 376px) {
+    max-width: 100%;
+  }
 `;
 
 const BaseLayout = ({ children }: { children: ReactNode }) => {

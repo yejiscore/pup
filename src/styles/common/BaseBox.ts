@@ -11,6 +11,10 @@ const BaseBox = styled.div`
   align-items: center;
   min-width: 376px;
   border: 1px solid ${(props) => props.theme.colors.offGray};
+
+  @media (max-width: 376px) {
+    min-width: 100%;
+  }
 `;
 
 export default BaseBox;
