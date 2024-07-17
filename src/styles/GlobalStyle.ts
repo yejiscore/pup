@@ -3,7 +3,18 @@ import { reset } from 'styled-reset';
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
-  /* 추가적인 글로벌 스타일을 여기에 작성할 수 있습니다. */
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #EDF9F6;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
 `;
 
 export default GlobalStyle;
+
+
