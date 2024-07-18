@@ -29,5 +29,45 @@ declare module 'styled-components' {
         9: string;
       };
     };
+    fontSizes: {
+      head1: string;
+      head2: string;
+      body1: string;
+      body2: string;
+      body3: string;
+      body4: string;
+      body5: string;
+      body6: string;
+      text1: string;
+      text2: string;
+      text3: string;
+      text4: string;
+      text5: string;
+      text6: string;
+      memoText: string;
+      gnb1: string;
+      gnb2: string;
+      date: string;
+    };
+    lineHeights: {
+      head1: string;
+      head2: string;
+      body1: string;
+      body2: string;
+      body3: string;
+      body4: string;
+      body5: string;
+      body6: string;
+      text1: string;
+      text2: string;
+      text3: string;
+      text4: string;
+      text5: string;
+      text6: string;
+      memoText: string;
+      gnb1: string;
+      gnb2: string;
+      date: string;
+    };
   }
 }

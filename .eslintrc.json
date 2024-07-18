@@ -26,6 +26,8 @@
     "no-unused-vars": "off",
     "react/jsx-props-no-spreading": "off",
     "react/jsx-one-expression-per-line": "off",
-    "operator-linebreak": "off"
+    "operator-linebreak": "off",
+    "no-confusing-arrow": "off",
+    "implicit-arrow-linebreak": "off"
   }
 }

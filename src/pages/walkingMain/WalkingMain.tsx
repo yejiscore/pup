@@ -56,6 +56,8 @@ const WalkingMain = () => {
   );
   const [showStopModal, setShowStopModal] = useState(false);
   const [photos, setPhotos] = useState<string[]>([]); // 사진 저장 배열
+  const [dogsId, setDogsId] = useState<number[]>([]);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const tmapRef = useRef<TmapHandles>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -205,6 +207,7 @@ const WalkingMain = () => {
     console.log('Time:', time);
     // 산책 종료 시 위치 좌표 백엔드로 전송
   };
+
   const handleTakePhoto = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -245,6 +248,15 @@ const WalkingMain = () => {
     }
   };
 
+  const handleDogSelect = (dogId: number) => {
+    setDogsId((prevIds) => {
+      if (prevIds.includes(dogId)) {
+        return prevIds.filter((id) => id !== dogId);
+      }
+      return [...prevIds, dogId];
+    });
+  };
+
   return (
     <BaseBox>
       <Tmap ref={tmapRef} />
@@ -271,6 +283,8 @@ const WalkingMain = () => {
         <DogSelectModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
+          onDogSelect={handleDogSelect}
+          selectedDogs={dogsId}
         />
       )}
 
@@ -289,6 +303,3 @@ const WalkingMain = () => {
 };
 
 export default WalkingMain;
-
-// ssh -i /Users/dobby/Documents/portfolio/launching/new_mountain/new_mountain.pem ubuntu@44.
-// 202.251.90

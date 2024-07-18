@@ -1,8 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { fetchData } from '../services/apiService';
 
-const useFetch = (key: string, url: string, params?: any, enabled = true) => {
-  return useQuery([key, params], () => fetchData(url, params), {
+const useFetch = <T>(
+  key: string,
+  url: string,
+  params?: any,
+  enabled = true
+): UseQueryResult<T> => {
+  return useQuery<T>([key, params], () => fetchData(url, params), {
     staleTime: 5 * 60 * 1000, // 5분 동안은 캐시된 데이터를 사용
     cacheTime: 30 * 60 * 1000, // 30분 동안은 캐시된 데이터를 사용
     retry: 2, // 2번 재시도

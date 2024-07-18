@@ -2,13 +2,15 @@ import React, { FormEvent, useState } from 'react';
 
 import { useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
+
 import useMutate from '../../hooks/useMutate';
 import authState from '../../stores/auth/authState';
+import { setCookie } from '../../utils/cookiesUtils';
 
 const LoginMain = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('test@test.com');
+  const [password, setPassword] = useState('1234');
   const setAuthState = useSetRecoilState(authState);
 
   const { mutate: loginMutate } = useMutate('/login', '/auth/login', 'post');
@@ -18,7 +20,9 @@ const LoginMain = () => {
     loginMutate(
       { email, password },
       {
-        onSuccess: (data) => {
+        onSuccess: ({ data }) => {
+          console.log(email, password);
+          console.log('data:', data);
           // main으로 페이지 이동
           setAuthState({
             userId: data.userId,
@@ -26,10 +30,21 @@ const LoginMain = () => {
             nickname: data.nickname,
             userUid: data.userUid,
             token: {
-              accessToken: data.accessToken,
-              refreshToken: data.refreshToken,
+              accessToken: data.token.accessToken,
+              refreshToken: data.token.refreshToken,
             },
           });
+          setCookie('pup_access', data.token.accessToken, {
+            path: '/', // root로 설정
+            // secure: true, // https에서만 사용
+            expires: new Date(new Date().getTime() + 30 * 60 * 1000), // 30분
+          });
+          setCookie('pup_refresh', data.token.refreshToken, {
+            path: '/', // root로 설정
+            // secure: true, // https에서만 사용
+            expires: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // 7일
+          });
+
           navigate('/');
           console.log('로그인 성공:', data);
         },
@@ -48,12 +63,14 @@ const LoginMain = () => {
         type="email"
         placeholder="아이디"
         onChange={(e) => setEmail(e.target.value)}
+        value={email}
       />
 
       <input
         type="password"
         placeholder="비밀번호"
         onChange={(e) => setPassword(e.target.value)}
+        value={password}
       />
       <button type="button" onClick={onSubmit}>
         확인

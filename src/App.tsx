@@ -3,13 +3,11 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styled from 'styled-components';
-import MyBoardPage from './components/MyBoardPage.tsx';
-import TabBar from './components/BottomTab.tsx';
-import GlobalStyle from './styles/GlobalStyle.ts';
 import WalkingMain from './pages/walkingMain/WalkingMain';
 import BaseLayout from './layouts/Layout';
 import LoginMain from './pages/login/LoginMain.tsx';
 import Footer from './components/common/Footer.tsx';
+import WalkingReport from './pages/walkingReport/WalkingReport.tsx';
 
 const AppContainer = styled.div`
   width: 100vw;
@@ -47,6 +45,14 @@ function App() {
           element={
             <BaseLayout>
               <WalkingMain />
+            </BaseLayout>
+          }
+        />
+        <Route
+          path="/walking_main/report"
+          element={
+            <BaseLayout>
+              <WalkingReport />
             </BaseLayout>
           }
         />

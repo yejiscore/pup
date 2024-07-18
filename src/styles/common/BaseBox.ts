@@ -4,7 +4,7 @@ const BaseBox = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  background-color: ${(props) => props.theme.colors.primary[2]};
+  background-color: ${(props) => props.theme.colors.background};
   display: flex;
   flex-direction: column;
   justify-content: start;

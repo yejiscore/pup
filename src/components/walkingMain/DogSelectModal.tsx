@@ -4,6 +4,8 @@ import Slider from 'react-slick';
 
 import dogPictureOn from '../../assets/map/dogPictureOn.png';
 import dogPictureOff from '../../assets/map/dogPictureOff.png';
+import useFetch from '../../hooks/useFetch';
+import getUserDogsType from '../../types/getUserDogsType';
 
 const ModalContainer = styled.div`
   width: 336px;
@@ -30,6 +32,16 @@ const Title = styled.h2`
   gap: 10px;
   border-radius: 18px 18px 0px 0px;
   opacity: 0px;
+`;
+
+const DogWapper = styled.div`
+  display: flex;
+  /* justify-content: center; */
+  /* align-items: center; */
+  /* gap: 10px; */
+  width: 100%;
+  height: 158px;
+  margin-left: 20px;
 `;
 
 const DohImgWrapper = styled.div`
@@ -59,46 +71,62 @@ const SliderContainer = styled(Slider)`
 const DogSelectModal = ({
   isOpen,
   onClose,
+  onDogSelect,
+  selectedDogs,
 }: {
   isOpen: boolean;
   onClose: () => void;
+  onDogSelect: (dogId: number) => void;
+  selectedDogs: number[];
 }) => {
+  const { data: dogData, isLoading } = useFetch<getUserDogsType>(
+    'dogs',
+    '/dog',
+    {}
+  );
+
+  const handleDogClick = (dogId: number) => {
+    onDogSelect(dogId);
+  };
+
   const settings = {
     dots: false,
-    infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: dogData ? Math.min(dogData.data.length, 1) : 1,
     slidesToScroll: 1,
-    centerMode: true,
+    centerMode: false,
     centerPadding: '0px',
   };
-  console.log(isOpen);
+
   if (!isOpen) return null;
   return (
     <ModalContainer onClick={(e) => e.stopPropagation()}>
       <Title>함께할 반려견을 선택해 주세요.</Title>
-      <SliderContainer {...settings}>
-        <DohImgWrapper>
-          <img src={dogPictureOn} alt="개이름" width={85} height={85} />
-          <p className="dogName">개이름</p>
-        </DohImgWrapper>
-        <DohImgWrapper>
-          <img src={dogPictureOn} alt="개이름" width={85} height={85} />
-          <p className="dogName">개이름</p>
-        </DohImgWrapper>
-        <DohImgWrapper>
-          <img src={dogPictureOff} alt="개이름" width={85} height={85} />
-          <p className="dogName">개이름</p>
-        </DohImgWrapper>
-        <DohImgWrapper>
-          <img src={dogPictureOff} alt="개이름" width={85} height={85} />
-          <p className="dogName">개이름</p>
-        </DohImgWrapper>
-        <DohImgWrapper>
-          <img src={dogPictureOff} alt="개이름" width={85} height={85} />
-          <p className="dogName">개이름</p>
-        </DohImgWrapper>
-      </SliderContainer>
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <DogWapper>
+          {dogData &&
+            dogData.data.map((dog) => (
+              <DohImgWrapper
+                key={dog.dogId}
+                onClick={() => handleDogClick(dog.dogId)}
+              >
+                <img
+                  src={
+                    selectedDogs.includes(dog.dogId)
+                      ? dogPictureOn
+                      : dogPictureOff
+                  }
+                  alt={dog.name}
+                  width={85}
+                  height={85}
+                />
+                <p className="dogName">{dog.name}</p>
+              </DohImgWrapper>
+            ))}
+        </DogWapper>
+      )}
     </ModalContainer>
   );
 };
