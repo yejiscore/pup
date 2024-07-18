@@ -24,7 +24,7 @@ const TabButton = styled(NavLink)`
   color: gray;
 
   &.active {
-    background-color: #00AE80;
+    background-color: #00ae80;
     color: white;
   }
 `;

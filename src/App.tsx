@@ -8,6 +8,8 @@ import TabBar from './components/BottomTab.tsx';
 import GlobalStyle from './styles/GlobalStyle.ts';
 import WalkingMain from './pages/walkingMain/WalkingMain';
 import BaseLayout from './layouts/Layout';
+import LoginMain from './pages/login/LoginMain.tsx';
+import Footer from './components/common/Footer.tsx';
 
 const AppContainer = styled.div`
   width: 100vw;
@@ -32,7 +34,14 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<div>Home</div>} />
+        <Route
+          path="/"
+          element={
+            <BaseLayout>
+              Home <Footer />
+            </BaseLayout>
+          }
+        />
         <Route
           path="/walking_main"
           element={
@@ -43,6 +52,15 @@ function App() {
         />
         <Route path="/walking" element={<div>산책하기 페이지</div>} />
         <Route path="/search" element={<div>산책로 찾기 페이지</div>} />
+        <Route
+          path="/login"
+          element={
+            <BaseLayout>
+              <LoginMain />
+              <Footer />
+            </BaseLayout>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

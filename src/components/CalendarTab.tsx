@@ -11,13 +11,13 @@ const CalendarContainer = styled.div`
 `;
 
 const CalendarButton = styled.button<{ active: boolean }>`
-  background-color: ${props => (props.active ? '#00AE80' : '#B7CAC4')};
+  background-color: ${(props) => (props.active ? '#00AE80' : '#B7CAC4')};
   border: none;
   padding: 10px;
   cursor: pointer;
   flex: 1;
   font-size: 1em;
-  color: ${props => (props.active ? '#fff' : '#000')};
+  color: ${(props) => (props.active ? '#fff' : '#000')};
 `;
 
 interface CalendarProps {

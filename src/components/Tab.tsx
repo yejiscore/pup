@@ -14,13 +14,13 @@ const TabContainer = styled.div`
 `;
 
 const Button = styled.button<{ active?: boolean }>`
-  background-color: ${props => (props.active ? '#00AE80' : 'transparent')};
-  color: ${props => (props.active ? '#FFFFFF' : '#00AE80')};
-  border: 1px solid #00AE80;
+  background-color: ${(props) => (props.active ? '#00AE80' : 'transparent')};
+  color: ${(props) => (props.active ? '#FFFFFF' : '#00AE80')};
+  border: 1px solid #00ae80;
   cursor: pointer;
   font-size: 15px;
   display: flex;
-  align-items:center;
+  align-items: center;
   justify-content: center;
   width: 79px;
   height: 29px;
@@ -40,16 +40,25 @@ interface TabProps {
 function Tab({ activeTab, setActiveTab }: TabProps) {
   return (
     <TabContainer>
-        <Button active={activeTab === '산책로'} onClick={() => setActiveTab('산책로')}>
-          산책로
-        </Button>
-        <Button active={activeTab === '친구'} onClick={() => setActiveTab('친구')}>
-          친구
-        </Button>
-        <Button active={activeTab === '내정보'} onClick={() => setActiveTab('내정보')}>
-          내정보
-        </Button>
-      </TabContainer>
+      <Button
+        active={activeTab === '산책로'}
+        onClick={() => setActiveTab('산책로')}
+      >
+        산책로
+      </Button>
+      <Button
+        active={activeTab === '친구'}
+        onClick={() => setActiveTab('친구')}
+      >
+        친구
+      </Button>
+      <Button
+        active={activeTab === '내정보'}
+        onClick={() => setActiveTab('내정보')}
+      >
+        내정보
+      </Button>
+    </TabContainer>
   );
 }
 

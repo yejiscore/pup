@@ -47,12 +47,12 @@ function Header() {
   return (
     <Container>
       <Title>내 산책보드</Title>
-        <div>
-          <IconButton 
-            src={isTrashIcon ? TrashIcon : MeatballsIcon} 
-            onClick={handleIconClick} 
-          />
-        </div>
+      <div>
+        <IconButton
+          src={isTrashIcon ? TrashIcon : MeatballsIcon}
+          onClick={handleIconClick}
+        />
+      </div>
     </Container>
   );
 }

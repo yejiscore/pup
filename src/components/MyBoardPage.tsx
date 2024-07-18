@@ -11,7 +11,7 @@ import SubTab from './SubTab.tsx';
 const InnerContainer = styled.div`
   width: 376px;
   height: 812px;
-  background-color: #EDF9F6;
+  background-color: #edf9f6;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -37,7 +37,10 @@ function MyBoardPage() {
       <ContentArea>
         {activeTab === '산책로' && (
           <>
-            <SubTab activeSubTab={activeSubTab} setActiveSubTab={setActiveSubTab} />
+            <SubTab
+              activeSubTab={activeSubTab}
+              setActiveSubTab={setActiveSubTab}
+            />
             {activeSubTab === '내 산책로' && <WalkList data={myData} />}
             {activeSubTab === '찜한 산책로' && <WalkList data={likeData} />}
           </>

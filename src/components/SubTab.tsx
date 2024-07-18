@@ -11,7 +11,7 @@ const SubTabContainer = styled.div`
 `;
 
 const SubTabButton = styled.button<{ active: boolean }>`
-  background-color: ${props => (props.active ? '#00AE80' : '#B7CAC4')};
+  background-color: ${(props) => (props.active ? '#00AE80' : '#B7CAC4')};
   border: none;
   padding: 10px;
   cursor: pointer;
@@ -19,7 +19,7 @@ const SubTabButton = styled.button<{ active: boolean }>`
   font-size: 1em;
   weight: 10px;
   height: 49px;
-  color: ${props => (props.active ? '#fff' : '#000')};
+  color: ${(props) => (props.active ? '#fff' : '#000')};
 `;
 
 interface SubTabProps {

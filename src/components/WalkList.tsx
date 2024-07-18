@@ -21,7 +21,7 @@ const ListItem = styled.div`
   height: 116px;
   gap: 0px;
   border-radius: 16px;
-  padding: 8px; 
+  padding: 8px;
   display: flex;
   background-color: white;
   margin-left: 10px;
