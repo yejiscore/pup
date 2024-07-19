@@ -1,10 +1,20 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-plusplus */
+/* eslint-disable react/no-array-index-key */
 import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+import AWS from 'aws-sdk';
+
+import { v4 } from 'uuid';
 import BaseBox from '../../styles/common/BaseBox';
 import WalkingReportHeader from '../../components/walkingReport/WalkingReportHeader';
 import WalkingReportThumbnail from '../../assets/walkingReport/walkingReportThumbnail.png';
+import rediocheck from '../../assets/walkingReport/radiocheck.svg';
 import pen from '../../assets/walkingReport/pen.png';
 import { BaseBody4, BaseHead4 } from '../../styles/common/textStyle';
+import uploadDataState from '../../stores/uploadDataState';
 
 const MiddlewBox = styled.div`
   display: flex;
@@ -172,14 +182,41 @@ const MemoTextArea = styled.textarea`
   border: none;
 `;
 
+const ImageWrapper = styled.div`
+  position: relative;
+`;
+
+const ImageContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+`;
+
+const ImageBox = styled.img`
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 12px;
+`;
+const DeleteButton = styled.button`
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+`;
+
 const WalkingReport = () => {
+  const [uploadData, setUploadData] = useRecoilState(uploadDataState);
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState('');
-  const [time, setTime] = useState('00:00:00');
-  const [distance, setDistance] = useState('00.00km');
+  const [time, setTime] = useState(uploadData.walkingTime);
+  const [distance, setDistance] = useState(uploadData.walkingDistance);
   const [activeButton, setActiveButton] = useState('비공개');
   const [memo, setMemo] = useState('');
   const [isMomo, setIsMemo] = useState(false);
+  console.log(uploadData);
 
   const handleNameClick = () => {
     setIsEditing(true);
@@ -195,6 +232,85 @@ const WalkingReport = () => {
   const onChangeIsMemo = () => {
     setIsMemo((prev) => !prev);
   };
+
+  const handleDeletePhoto = (index: number) => {
+    setUploadData((prevData) => ({
+      ...prevData,
+      walkingPhotos: prevData.walkingPhotos.filter(
+        (_: any, i: number) => i !== index
+      ),
+    }));
+  };
+
+  const handleRegister = async () => {
+    try {
+      const s3 = new AWS.S3({
+        accessKeyId: process.env.REACT_APP_MINIO_ACCESS_KEY,
+        secretAccessKey: process.env.REACT_APP_MINIO_SECRET_KEY,
+        endpoint: process.env.REACT_APP_MINIO_ENDPOINT,
+        s3ForcePathStyle: true,
+        signatureVersion: 'v4',
+      });
+
+      for (let i = 0; i < uploadData.walkingPhotos.length; i++) {
+        const photo = uploadData.walkingPhotos[i];
+        const base64Data = photo.split(',')[1];
+        const binaryData = atob(base64Data);
+        const bufferData = new Uint8Array(binaryData.length);
+
+        for (let j = 0; j < binaryData.length; j++) {
+          bufferData[j] = binaryData.charCodeAt(j);
+        }
+
+        const params = {
+          Bucket: process.env.REACT_APP_MINIO_BUCKET_NAME || '',
+          Key: `photos/${v4()}_${Date.now()}.jpg`,
+          Body: bufferData,
+          ContentEncoding: 'base64',
+          ContentType: 'image/jpeg',
+        };
+
+        await s3.upload(params).promise();
+      }
+
+      // Add logic to send other data to the backend
+      const dataToSend = {
+        walkingTrailUid: uploadData.walkingTrailId,
+        name,
+        time,
+        distance,
+        description: memo,
+        openRange:
+          activeButton === '공개'
+            ? 'PUBLIC'
+            : activeButton === '친구만'
+              ? 'PROTECTED'
+              : 'PRIVATE',
+        placeList: uploadData.walkingCoordinates,
+      };
+
+      console.log('Data to send:', dataToSend);
+      // await axios.post('/your-backend-endpoint', dataToSend);
+
+      console.log('All data successfully sent!');
+    } catch (err) {
+      console.error('Error uploading photo or sending data:', err);
+    }
+  };
+
+  // const handleRegister = async () => {
+  //   const payload = {
+  //     walkingTrailUid: '11',
+  //     name,
+  //     time,
+  //     distance,
+  //     description: memo,
+  //     openRange: activeButton, // 공개범위
+  //     placeList: uploadData.walkingCoordinates,
+  //   };
+  //   console.log('Register payload:', payload);
+  // };
+
   return (
     <BaseBox>
       <WalkingReportHeader />
@@ -237,7 +353,16 @@ const WalkingReport = () => {
               <img src={pen} alt="pen" width={28} height={28} />
             </BtnImage>
           </div>
-          <div>image</div>
+          <ImageContainer>
+            {uploadData.walkingPhotos.map((photo: any, index: number) => (
+              <ImageWrapper key={index}>
+                <ImageBox src={photo} alt={`Walking Photo ${index + 1}`} />
+                <DeleteButton onClick={() => handleDeletePhoto(index)}>
+                  <img src={rediocheck} alt="delete" />
+                </DeleteButton>
+              </ImageWrapper>
+            ))}
+          </ImageContainer>
         </ComBoxTwo>
 
         <ComBoxTwo>
@@ -287,7 +412,9 @@ const WalkingReport = () => {
               </ToggleButton>
             </ToggleButtonGroup>
           </ButtonWrapper>
-          <RegisterButton>산책 등록하기</RegisterButton>
+          <RegisterButton onClick={handleRegister}>
+            산책 등록하기
+          </RegisterButton>
         </ComBoxTwo>
       </BottomBox>
     </BaseBox>

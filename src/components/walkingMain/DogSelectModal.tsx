@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Slider from 'react-slick';
 
+import { screen } from '@testing-library/react';
 import dogPictureOn from '../../assets/map/dogPictureOn.png';
 import dogPictureOff from '../../assets/map/dogPictureOff.png';
 import useFetch from '../../hooks/useFetch';
@@ -41,7 +42,9 @@ const DogWapper = styled.div`
   /* gap: 10px; */
   width: 100%;
   height: 158px;
-  margin-left: 20px;
+  /* margin-left: 20px; */
+  gap: 5px;
+  overflow-x: hidden;
 `;
 
 const DohImgWrapper = styled.div`

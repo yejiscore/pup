@@ -1,29 +1,9 @@
-import React, { useState, useRef, useEffect, ChangeEvent } from 'react';
+import { useState, useRef, useEffect, ChangeEvent } from 'react';
+import { useSetRecoilState } from 'recoil';
 import AWS from 'aws-sdk';
-import axios from 'axios';
-import Webcam from 'react-webcam';
-
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { useNavigate } from 'react-router-dom';
-import BaseBox from '../../styles/common/BaseBox';
-import Tmap, { TmapHandles } from '../../components/map/Tmap';
-import DogSelectModal from '../../components/walkingMain/DogSelectModal';
-import WalkingModal from '../../components/walkingMain/WalkingModal';
-import Footer from '../../components/common/Footer';
-import WalkingHeader from '../../components/walkingMain/WalkingHeader';
-import WalkingControls from '../../components/walkingMain/WalkingControls';
-import WalkingMyLocation from '../../components/walkingMain/WalkingMyLocation';
-import WalkingStartButton from '../../components/walkingMain/WalkingStartButton';
-import WalkingStopModal from '../../components/walkingMain/WalkingStopModal';
+import { TmapHandles } from '../../components/map/Tmap';
 import uploadDataState from '../../stores/uploadDataState';
 import useMutate from '../../hooks/useMutate';
-import { Controls } from '../../styles/WalkingMainStyle';
-
-declare global {
-  interface Window {
-    Tmapv2: any;
-  }
-}
 
 const deg2rad = (deg: number) => {
   return deg * (Math.PI / 180);
@@ -49,12 +29,7 @@ const getDistanceFromLatLonInKm = (
   return d;
 };
 
-const WalkingMain = () => {
-  const navigate = useNavigate();
-  // 리코일
-  const [uploadData, setUploadData] = useRecoilState(uploadDataState);
-
-  // 상태
+const useWalking = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [buttonText, setButtonText] = useState('산책 시작하기');
   const [isWalking, setIsWalking] = useState(false);
@@ -68,14 +43,14 @@ const WalkingMain = () => {
   const [photos, setPhotos] = useState<string[]>([]); // 사진 저장 배열
   const [dogsId, setDogsId] = useState<number[]>([]);
 
-  // ref
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const setUploadData = useSetRecoilState(uploadDataState);
+
   const tmapRef = useRef<TmapHandles>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const lineRef = useRef<any>(null);
   const path = useRef<any[]>([]); // 경로를 저장할 배열
 
-  // 좌표 얻기
   useEffect(() => {
     if (isWalking && !isPaused) {
       intervalRef.current = setInterval(() => {
@@ -145,9 +120,8 @@ const WalkingMain = () => {
         clearInterval(intervalRef.current);
       }
     };
-  }, [isWalking, isPaused]);
+  }, [isWalking, isPaused, positions]);
 
-  // 줌
   const handleZoomIn = () => {
     const map = tmapRef.current?.getMapInstance();
     if (map) {
@@ -155,7 +129,6 @@ const WalkingMain = () => {
     }
   };
 
-  // 아웃
   const handleZoomOut = () => {
     const map = tmapRef.current?.getMapInstance();
     if (map) {
@@ -163,8 +136,8 @@ const WalkingMain = () => {
     }
   };
 
-  // 내 위치 찾기
   const handleFindLocation = () => {
+    console.log('자신 위치 찾기');
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -196,77 +169,44 @@ const WalkingMain = () => {
     'post'
   );
 
-  // 산책 시작
   const handleStartClick = () => {
     if (buttonText === '산책 시작하기') {
       setButtonText('산책 시작');
       setIsModalOpen(true);
     } else if (buttonText === '산책 시작') {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const { latitude, longitude } = position.coords;
-          createWalkingTrail(
-            {
-              dogIds: dogsId,
-              startPosition: { lat: latitude, lng: longitude },
-            },
-            {
-              onSuccess: (data) => {
-                console.log('Walking trail created:', data);
-                setUploadData((prevData) => ({
-                  ...prevData,
-                  walkingTrailId: data.data,
-                }));
-              },
-              onError: (error) => {
-                console.error('Error creating walking trail:', error);
-              },
-            }
-          );
-        });
-      }
       setIsWalking(true);
       setButtonText('산책 중지');
     }
   };
 
-  // 산책 중지
   const handleStop = () => {
     setIsWalking(false);
     setShowStopModal(true);
   };
 
-  // 산책 재개
   const handleResume = () => {
     setIsPaused(false);
     setShowStopModal(false);
     setIsWalking(true);
   };
 
-  // 산책 완료
   const handleComplete = () => {
-    setUploadData((prevData) => ({
-      ...prevData,
-      walkingPhotos: uploadData.walkingPhotos,
-      walkingDistance: distance.toString(),
-      walkingTime: time.toString(),
-      walkingCoordinates: positions,
-    }));
-
     setButtonText('산책 시작하기');
     setIsModalOpen(false);
     setShowStopModal(false);
-    navigate('/walking_main/report');
+
+    console.log('Positions:', positions);
+    console.log('Distance:', distance);
+    console.log('Time:', time);
+    // 산책 종료 시 위치 좌표 백엔드로 전송
   };
 
-  // 사진 찍기
   const handleTakePhoto = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
 
-  // 수정된 handleFileChange 함수
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -292,49 +232,30 @@ const WalkingMain = () => {
     });
   };
 
-  return (
-    <BaseBox>
-      <Tmap ref={tmapRef} />
-      <WalkingHeader />
-      <WalkingControls onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} />
-      <WalkingMyLocation onClick={handleFindLocation} />
-      <WalkingStartButton
-        onClick={handleStartClick}
-        isModalOpen={isModalOpen}
-        buttonText={buttonText}
-      />
-      {isWalking && (
-        <WalkingModal
-          distance={distance}
-          time={time}
-          onStop={handleStop}
-          onTakePhoto={handleTakePhoto}
-          photoCount={uploadData.walkingPhotos.length}
-        />
-      )}
-      {!isWalking && !isModalOpen && <Footer />}
-
-      {!isWalking && isModalOpen && (
-        <DogSelectModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onDogSelect={handleDogSelect}
-          selectedDogs={dogsId}
-        />
-      )}
-
-      {showStopModal && (
-        <WalkingStopModal onRestart={handleResume} onStop={handleComplete} />
-      )}
-      <input
-        type="file"
-        accept="image/*"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        style={{ display: 'none' }}
-      />
-    </BaseBox>
-  );
+  return {
+    tmapRef,
+    isModalOpen,
+    setIsModalOpen,
+    buttonText,
+    isWalking,
+    setIsWalking,
+    distance,
+    time,
+    handleZoomIn,
+    handleZoomOut,
+    handleFindLocation,
+    handleStartClick,
+    handleStop,
+    handleResume,
+    handleComplete,
+    handleTakePhoto,
+    handleFileChange,
+    handleDogSelect,
+    fileInputRef,
+    photos,
+    showStopModal,
+    dogsId,
+  };
 };
 
-export default WalkingMain;
+export default useWalking;
