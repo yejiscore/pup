@@ -13,11 +13,6 @@ const GlobalStyle = createGlobalStyle`
     align-items: center;
     overflow: hidden;
   }
-
-  .slick-slide {
-    width: 154px; 
-    margin: 0 7px;
-  }
 `;
 
 export default GlobalStyle;

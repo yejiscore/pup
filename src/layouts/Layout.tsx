@@ -10,6 +10,8 @@ const BaseLayoutStyled = styled.div`
   flex-direction: column;
   justify-content: start;
   align-items: center;
+  overflow-y: auto; // 전체 레이아웃에 스크롤 적용
+  overflow-x: hidden; // 가로 스크롤 방지
 `;
 
 const Main = styled.main`
@@ -21,20 +23,15 @@ const Main = styled.main`
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  background-color: gray;
-
   @media (max-width: 376px) {
     max-width: 100%; // 376px 이하일 때 최대 너비를 100%로 설정
     min-width: 320px; // 최소 너비를 320px로 설정
   }
 `;
-
 const BaseLayout = ({ children }: { children: ReactNode }) => {
   return (
     <BaseLayoutStyled>
-      {/* <Header /> */}
       <Main>{children}</Main>
-      {/* <Footer /> */}
     </BaseLayoutStyled>
   );
 };
