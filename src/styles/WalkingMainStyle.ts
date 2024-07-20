@@ -27,7 +27,7 @@ export const WeatherInfo = styled.div`
 export const Controls = styled.div`
   position: absolute;
   top: 208px;
-  left: 308px;
+  right: 5%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -63,7 +63,7 @@ export const MyLocation = styled.button`
   align-items: center;
   position: absolute;
   top: 332px;
-  left: 308px;
+  right: 5%;
   width: 48px;
   height: 48px;
   padding: 4px;
