@@ -9,6 +9,8 @@ import LoginMain from './pages/login/LoginMain.tsx';
 import Footer from './components/common/Footer.tsx';
 import WalkingReport from './pages/walkingReport/WalkingReport.tsx';
 import SearchMain from './pages/searchMain/SearchMain.tsx';
+import SearchMap from './pages/searchMap/SearchMap.tsx';
+import SearchStartWalking from './pages/searchMap/SearchStartWalking.tsx';
 
 function App() {
   return (
@@ -46,6 +48,23 @@ function App() {
             </BaseLayout>
           }
         />
+        <Route
+          path="/search_map"
+          element={
+            <BaseLayout>
+              <SearchMap />
+            </BaseLayout>
+          }
+        />
+        <Route
+          path="/search_map/start/:id"
+          element={
+            <BaseLayout>
+              <SearchStartWalking />
+            </BaseLayout>
+          }
+        />
+
         <Route path="/walking" element={<div>산책하기 페이지</div>} />
         <Route
           path="/login"

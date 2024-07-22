@@ -41,9 +41,11 @@ const NavIcon = styled.img`
   margin-bottom: 5px;
 `;
 
-const NavText = styled.div<{ active: boolean }>`
+const NavText = styled.div<{ $active: boolean }>`
   color: ${(props) =>
-    props.active ? props.theme.colors.primary[5] : props.theme.colors.darkGray};
+    props.$active
+      ? props.theme.colors.primary[5]
+      : props.theme.colors.darkGray};
   font-size: 10px;
   line-height: 11.7px;
   letter-spacing: -1%;
@@ -61,7 +63,7 @@ const Footer = () => {
             src={location.pathname === '/map' ? bagOnIcon : bagOffIcon}
             alt="내 산책지도"
           />
-          <NavText active={location.pathname === '/map'}>내 산책지도</NavText>
+          <NavText $active={location.pathname === '/map'}>내 산책지도</NavText>
         </NavItem>
       </Link>
       <Link to="/walking_main" style={{ textDecoration: 'none' }}>
@@ -70,7 +72,7 @@ const Footer = () => {
             src={location.pathname === '/walking_main' ? dogOnIcon : dogOffIcon}
             alt="산책하기"
           />
-          <NavText active={location.pathname === '/walking_main'}>
+          <NavText $active={location.pathname === '/walking_main'}>
             산책하기
           </NavText>
         </NavItem>
@@ -81,7 +83,7 @@ const Footer = () => {
             src={location.pathname === '/search' ? searchOnIcon : searchOffIcon}
             alt="산책로 찾기"
           />
-          <NavText active={location.pathname === '/search'}>
+          <NavText $active={location.pathname === '/search'}>
             산책로 찾기
           </NavText>
         </NavItem>

@@ -8,217 +8,61 @@ import { useRecoilState } from 'recoil';
 import AWS from 'aws-sdk';
 
 import { v4 } from 'uuid';
+import Slider from 'react-slick';
+import { useNavigate } from 'react-router-dom';
 import BaseBox from '../../styles/common/BaseBox';
 import WalkingReportHeader from '../../components/walkingReport/WalkingReportHeader';
 import WalkingReportThumbnail from '../../assets/walkingReport/walkingReportThumbnail.png';
-import rediocheck from '../../assets/walkingReport/radiocheck.svg';
 import pen from '../../assets/walkingReport/pen.png';
-import { BaseBody4, BaseHead4 } from '../../styles/common/textStyle';
+import rediocheck from '../../assets/walkingReport/radiocheck.svg';
+import noBackPen from '../../assets/walkingReport/noBackPen.png';
+import {
+  MiddlewBox,
+  ComBoxOne,
+  ComBoxTwo,
+  BtnImage,
+  Head4,
+  Input,
+  Body3,
+  TimeDistance,
+  BottomBox,
+  ButtonWrapper,
+  ToggleButtonGroup,
+  ToggleButton,
+  RegisterButton,
+  CharCount,
+  ImageContainer,
+  ImageWrapper,
+  ImageBox,
+  DeleteButton,
+  ButtonMemo,
+  MemoTextArea,
+  Text,
+  MarginBox,
+  ButtonTitleHead4,
+} from '../../styles/walkingReportStyle/WalkingReportStyle';
 import uploadDataState from '../../stores/uploadDataState';
-
-const MiddlewBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  height: 446px;
-  width: 100%;
-  background-color: ${(props) => props.theme.colors.white};
-`;
-
-const ComBoxOne = styled.div`
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  width: 100%;
-  margin-left: 20px;
-`;
-
-const ComBoxTwo = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: center;
-  width: 100%;
-  margin-left: 20px;
-
-  .title {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    width: 100%;
-  }
-`;
-
-const BtnImage = styled.button`
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-`;
-
-const Head4 = styled(BaseHead4)`
-  color: ${(props) => props.theme.colors.primary[5]};
-  font-weight: 400;
-  line-height: 26.25px;
-`;
-
-const Input = styled.input`
-  border: none;
-  font-size: 22px;
-  line-height: 26.25px;
-  font-weight: 600;
-  margin-left: 12px;
-`;
-
-const Body3 = styled(BaseBody4)`
-  color: ${(props) => props.theme.colors.darkGray};
-  font-weight: 600;
-  line-height: 26.25px;
-  margin-left: 12px;
-`;
-
-const TimeDistance = styled.div`
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  width: 100%;
-  /* margin-left: 20px; */
-`;
-
-const ButtonMemo = styled.button`
-  width: 336px;
-  height: 44px;
-  border-radius: 100px;
-  border: 2px solid ${(props) => props.theme.colors.darkGray};
-  background-color: inherit;
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  margin-right: 20px;
-`;
-
-const Text = styled.span`
-  font-size: 22px;
-  font-weight: 400;
-  color: ${(props) => props.theme.colors.darkGray};
-  margin-left: 11px;
-  line-height: 26.25px;
-`;
-
-const BottomBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: start;
-  margin-top: 10px;
-  height: 214px;
-  width: 100%;
-  background-color: ${(props) => props.theme.colors.white};
-`;
-
-const ButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin-right: 40px;
-  margin-top: 12px;
-  margin-bottom: 20px;
-`;
-
-const ToggleButtonGroup = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 336px;
-  height: 42px;
-  border-radius: 25px;
-  border: 2px solid ${(props) => props.theme.colors.primary[5]};
-  overflow: hidden;
-`;
-
-const ToggleButton = styled.button<{ $active: boolean }>`
-  background-color: ${(props) =>
-    props.$active ? props.theme.colors.primary[5] : props.theme.colors.white};
-  color: ${(props) =>
-    props.$active ? props.theme.colors.white : props.theme.colors.primary[5]};
-  border: none;
-  outline: none;
-  cursor: pointer;
-  width: 110px;
-  height: 42px;
-  border: 2px;
-
-  &:not(:last-child) {
-    border-right: 2px solid ${(props) => props.theme.colors.primary[5]};
-  }
-`;
-
-const RegisterButton = styled.button`
-  width: 336px;
-  height: 64px;
-  border-radius: 100px;
-  background-color: ${(props) => props.theme.colors.primary[5]};
-  color: ${(props) => props.theme.colors.white};
-  border: none;
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 30.24px;
-  cursor: pointer;
-  margin-right: 40px;
-`;
-
-const MemoTextArea = styled.textarea`
-  width: 326px;
-  max-height: 729px;
-  min-height: 200px;
-  border-radius: 18px;
-  background-color: ${(props) => props.theme.colors.background};
-  margin-top: 12px;
-  margin-right: 20px;
-  padding: 5px 10px;
-  border: none;
-`;
-
-const ImageWrapper = styled.div`
-  position: relative;
-`;
-
-const ImageContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-`;
-
-const ImageBox = styled.img`
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 12px;
-`;
-const DeleteButton = styled.button`
-  position: absolute;
-  top: 0;
-  right: 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-`;
+import { formatDistance, formatTime } from '../../utils/formatTime';
+import useMutate from '../../hooks/useMutate';
 
 const WalkingReport = () => {
+  const navigate = useNavigate();
   const [uploadData, setUploadData] = useRecoilState(uploadDataState);
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState('');
-  const [time, setTime] = useState(uploadData.walkingTime);
-  const [distance, setDistance] = useState(uploadData.walkingDistance);
+  const [name, setName] = useState('작성해 주세요');
+  const [time, setTime] = useState(uploadData.walkingTime || 11);
+  const [distance, setDistance] = useState(
+    uploadData.walkingDistance || 0.17674250992976798
+  );
   const [activeButton, setActiveButton] = useState('비공개');
   const [memo, setMemo] = useState('');
   const [isMomo, setIsMemo] = useState(false);
-  console.log(uploadData);
+
+  const formattedTime = formatTime(Number(time));
+  const formattedDistance = formatDistance(Number(distance));
 
   const handleNameClick = () => {
+    setName('');
     setIsEditing(true);
   };
 
@@ -242,6 +86,17 @@ const WalkingReport = () => {
     }));
   };
 
+  const { mutate: putWalkingTrail } = useMutate(
+    'putWalkingTrail',
+    '/walking-trail',
+    'put'
+  );
+  const { mutate: uploadPicture } = useMutate(
+    'uploadPicture',
+    '/walking-trail/image',
+    'post'
+  );
+
   const handleRegister = async () => {
     try {
       const s3 = new AWS.S3({
@@ -251,6 +106,8 @@ const WalkingReport = () => {
         s3ForcePathStyle: true,
         signatureVersion: 'v4',
       });
+
+      const uploadedPhotoUrls: string[] = [];
 
       for (let i = 0; i < uploadData.walkingPhotos.length; i++) {
         const photo = uploadData.walkingPhotos[i];
@@ -270,7 +127,31 @@ const WalkingReport = () => {
           ContentType: 'image/jpeg',
         };
 
-        await s3.upload(params).promise();
+        const uploadResult = await s3.upload(params).promise();
+        uploadedPhotoUrls.push(uploadResult.Location);
+      }
+
+      for (let i = 0; i < uploadedPhotoUrls.length; i++) {
+        await uploadPicture(
+          {
+            walkingTrailUid: uploadData.walkingTrailId,
+            path: uploadedPhotoUrls[i],
+            lat: uploadData.walkingCoordinates[0].lat,
+            lng: uploadData.walkingCoordinates[0].lng,
+          },
+
+          {
+            onSuccess: () => {
+              console.log(
+                'Photo URL successfully sent to backend:',
+                uploadedPhotoUrls[i]
+              );
+            },
+            onError: (error) => {
+              console.error('Error sending photo URL to backend:', error);
+            },
+          }
+        );
       }
 
       // Add logic to send other data to the backend
@@ -290,7 +171,15 @@ const WalkingReport = () => {
       };
 
       console.log('Data to send:', dataToSend);
-      // await axios.post('/your-backend-endpoint', dataToSend);
+      putWalkingTrail(
+        { ...dataToSend },
+        {
+          onSuccess: () => {
+            navigate('/');
+            console.log('Walking trail successfully registered!');
+          },
+        }
+      );
 
       console.log('All data successfully sent!');
     } catch (err) {
@@ -298,18 +187,13 @@ const WalkingReport = () => {
     }
   };
 
-  // const handleRegister = async () => {
-  //   const payload = {
-  //     walkingTrailUid: '11',
-  //     name,
-  //     time,
-  //     distance,
-  //     description: memo,
-  //     openRange: activeButton, // 공개범위
-  //     placeList: uploadData.walkingCoordinates,
-  //   };
-  //   console.log('Register payload:', payload);
-  // };
+  const settings = {
+    dots: false,
+    speed: 500,
+    slidesToShow: uploadData.walkingPhotos.length,
+    slidesToScroll: 1,
+    infinite: false,
+  };
 
   return (
     <BaseBox>
@@ -323,98 +207,120 @@ const WalkingReport = () => {
 
       <MiddlewBox>
         <ComBoxOne>
-          <Head4>이름</Head4>
-          <Input
-            type="text"
-            value={name}
-            onChange={handleNameChange}
-            onBlur={handleNameBlur}
-            placeholder="이름을 적어주세요"
-            disabled={!isEditing}
-          />
-          <BtnImage type="button" onClick={handleNameClick}>
-            <img src={pen} alt="pen" width={28} height={28} />
-          </BtnImage>
+          <div className="firstBox">
+            <Head4>이름</Head4>
+            <Input
+              type="text"
+              value={name}
+              onChange={handleNameChange}
+              onBlur={handleNameBlur}
+              placeholder="예: 즐거운 산책로"
+              disabled={!isEditing}
+              $isEditing={isEditing}
+              maxLength={13}
+            />
+
+            {isEditing ? (
+              <CharCount>{`${name.length}/13`}</CharCount>
+            ) : (
+              <BtnImage type="button" onClick={handleNameClick}>
+                <img src={pen} alt="pen" width={28} height={28} />
+              </BtnImage>
+            )}
+          </div>
         </ComBoxOne>
+
         <ComBoxOne>
           <TimeDistance>
             <Head4>시간</Head4>
-            <Body3>{time}</Body3>
+            <Body3>{formattedTime}</Body3>
           </TimeDistance>
           <TimeDistance>
             <Head4>거리</Head4>
-            <Body3>{distance}</Body3>
+            <Body3>{formattedDistance}</Body3>
           </TimeDistance>
         </ComBoxOne>
-        <ComBoxTwo>
-          <div className="title">
-            <Head4>기록</Head4>
-            <BtnImage type="button" onClick={handleNameClick}>
-              <img src={pen} alt="pen" width={28} height={28} />
-            </BtnImage>
-          </div>
-          <ImageContainer>
-            {uploadData.walkingPhotos.map((photo: any, index: number) => (
-              <ImageWrapper key={index}>
-                <ImageBox src={photo} alt={`Walking Photo ${index + 1}`} />
-                <DeleteButton onClick={() => handleDeletePhoto(index)}>
-                  <img src={rediocheck} alt="delete" />
-                </DeleteButton>
-              </ImageWrapper>
-            ))}
-          </ImageContainer>
-        </ComBoxTwo>
 
         <ComBoxTwo>
-          <div className="title">
-            <Head4>메모</Head4>
-          </div>
-          <ButtonMemo onClick={onChangeIsMemo}>
-            <img src={pen} alt="pen" width={30} height={30} />
-            <Text>메모 작성하기</Text>
-          </ButtonMemo>
-          {isMomo && (
-            <MemoTextArea
-              placeholder="메모를 작성해주세요"
-              value={memo}
-              onChange={(e) => setMemo(e.target.value)}
-              disabled={!isMomo}
-              maxLength={500}
-            />
-          )}
+          <MarginBox>
+            <div className="title">
+              <Head4>기록</Head4>
+              <BtnImage type="button" onClick={handleNameClick}>
+                <img src={pen} alt="pen" width={28} height={28} />
+              </BtnImage>
+            </div>
+            <ImageContainer>
+              <Slider {...settings}>
+                {uploadData.walkingPhotos.map((photo: any, index: number) => (
+                  <ImageWrapper key={index}>
+                    <ImageBox src={photo} alt={`Walking Photo ${index + 1}`} />
+                    <DeleteButton onClick={() => handleDeletePhoto(index)}>
+                      <img src={rediocheck} alt="delete" />
+                    </DeleteButton>
+                  </ImageWrapper>
+                ))}
+              </Slider>
+            </ImageContainer>
+          </MarginBox>
+        </ComBoxTwo>
+
+        <ComBoxTwo style={{ marginTop: '20px' }}>
+          <MarginBox>
+            <div className="title">
+              <Head4>메모</Head4>
+            </div>
+
+            {isMomo ? (
+              <MemoTextArea
+                placeholder="메모를 작성해주세요"
+                value={memo}
+                onChange={(e) => setMemo(e.target.value)}
+                disabled={!isMomo}
+                maxLength={500}
+              />
+            ) : (
+              <ButtonMemo onClick={onChangeIsMemo}>
+                <img src={noBackPen} alt="pen" width={30} height={30} />
+                <Text>메모 작성하기</Text>
+              </ButtonMemo>
+            )}
+          </MarginBox>
         </ComBoxTwo>
       </MiddlewBox>
 
       <BottomBox>
         <ComBoxTwo>
-          <div className="title">
-            <Head4>공개범위</Head4>
-          </div>
-          <ButtonWrapper>
-            <ToggleButtonGroup>
-              <ToggleButton
-                $active={activeButton === '비공개'}
-                onClick={() => setActiveButton('비공개')}
-              >
-                비공개
-              </ToggleButton>
-              <ToggleButton
-                $active={activeButton === '친구만'}
-                onClick={() => setActiveButton('친구만')}
-              >
-                친구만
-              </ToggleButton>
-              <ToggleButton
-                $active={activeButton === '전체공개'}
-                onClick={() => setActiveButton('전체공개')}
-              >
-                전체공개
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </ButtonWrapper>
-          <RegisterButton onClick={handleRegister}>
-            산책 등록하기
-          </RegisterButton>
+          <MarginBox>
+            <div className="title">
+              <ButtonTitleHead4>공개범위</ButtonTitleHead4>
+            </div>
+            <ButtonWrapper>
+              <ToggleButtonGroup>
+                <ToggleButton
+                  $active={activeButton === '비공개'}
+                  onClick={() => setActiveButton('비공개')}
+                >
+                  비공개
+                </ToggleButton>
+                <ToggleButton
+                  $active={activeButton === '친구만'}
+                  onClick={() => setActiveButton('친구만')}
+                >
+                  친구만
+                </ToggleButton>
+                <ToggleButton
+                  $active={activeButton === '전체공개'}
+                  onClick={() => setActiveButton('전체공개')}
+                >
+                  전체공개
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </ButtonWrapper>
+
+            <RegisterButton onClick={handleRegister}>
+              산책 등록하기
+            </RegisterButton>
+          </MarginBox>
         </ComBoxTwo>
       </BottomBox>
     </BaseBox>

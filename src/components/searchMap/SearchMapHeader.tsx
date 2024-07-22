@@ -8,8 +8,8 @@ const Container = styled.div`
   align-items: center;
   width: 100%;
   height: 49px;
-  position: relative;
-  margin: 15.79px 0;
+  position: relative; // 상대 위치 설정
+  background-color: #ffffff80;
 `;
 
 const Title = styled.div`
@@ -22,9 +22,8 @@ const Title = styled.div`
 const IconButton = styled.img`
   width: 40px;
   height: 40px;
-  position: absolute;
-  /* top: -7px; */
-  right: 10px;
+  position: absolute; // 절대 위치 설정
+  right: 10px; // 오른쪽 끝에 배치
   cursor: pointer;
 `;
 

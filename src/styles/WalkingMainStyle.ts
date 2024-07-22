@@ -71,6 +71,7 @@ export const MyLocation = styled.button`
   border-radius: 100px;
   opacity: 0px;
   border: none;
+  background-color: ${(props) => props.theme.colors.white};
   box-shadow:
     1px 0px 1px 0px #0000001a,
     2px 0px 2px 0px #00000017,

@@ -27,35 +27,62 @@ const ModalContainer = styled.div`
   border-radius: 18px;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
   align-items: center;
+`;
+
+const TitleWrapper = styled.div`
+  width: 100%;
+  height: 58px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .title {
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 26.25px;
+    color: ${(props) => props.theme.colors.darkGray};
+    text-align: center;
+    width: 212px;
+  }
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-around;
+  align-items: center;
   width: 100%;
+  height: 62px;
 `;
 
 const RestartButton = styled.button`
   width: 94px;
   height: 36px;
   background: none;
-  border: 2px solid ${(props) => props.theme.colors.primary[2]};
+  border: 2px solid ${(props) => props.theme.colors.primary[5]};
   border-radius: 100px;
-  padding: 10px 9px;
   cursor: pointer;
+  color: ${(props) => props.theme.colors.primary[5]};
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 23.4px;
+  letter-spacing: -1%;
+  text-align: center;
 `;
 
 const StopButton = styled.button`
   width: 94px;
   height: 36px;
-  background: ${(props) => props.theme.colors.primary[2]};
+  background: ${(props) => props.theme.colors.primary[5]};
   border-radius: 100px;
   border: none;
-  padding: 10px 9px;
   color: ${(props) => props.theme.colors.white};
   cursor: pointer;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 23.4px;
+  letter-spacing: -1%;
+  text-align: center;
 `;
 
 const WalkingStopModal = ({
@@ -67,7 +94,9 @@ const WalkingStopModal = ({
 }) => (
   <Overlay>
     <ModalContainer>
-      <h3>산책을 종료합니다.</h3>
+      <TitleWrapper>
+        <h3 className="title">산책을 종료합니다.</h3>
+      </TitleWrapper>
       <ButtonContainer>
         <RestartButton onClick={onRestart}>다시시작</RestartButton>
         <StopButton onClick={onStop}>종료</StopButton>

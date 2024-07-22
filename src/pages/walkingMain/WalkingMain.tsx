@@ -1,9 +1,6 @@
 import React, { useState, useRef, useEffect, ChangeEvent } from 'react';
-import AWS from 'aws-sdk';
-import axios from 'axios';
-import Webcam from 'react-webcam';
 
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import BaseBox from '../../styles/common/BaseBox';
 import Tmap, { TmapHandles } from '../../components/map/Tmap';
@@ -17,7 +14,7 @@ import WalkingStartButton from '../../components/walkingMain/WalkingStartButton'
 import WalkingStopModal from '../../components/walkingMain/WalkingStopModal';
 import uploadDataState from '../../stores/uploadDataState';
 import useMutate from '../../hooks/useMutate';
-import { Controls } from '../../styles/WalkingMainStyle';
+import pawIcon from '../../assets/map/paw.png';
 
 declare global {
   interface Window {
@@ -25,7 +22,7 @@ declare global {
   }
 }
 
-const deg2rad = (deg: number) => {
+const deg2rad = (deg: number): number => {
   return deg * (Math.PI / 180);
 };
 
@@ -34,10 +31,10 @@ const getDistanceFromLatLonInKm = (
   lon1: number,
   lat2: number,
   lon2: number
-) => {
+): number => {
   const R = 6371; // Radius of the earth in km
   const dLat = deg2rad(lat2 - lat1);
-  const dLon = deg2rad(lat2 - lon1);
+  const dLon = deg2rad(lon2 - lon1);
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(deg2rad(lat1)) *
@@ -64,8 +61,11 @@ const WalkingMain = () => {
   const [positions, setPositions] = useState<{ lat: number; lng: number }[]>(
     []
   );
+  const [basePosition, setBasePosition] = useState<{
+    lat: number;
+    lng: number;
+  }>({ lat: 37.514575, lng: 127.0495556 });
   const [showStopModal, setShowStopModal] = useState(false);
-  const [photos, setPhotos] = useState<string[]>([]); // 사진 저장 배열
   const [dogsId, setDogsId] = useState<number[]>([]);
 
   // ref
@@ -74,6 +74,7 @@ const WalkingMain = () => {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const lineRef = useRef<any>(null);
   const path = useRef<any[]>([]); // 경로를 저장할 배열
+  const markerRef = useRef<any>(null);
 
   // 좌표 얻기
   useEffect(() => {
@@ -83,13 +84,30 @@ const WalkingMain = () => {
       }, 1000);
 
       if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(
+        const watchId = navigator.geolocation.watchPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
-            setPositions((prevPositions) => [
-              ...prevPositions,
-              { lat: latitude, lng: longitude },
-            ]);
+
+            setPositions((prevPositions) => {
+              const newPositions = [
+                ...prevPositions,
+                { lat: latitude, lng: longitude },
+              ];
+
+              if (newPositions.length > 1) {
+                const prevPos = newPositions[newPositions.length - 2];
+                const distanceIncrement = getDistanceFromLatLonInKm(
+                  prevPos.lat,
+                  prevPos.lng,
+                  latitude,
+                  longitude
+                );
+                console.log('Distance increment:', distanceIncrement);
+                setDistance((prevDistance) => prevDistance + distanceIncrement);
+              }
+
+              return newPositions;
+            });
 
             // Tmap 업데이트
             const map = tmapRef.current?.getMapInstance();
@@ -109,17 +127,18 @@ const WalkingMain = () => {
               } else {
                 lineRef.current.setPath(path.current);
               }
-            }
 
-            if (positions.length > 0) {
-              const prevPos = positions[positions.length - 1];
-              const distanceIncrement = getDistanceFromLatLonInKm(
-                prevPos.lat,
-                prevPos.lng,
-                latitude,
-                longitude
-              );
-              setDistance((prevDistance) => prevDistance + distanceIncrement);
+              // 현재 위치에 마커 추가
+              if (markerRef.current) {
+                markerRef.current.setMap(null); // 이전 마커 제거
+              }
+              const newMarker = new window.Tmapv2.Marker({
+                position: latLng,
+                icon: pawIcon,
+                iconSize: new window.Tmapv2.Size(20, 20), // 마커 이미지 크기 설정
+                map,
+              });
+              markerRef.current = newMarker;
             }
           },
           (error) => {
@@ -134,6 +153,13 @@ const WalkingMain = () => {
             }
           }
         );
+
+        return () => {
+          if (watchId) {
+            // watchId가 존재하면
+            navigator.geolocation.clearWatch(watchId); // 위치 추적 중지
+          }
+        };
       }
     } else if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -147,30 +173,29 @@ const WalkingMain = () => {
     };
   }, [isWalking, isPaused]);
 
-  // 줌
-  const handleZoomIn = () => {
-    const map = tmapRef.current?.getMapInstance();
-    if (map) {
-      map.zoomIn();
-    }
-  };
-
-  // 아웃
-  const handleZoomOut = () => {
-    const map = tmapRef.current?.getMapInstance();
-    if (map) {
-      map.zoomOut();
-    }
-  };
-
   // 내 위치 찾기
   const handleFindLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          if (tmapRef.current) {
-            tmapRef.current.updateLocation(latitude, longitude);
+          setBasePosition({ lat: latitude, lng: longitude });
+          const map = tmapRef.current?.getMapInstance();
+          if (map) {
+            const latLng = new window.Tmapv2.LatLng(latitude, longitude);
+            map.setCenter(latLng);
+
+            // 현재 위치에 마커 추가
+            if (markerRef.current) {
+              markerRef.current.setMap(null); // 이전 마커 제거
+            }
+            const newMarker = new window.Tmapv2.Marker({
+              position: latLng,
+              icon: pawIcon,
+              iconSize: new window.Tmapv2.Size(20, 20), // 마커 이미지 크기 설정
+              map,
+            });
+            markerRef.current = newMarker;
           }
         },
         (error) => {
@@ -196,6 +221,22 @@ const WalkingMain = () => {
     'post'
   );
 
+  // 줌
+  const handleZoomIn = () => {
+    const map = tmapRef.current?.getMapInstance();
+    if (map) {
+      map.zoomIn();
+    }
+  };
+
+  // 아웃
+  const handleZoomOut = () => {
+    const map = tmapRef.current?.getMapInstance();
+    if (map) {
+      map.zoomOut();
+    }
+  };
+
   // 산책 시작
   const handleStartClick = () => {
     if (buttonText === '산책 시작하기') {
@@ -207,8 +248,9 @@ const WalkingMain = () => {
           const { latitude, longitude } = position.coords;
           createWalkingTrail(
             {
-              dogIds: dogsId,
-              startPosition: { lat: latitude, lng: longitude },
+              dogIdList: dogsId,
+              lat: latitude,
+              lng: longitude,
             },
             {
               onSuccess: (data) => {
@@ -295,7 +337,7 @@ const WalkingMain = () => {
   return (
     <BaseBox>
       <Tmap ref={tmapRef} />
-      <WalkingHeader />
+      <WalkingHeader basePosition={basePosition} />
       <WalkingControls onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} />
       <WalkingMyLocation onClick={handleFindLocation} />
       <WalkingStartButton

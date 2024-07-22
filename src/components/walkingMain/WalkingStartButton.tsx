@@ -11,7 +11,7 @@ const Button = styled.button<{ $isModalOpen: boolean }>`
   width: 335px;
   height: 63px;
   bottom: ${(props) => (props.$isModalOpen ? '50px' : '109px')};
-  padding: 23px 103px;
+  /* padding: 23px 103px; */
   gap: 10px;
   border-radius: 100px;
   background-color: ${(props) => props.theme.colors.primary[5]};
@@ -23,7 +23,14 @@ const Button = styled.button<{ $isModalOpen: boolean }>`
     0px 23px 14px 0px #37ae7f1a,
     0px 41px 17px 0px #37ae7f08,
     0px 65px 18px 0px #37ae7f00;
-  cursor: pointer;
+
+  .text {
+    cursor: pointer;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 36px;
+    letter-spacing: -1%;
+  }
 `;
 
 const WalkingStartButton = ({
@@ -36,7 +43,7 @@ const WalkingStartButton = ({
   buttonText: string;
 }) => (
   <Button onClick={onClick} $isModalOpen={isModalOpen}>
-    {buttonText}
+    <span className="text">{buttonText}</span>
   </Button>
 );
 
