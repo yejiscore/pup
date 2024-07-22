@@ -11,7 +11,7 @@ const BaseBox = styled.div`
   align-items: center;
   min-width: 320px; // 최소 너비를 320px로 설정
   border: 1px solid ${(props) => props.theme.colors.offGray};
-  @media (max-width: 480px) {
+  @media (max-width: 600px) {
     width: 100%; // 480px 이하일 때 너비를 100%로 설정
     min-width: 320px; // 최소 너비를 320px로 설정
   }

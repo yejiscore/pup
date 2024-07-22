@@ -141,12 +141,6 @@ const WalkingReport = () => {
           },
 
           {
-            onSuccess: () => {
-              console.log(
-                'Photo URL successfully sent to backend:',
-                uploadedPhotoUrls[i]
-              );
-            },
             onError: (error) => {
               console.error('Error sending photo URL to backend:', error);
             },
@@ -170,18 +164,17 @@ const WalkingReport = () => {
         placeList: uploadData.walkingCoordinates,
       };
 
-      console.log('Data to send:', dataToSend);
       putWalkingTrail(
         { ...dataToSend },
         {
           onSuccess: () => {
             navigate('/');
-            console.log('Walking trail successfully registered!');
+          },
+          onError: (error) => {
+            console.error('Error registering walking trail:', error);
           },
         }
       );
-
-      console.log('All data successfully sent!');
     } catch (err) {
       console.error('Error uploading photo or sending data:', err);
     }

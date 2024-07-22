@@ -97,54 +97,11 @@ const DogSelectModal = ({
   onDogSelect: (dogId: number) => void;
   selectedDogs: number[];
 }) => {
-  const { data: dogData, isLoading } = useFetch<getUserDogsType>(
-    'dogs',
-    '/dog',
-    {}
-  );
-  // const dogData = {
-  //   code: 200,
-  //   status: 'OK',
-  //   data: [
-  //     {
-  //       dogId: 1,
-  //       name: '뽀삐',
-  //       profile: 'https://',
-  //       birth: '2021-01-01',
-  //       isNeutered: false,
-  //     },
-  //     {
-  //       dogId: 2,
-  //       name: '뽀삐',
-  //       profile: 'https://',
-  //       birth: '2021-01-01',
-  //       isNeutered: false,
-  //     },
-  //     {
-  //       dogId: 3,
-  //       name: '뽀삐',
-  //       profile: 'https://',
-  //       birth: '2021-01-01',
-  //       isNeutered: false,
-  //     },
-  //     {
-  //       dogId: 4,
-  //       name: '뽀삐',
-  //       profile: 'https://',
-  //       birth: '2021-01-01',
-  //       isNeutered: false,
-  //     },
-  //     {
-  //       dogId: 5,
-  //       name: '뽀삐',
-  //       profile: 'https://',
-  //       birth: '2021-01-01',
-  //       isNeutered: false,
-  //     },
-  //   ],
-  //   message: '강아지 리스트를 조회합니다.',
-  // };
-  // const isLoading = false;
+  const {
+    data: dogData,
+    isLoading,
+    refetch,
+  } = useFetch<getUserDogsType>('dogs', '/dog', {});
 
   const handleDogClick = (dogId: number) => {
     onDogSelect(dogId);

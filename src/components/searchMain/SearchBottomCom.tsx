@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Slider from 'react-slick';
 import { BaseBody1, BaseBody4, BaseText3 } from '../../styles/common/textStyle';
@@ -6,6 +6,8 @@ import walkingReportThumbnail from '../../assets/walkingReport/walkingReportThum
 import startIcon from '../../assets/common/star.png';
 import linkIcon from '../../assets/common/link.png';
 import { Text2 } from '../../styles/WalkintSreachStyle/SearchTopCom';
+import useFetch from '../../hooks/useFetch';
+import { ResIUserTrailLists } from '../../types/getUserTrailListsType';
 
 const Wrapper = styled.div`
   display: flex;
@@ -135,91 +137,61 @@ const SearchBottomCom = () => {
     slidesToScroll: 1,
     variableWidth: true, // 슬라이드 너비를 자동으로 조절
   };
+  const [name, setName] = useState('');
+  const [type, setType] = useState('RECENT');
+  const { data: trailData } = useFetch<ResIUserTrailLists>(
+    `[trailData${name}${type}]`,
+    '/walking-trail',
+    {
+      name,
+      type,
+    }
+  );
 
-  const dummyData = [
-    {
-      id: '124',
-      name: 'asd',
-      title: '일이삼사오륙칠팔구십일이삼',
-      img: 'asd',
-      desc: '일이삼사오륙칠팔구십일이삼',
-      time: '00:12:00',
-      distance: '1.2km',
-      rate: 4.5,
-      isWorked: 0.005,
-    },
-    {
-      id: '34',
-      name: 'asd',
-      title: '일이삼사오륙칠팔구십일이삼',
-      img: 'asd',
-      desc: '일이삼사오륙칠팔구십일이삼',
-      time: '00:11:00',
-      distance: '1.2km',
-      rate: 4.5,
-      isWorked: 0.005,
-    },
-    {
-      id: '34',
-      name: 'asd',
-      title: '일이삼사오륙칠팔구십일이삼',
-      img: 'asd',
-      desc: '일이삼사오륙칠팔구십일이삼',
-      time: '11:00',
-      distance: '1.2km',
-      rate: 4.5,
-      isWorked: 0.005,
-    },
-    {
-      id: '34',
-      name: 'asd',
-      title: '일이삼사오륙칠팔구십일이삼',
-      img: 'asd',
-      desc: '일이삼사오륙칠팔구십일이삼',
-      time: '11:00',
-      distance: '1.2km',
-      rate: 4.5,
-      isWorked: 0.005,
-    },
-  ];
   return (
     <Wrapper>
       <Box>
         <Title>방금 산책했어요!</Title>
         <CardWrapper>
           <Slider {...settings}>
-            {dummyData.map((data) => (
-              <Card key={data.id}>
-                <img
-                  src={walkingReportThumbnail}
-                  alt="thumbnail"
-                  width={69}
-                  height={88}
-                  style={{ borderRadius: '12px' }}
-                />
-                <ContentWrapper>
-                  <Body4>{data.title}</Body4>
-                  <InfoWrapper>
-                    <Info>
-                      <DescriptionTitle>시간</DescriptionTitle>
-                      <DescriptionContent>{data.time}</DescriptionContent>
-                    </Info>
-                    <Info>
-                      <DescriptionTitle>거리</DescriptionTitle>
-                      <DescriptionContent>{data.distance}</DescriptionContent>
-                    </Info>
-                  </InfoWrapper>
-                  <NameRatingWrapper>
-                    <span className="name">{data.name}의 산책길</span>
-                    <Rate>
-                      <img src={startIcon} alt="star" width={24} height={24} />{' '}
-                      {data.rate}
-                    </Rate>
-                  </NameRatingWrapper>
-                </ContentWrapper>
-                <LinkImg src={linkIcon} />
-              </Card>
-            ))}
+            {trailData &&
+              trailData.data.map((data) => (
+                <Card key={data.walkingTrailId}>
+                  <img
+                    src={walkingReportThumbnail}
+                    alt="thumbnail"
+                    width={69}
+                    height={88}
+                    style={{ borderRadius: '12px' }}
+                  />
+                  {/* <ContentWrapper>
+                    <Body4>{data.}</Body4>
+                    <InfoWrapper>
+                      <Info>
+                        <DescriptionTitle>시간</DescriptionTitle>
+                        <DescriptionContent>{data.time}</DescriptionContent>
+                      </Info>
+                      <Info>
+                        <DescriptionTitle>거리</DescriptionTitle>
+                        <DescriptionContent>{data.distance}</DescriptionContent>
+                      </Info>
+                    </InfoWrapper>
+                    <NameRatingWrapper>
+                      <span className="name">{data.name}의 산책길</span>
+                      <Rate>
+                        <img
+                          src={startIcon}
+                          alt="star"
+                          width={24}
+                          height={24}
+                        />{' '}
+                        {data.rate}
+                      </Rate>
+                    </NameRatingWrapper>
+                  </ContentWrapper> */}
+                  <LinkImg src={linkIcon} />
+                </Card>
+              ))}
           </Slider>
         </CardWrapper>
       </Box>
