@@ -9,10 +9,13 @@ import SearchBottomCom from '../../components/searchMain/SearchBottomCom';
 import Footer from '../../components/common/Footer';
 import SearchResult from '../../components/searchMain/SearchResult';
 import searchDataState from '../../stores/searchDataState';
+import useFetch from '../../hooks/useFetch';
 
 const SearchMain = () => {
   const [serachData, setSearchData] = useRecoilState(searchDataState);
 
+  // const { data } = useFetch('trailData/search', '/walking-trail', {});
+  // console.log('data', data);
   return (
     <BaseBox>
       {serachData.isSearch ? (

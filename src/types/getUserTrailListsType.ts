@@ -1,4 +1,5 @@
 export interface IUserTrailLists {
+  mainImage: string;
   walkingTrailId: number;
   name: string;
   description: string;
@@ -9,6 +10,7 @@ export interface IUserTrailLists {
   createdDate: string;
   rating: number;
   userId: number;
+  userUid: string;
   reviewCount: number;
   likeCount: number;
   isLike: boolean;

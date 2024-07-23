@@ -40,7 +40,8 @@ const StartWalkingHeader = ({ data }: any) => {
     <Container>
       <IconButton src={BackIcon} alt="backIcon" onClick={handleBackIconClick} />
       <Title>{data.name}</Title>
-      <IconButton src={MeatballsIcon} alt="moreIcon" />
+      <div />
+      {/* <IconButton src={MeatballsIcon} alt="moreIcon" /> */}
     </Container>
   );
 };

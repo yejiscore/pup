@@ -12,4 +12,14 @@ module.exports = function (app) {
       },
     })
   );
+  app.use(
+    '/tmap-tile',
+    createProxyMiddleware({
+      target: 'http://topopentile3.tmap.co.kr',
+      changeOrigin: true,
+      pathRewrite: {
+        '^/tmap-tile': '', // URL에서 /tmap-tile을 제거
+      },
+    })
+  );
 };

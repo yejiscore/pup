@@ -1,6 +1,3 @@
-/* eslint-disable no-nested-ternary */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-plusplus */
 /* eslint-disable react/no-array-index-key */
 import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
@@ -152,11 +149,12 @@ const WalkingReport = () => {
       const dataToSend = {
         walkingTrailUid: uploadData.walkingTrailId,
         name,
-        time,
-        distance,
+        time: Number(time),
+        distance: Number(distance),
         description: memo,
+        mainImage: '',
         openRange:
-          activeButton === '공개'
+          activeButton === '전체공개'
             ? 'PUBLIC'
             : activeButton === '친구만'
               ? 'PROTECTED'

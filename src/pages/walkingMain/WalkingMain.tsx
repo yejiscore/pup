@@ -67,6 +67,7 @@ const WalkingMain = () => {
   }>({ lat: 37.514575, lng: 127.0495556 });
   const [showStopModal, setShowStopModal] = useState(false);
   const [dogsId, setDogsId] = useState<number[]>([]);
+  const [isActive, setIsActive] = useState(false);
 
   // ref
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -195,6 +196,7 @@ const WalkingMain = () => {
               iconSize: new window.Tmapv2.Size(20, 20), // 마커 이미지 크기 설정
               map,
             });
+            setIsActive(true);
             markerRef.current = newMarker;
           }
         },
@@ -339,7 +341,7 @@ const WalkingMain = () => {
       <Tmap ref={tmapRef} />
       <WalkingHeader basePosition={basePosition} />
       <WalkingControls onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} />
-      <WalkingMyLocation onClick={handleFindLocation} />
+      <WalkingMyLocation onClick={handleFindLocation} isActive={isActive} />
       <WalkingStartButton
         onClick={handleStartClick}
         isModalOpen={isModalOpen}

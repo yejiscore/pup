@@ -4,10 +4,20 @@ import {
   ImageButton,
 } from '../../styles/WalkingMainStyle';
 import locationIcon from '../../assets/map/locationOff.png';
+import locationOnIcon from '../../assets/map/locationOn.png';
 
-const WalkingMyLocation = ({ onClick }: { onClick: () => void }) => (
+const WalkingMyLocation = ({
+  onClick,
+  isActive = false,
+}: {
+  onClick: () => void;
+  isActive: boolean | null;
+}) => (
   <StyledMyLocation onClick={onClick}>
-    <ImageButton src={locationIcon} alt="location" />
+    <ImageButton
+      src={isActive ? locationOnIcon : locationIcon}
+      alt="location"
+    />
   </StyledMyLocation>
 );
 

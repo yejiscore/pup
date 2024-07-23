@@ -16,6 +16,7 @@
     "aws-sdk": "^2.1659.0",
     "axios": "^1.7.2",
     "date-fns": "^3.6.0",
+    "html2canvas": "^1.4.1",
     "http-proxy-middleware": "^3.0.0",
     "moment": "^2.30.1",
     "react": "^18.2.0",

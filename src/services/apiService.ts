@@ -19,3 +19,8 @@ export const deleteData = async (url: string, data?: any) => {
   const response = await APIInstance.delete(url, { data });
   return response.data;
 };
+
+export const patchData = async (url: string, data?: any) => {
+  const response = await APIInstance.patch(url, data);
+  return response.data;
+};

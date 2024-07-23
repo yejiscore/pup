@@ -9,8 +9,11 @@ import LoginMain from './pages/login/LoginMain.tsx';
 import Footer from './components/common/Footer.tsx';
 import WalkingReport from './pages/walkingReport/WalkingReport.tsx';
 import SearchMain from './pages/searchMain/SearchMain.tsx';
-import SearchMap from './pages/searchMap/SearchMap.tsx';
+import SearchMap from './pages/searchMain/SearchMap.tsx';
 import SearchStartWalking from './pages/searchMap/SearchStartWalking.tsx';
+import SelectTrail from './pages/detail/SelectTrail.tsx';
+import TrailStart from './pages/trailStart/TrailStart.tsx';
+import FinishTrail from './pages/trailStart/FinishTrail.tsx';
 
 function App() {
   return (
@@ -24,6 +27,8 @@ function App() {
             </BaseLayout>
           }
         />
+
+        {/* 산책로 생성 */}
         <Route
           path="/walking_main"
           element={
@@ -40,6 +45,8 @@ function App() {
             </BaseLayout>
           }
         />
+
+        {/* 검색 */}
         <Route
           path="/search"
           element={
@@ -49,23 +56,48 @@ function App() {
           }
         />
         <Route
-          path="/search_map"
+          path="/search/map"
           element={
             <BaseLayout>
               <SearchMap />
             </BaseLayout>
           }
         />
+
+        {/* 산책로 위치로 이동 */}
         <Route
-          path="/search_map/start/:id"
+          path="/trail/start/:id"
           element={
             <BaseLayout>
               <SearchStartWalking />
             </BaseLayout>
           }
         />
+        <Route
+          path="/trail/select/:id"
+          element={
+            <BaseLayout>
+              <SelectTrail />
+            </BaseLayout>
+          }
+        />
+        <Route
+          path="/trail/startTrail/:id"
+          element={
+            <BaseLayout>
+              <TrailStart />
+            </BaseLayout>
+          }
+        />
+        <Route
+          path="/trail/finish/:id"
+          element={
+            <BaseLayout>
+              <FinishTrail />
+            </BaseLayout>
+          }
+        />
 
-        <Route path="/walking" element={<div>산책하기 페이지</div>} />
         <Route
           path="/login"
           element={

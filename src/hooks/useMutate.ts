@@ -1,7 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteData, postData, putData } from '../services/apiService';
+import {
+  deleteData,
+  patchData,
+  postData,
+  putData,
+} from '../services/apiService';
 
-type HttpMethod = 'post' | 'put' | 'delete';
+type HttpMethod = 'post' | 'put' | 'delete' | 'patch';
 
 const useMutate = (key: string, url: string, method: HttpMethod) => {
   const queryClient = useQueryClient();
@@ -15,6 +20,9 @@ const useMutate = (key: string, url: string, method: HttpMethod) => {
     }
     if (method === 'delete') {
       return deleteData(url, data);
+    }
+    if (method === 'patch') {
+      return patchData(url, data);
     }
     return Promise.reject(new Error('Invalid HTTP method'));
   };

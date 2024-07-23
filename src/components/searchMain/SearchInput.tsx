@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 import searchIcon from '../../assets/common/search.png';
 import mapIcon from '../../assets/common/map.png';
 import searchDataState from '../../stores/searchDataState';
@@ -46,10 +47,11 @@ const SearchInputCom = styled.input`
 const Icon = styled.img`
   width: 36px;
   height: 36px;
-  /* margin: 0 20px; */
+  cursor: pointer;
 `;
 
 const SearchInput = () => {
+  const navigate = useNavigate();
   const [serachData, setSearchData] = useRecoilState(searchDataState);
   const [text, setText] = useState('');
   const onChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +66,9 @@ const SearchInput = () => {
     });
   };
 
+  const onClickMap = () => {
+    navigate('/search/map');
+  };
   return (
     <SearchBarContainer>
       <InputContainer>
@@ -75,7 +80,7 @@ const SearchInput = () => {
           onClick={onClick}
         />
       </InputContainer>
-      <Icon src={mapIcon} alt="map" />
+      <Icon src={mapIcon} alt="map" onClick={onClickMap} />
     </SearchBarContainer>
   );
 };

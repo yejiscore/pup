@@ -1,17 +1,14 @@
-/* eslint-disable consistent-return */
-/* eslint-disable new-cap */
-/* eslint-disable no-undef */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable guard-for-in */
-/* eslint-disable no-new */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useRecoilState } from 'recoil';
+/* eslint-disable no-shadow */
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import StartWalkingSelect from '../../components/searchMain/StartWalkingSelect';
-import isSelectState from '../../stores/selectDataState';
+import { useNavigate, useParams } from 'react-router-dom';
 import BaseBox from '../../styles/common/BaseBox';
+import StopIcon from '../../assets/map/stop.png';
+import WalkingStopModal from '../../components/walkingMain/WalkingStopModal';
+import calculateDistance from '../../utils/calculateDistance';
+import WalkingControls from '../../components/walkingMain/WalkingControls';
+import WalkingMyLocation from '../../components/walkingMain/WalkingMyLocation';
 
 declare global {
   interface Window {
@@ -28,10 +25,121 @@ const MapContainer = styled.div`
   z-index: 0; // 맨 뒤에 위치
 `;
 
+const BottomWrapper = styled.div`
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%); // 가운데 정렬
+  z-index: 1; // 앞에 위치
+  width: 346.16px;
+  height: 181px;
+`;
+
+const TopBox = styled.div`
+  width: 100%;
+  height: 110px;
+  background-color: ${({ theme }) => theme.colors.background};
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+
+  box-shadow:
+    0px 2px 4px 0px #37ae7f33,
+    0px 7px 7px 0px #37ae7f2b,
+    0px 15px 9px 0px #37ae7f1a,
+    0px 27px 11px 0px #37ae7f08,
+    0px 43px 12px 0px #37ae7f00;
+
+  .title {
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 23.87px;
+    color: ${({ theme }) => theme.colors.darkGray};
+    margin-left: 20px;
+    margin-bottom: 10px;
+  }
+  .infoWrapper {
+    display: flex;
+    margin-left: 20px;
+  }
+
+  .info {
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 23.87px;
+    color: ${({ theme }) => theme.colors.primary[5]};
+    margin-right: 13px;
+  }
+
+  .distance {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 23.87px;
+  }
+`;
+
+const BottomBox = styled.div`
+  width: 100%;
+  margin-top: 8px;
+  background-color: inherit;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .stopIcon {
+    background-color: inherit;
+    border-radius: 100px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    /* margin-left: 20; */
+  }
+
+  .startBtn {
+    box-shadow:
+      0px 3px 6px 0px #37ae7f33,
+      0px 10px 10px 0px #37ae7f2b,
+      0px 23px 14px 0px #37ae7f1a,
+      0px 41px 17px 0px #37ae7f08,
+      0px 65px 18px 0px #37ae7f00;
+
+    width: 263px;
+    height: 63px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: ${({ theme }) => theme.colors.primary[5]};
+    border-radius: 100px;
+    border: none;
+
+    color: ${({ theme }) => theme.colors.white};
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 36px;
+    letter-spacing: -1%;
+  }
+`;
+
 declare const Tmapv2: any;
 
 const SearchStartWalking = () => {
-  const tmapRef = useRef<HTMLDivElement | null>(null);
+  const { id } = useParams(); // URL 파라미터에서 id를 가져옴
+  const navigate = useNavigate();
+
+  //   const { data: trailData } = useFetch(
+  //     `/walking-trail/${id}`,
+  //     `/walking-trail/${id}`,
+  //     {}
+  //   );
+
+  const dummyData = {
+    lat: 37.497175,
+    lng: 127.027926,
+  };
+
+  const tmapRef = useRef<HTMLDivElement | null | any>(null);
   const [map, setMap] = useState<any>(null);
   const [userLocation, setUserLocation] = useState<{
     lat: number;
@@ -40,11 +148,10 @@ const SearchStartWalking = () => {
   const [path, setPath] = useState<any[]>([]);
   const [routeCalculated, setRouteCalculated] = useState<boolean>(false);
   const [marker, setMarker] = useState<any>(null);
-
-  const dummyData = {
-    lat: 37.497175,
-    lng: 127.027926,
-  };
+  const [distanceToDestination, setDistanceToDestination] = useState<
+    string | null
+  >(null);
+  const [isNearby, setIsNearby] = useState<boolean>(false);
 
   const drawLine = (arrPoint: any[], color: string = '#FF0000') => {
     new Tmapv2.Polyline({
@@ -67,6 +174,7 @@ const SearchStartWalking = () => {
           width: '100%',
           height: '100%',
           zoom: 15,
+          zoomControl: false, // 줌 컨트롤 버튼 삭제
         });
         setMap(tmap);
       };
@@ -79,7 +187,6 @@ const SearchStartWalking = () => {
       const watchId = navigator.geolocation.watchPosition((position) => {
         const { latitude, longitude } = position.coords;
         const newLocation = { lat: latitude, lng: longitude };
-        console.log('newLocation:', newLocation);
         setUserLocation(newLocation);
         setPath((prevPath) => [
           ...prevPath,
@@ -91,9 +198,12 @@ const SearchStartWalking = () => {
   }, []);
 
   useEffect(() => {
+    console.log('map:', map);
+    console.log('userLocation:', userLocation);
+    console.log('routeCalculated:', routeCalculated);
     if (map && userLocation && !routeCalculated) {
       const headers = {
-        appKey: 'yEiKCREP6d1WbNkSRexoX12a38UPnI4V8pCB3sEZ', // 당신의 Tmap 앱 키로 변경하세요
+        appKey: process.env.REACT_APP_TMAP_APP_KEY,
       };
       console.log('userLocation:', userLocation);
       console.log('실행');
@@ -138,7 +248,7 @@ const SearchStartWalking = () => {
           console.error('경로 데이터를 가져오는 중 오류 발생:', error);
         });
     }
-  }, []);
+  }, [map && userLocation && !routeCalculated]);
 
   useEffect(() => {
     if (map && userLocation) {
@@ -156,14 +266,109 @@ const SearchStartWalking = () => {
       });
       setMarker(newMarker);
       map.setCenter(new Tmapv2.LatLng(userLocation.lat, userLocation.lng));
+
+      // 목적지까지의 거리 계산
+      const distance = calculateDistance(
+        userLocation.lat,
+        userLocation.lng,
+        dummyData.lat,
+        dummyData.lng
+      );
+      setDistanceToDestination(distance);
+      // 거리가 0.05km 이하일 때 (즉, 50미터 이내일 때)
+      if (Number(distance) <= 0.05) {
+        setIsNearby(true);
+      } else {
+        setIsNearby(false);
+      }
     }
   }, [userLocation]);
+
+  const [showStopModal, setShowStopModal] = useState(false);
+  // 산책 재개
+  const handleResume = () => {
+    setShowStopModal(false);
+  };
+  // 산책 완료
+  const handleComplete = () => {
+    setShowStopModal(false);
+    // navigate('/walking_main/report');
+  };
+
+  const handleTraiLStart = () => {
+    console.log('산책 시작');
+    navigate(`/trail/startTrail/${id}`);
+  };
+
+  useEffect(() => {
+    if (userLocation) {
+      console.log('userLocation changed:', userLocation);
+      if (map) {
+        const newCenter = new Tmapv2.LatLng(userLocation.lat, userLocation.lng);
+        map.setCenter(newCenter);
+      }
+    }
+  }, [userLocation]);
+
+  // 줌
+  const handleZoomIn = () => {
+    if (map) {
+      map.zoomIn();
+    }
+  };
+
+  // 아웃
+  const handleZoomOut = () => {
+    if (map) {
+      map.zoomOut();
+    }
+  };
 
   return (
     <BaseBox>
       <MapContainer ref={tmapRef} />
+      <WalkingControls onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} />
+      <WalkingMyLocation onClick={() => {}} isActive />
+
+      <BottomWrapper>
+        <TopBox>
+          <span className="title">시작 지점으로 이동하기</span>
+          <div className="infoWrapper">
+            <span className="info">시작 지점까지</span>
+            <span className="distance">
+              {distanceToDestination !== null ? distanceToDestination : '00.00'}
+              km
+            </span>
+          </div>
+        </TopBox>
+        <BottomBox>
+          <button
+            type="button"
+            className="stopIcon"
+            onClick={() => {
+              setShowStopModal(true);
+            }}
+          >
+            <img src={StopIcon} alt="StopIcon" width={63} height={63} />
+          </button>
+          <button
+            type="button"
+            className="startBtn"
+            disabled={!isNearby}
+            onClick={handleTraiLStart}
+          >
+            산책시작
+          </button>
+        </BottomBox>
+      </BottomWrapper>
+      {showStopModal && (
+        <WalkingStopModal onRestart={handleResume} onStop={handleComplete} />
+      )}
     </BaseBox>
   );
 };
 
 export default SearchStartWalking;
+
+// 37.497175
+// 127.027926

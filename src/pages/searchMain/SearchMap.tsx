@@ -1,6 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable no-alert */
-/* eslint-disable no-new */
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +8,14 @@ import starIcon from '../../assets/common/star.png';
 import peopleIcon from '../../assets/common/people.png';
 import WalkingControls from '../../components/walkingMain/WalkingControls';
 import WalkingMyLocation from '../../components/walkingMain/WalkingMyLocation';
+import useFetch from '../../hooks/useFetch';
+import { ResIUserTrailLists } from '../../types/getUserTrailListsType';
+import {
+  formatDistance,
+  formatRating,
+  formatReviewCount,
+  formatTime,
+} from '../../utils/formatTime';
 
 const MapContainer = styled.div`
   width: 100%;
@@ -31,39 +36,75 @@ const HeaderContainer = styled.div`
 `;
 
 const SearchMap = () => {
+  const [baseName, setBaseName] = useState('');
+  const [name, setName] = useState('');
+  const type = 'RECENT';
+
+  const { data: trailData } = useFetch<ResIUserTrailLists>(
+    `[trailData/search/${name}${type}]`,
+    '/walking-trail/search',
+    {
+      name,
+      type,
+    }
+  );
   const dummyData = [
     {
-      id: 1,
-      name: '테스트',
-      address: '서울시 강남구',
-      lat: 37.498085,
-      lng: 127.028621,
-      time: '00:12:00',
-      distance: 0.5,
-      rating: 4.5,
-      isWoked: '0.000',
+      walkingTrailId: 11,
+      mainImage: null,
+      name: '서울시 어쩌구',
+      description: '해당 산책에 대한 기록을 저장합니다.',
+      walkingTrailUid: 'cf2c63cc-8b06-4b3d-8b2d-30f78be5ada1',
+      time: 120,
+      distance: 1000,
+      openRange: 'PUBLIC',
+      createdDate: '2024-07-21T12:54:17.601',
+      rating: 2,
+      userId: 6,
+      userUid: 'b758c502-049e-42ab-ac19-95b9f7524e59',
+      reviewCount: 1,
+      likeCount: 0,
+      isLike: false,
+      lat: 37.497175,
+      lng: 127.027926,
     },
     {
-      id: 2,
-      name: '테스트2',
-      address: '서울시 강남구',
-      lat: 37.496085,
-      lng: 127.027621,
-      time: '00:12:00',
-      distance: 0.5,
-      rating: 4.5,
-      isWoked: '0.000',
+      walkingTrailId: 10,
+      mainImage: null,
+      name: '서울시 어쩌구',
+      description: '해당 산책에 대한 기록을 저장합니다.',
+      walkingTrailUid: 'cf2c63cc-8b06-4b3d-8b2d-30f78be5ada2',
+      time: 120,
+      distance: 400,
+      openRange: 'PUBLIC',
+      createdDate: '2024-07-21T12:53:17.601',
+      rating: 2,
+      userId: 6,
+      userUid: 'b758c502-049e-42ab-ac19-95b9f7524e59',
+      reviewCount: 2,
+      likeCount: 0,
+      isLike: false,
+      lat: 37.499175,
+      lng: 127.028926,
     },
     {
-      id: 3,
-      name: '테스트3',
-      address: '서울시 강남구',
-      lat: 37.498085,
-      lng: 127.027221,
-      time: '00:12:00',
-      distance: 0.5,
-      rating: 4.5,
-      isWoked: '0.000',
+      walkingTrailId: 9,
+      mainImage: null,
+      name: '서울시 어쩌구',
+      description: '해당 산책에 대한 기록을 저장합니다.',
+      walkingTrailUid: 'cf2c63cc-8b06-4b3d-8b2d-30f78be5ada3',
+      time: 120,
+      distance: 500,
+      openRange: 'PUBLIC',
+      createdDate: '2024-07-21T12:52:17.601437',
+      rating: null,
+      userId: 6,
+      userUid: 'b758c502-049e-42ab-ac19-95b9f7524e59',
+      reviewCount: 200,
+      likeCount: 1,
+      isLike: true,
+      lat: 37.498175,
+      lng: 127.029926,
     },
   ];
   const calculateDistance = (
@@ -89,6 +130,7 @@ const SearchMap = () => {
 
   const tmapRef = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<any>(null);
+  const [isActive, setIsActive] = useState(false);
   const [userLocation, setUserLocation] = useState<{
     lat: number;
     lng: number;
@@ -128,22 +170,22 @@ const SearchMap = () => {
           }
 
           const content = `
-            <div style="width:189px; padding:5px; cursor: pointer;" class="go-detail-button" data-id="${data.id}">
+            <div style="width:189px; padding:5px; cursor: pointer;" class="go-detail-button" data-id="${data.walkingTrailId}">
               <h4 style="font-size:14px; font-weight:400; line-height:16.71px; color:#121413;">${distanceText}</h4>
               <h5 style="font-size:14px; font-weight:400; line-height:16.71px; color: #283330;">${data.name}</h5>
               <div style="display:flex; width:100%; justify-content:space-between;">
                   <p style="font-size:14px; font-weight:400; line-height:16.71px; color:#00AE80;">예상 시간</p>
-                  <p style="font-size:14px; font-weight:600; line-height:16.38px; color:#283330;">${data.time}</p>
+                  <p style="font-size:14px; font-weight:600; line-height:16.38px; color:#283330;">${formatTime(data.time)}</p>
               </div>
               <div style="display:flex; width:100%; justify-content:space-between;">
                   <p style="font-size=14px; font-weight:400; line-height:16.71px; color:#00AE80;">거리</p>
-                  <p style="font-size:14px; font-weight:600; line-height:16.38px; color:#283330;">${data.distance}km</p>
+                  <p style="font-size:14px; font-weight:600; line-height:16.38px; color:#283330;">${formatDistance(data.distance)}km</p>
               </div>
               <div style="display:flex; width: 100%; justify-content:center; align-items:center;">
                   <img src=${starIcon} alt="rating" width="24" height="24" />
-                  <p style="font-size:12px; font-weight:400; line-height:14.32px; color:#283330;">${data.rating}</p>
+                <p style="font-size:12px; font-weight:400; line-height:14.32px; color:#283330;">${data.rating ? formatRating(String(data.rating)) : '0.0'}</p>
                   <img src=${peopleIcon} alt="people" width="24" height="24" />
-                  <p style="font-size:12px; font-weight:400; line-height:14.32px; color:#283330;">${data.isWoked}</p>
+                  <p style="font-size:12px; font-weight:400; line-height:14.32px; color:#283330;">${formatReviewCount(data.reviewCount)}</p>
               </div>
 
             </div>
@@ -173,6 +215,7 @@ const SearchMap = () => {
         (position) => {
           const { latitude, longitude } = position.coords;
           setUserLocation({ lat: latitude, lng: longitude });
+          setIsActive(true);
         },
         (error) => {
           if (error.code === 1) {
@@ -216,21 +259,22 @@ const SearchMap = () => {
         const distanceText = `내 위치에서 ${distance} km`;
 
         const content = `
-<div style="width:189px; padding:5px; cursor: pointer;" class="go-detail-button" data-id="${data.id}">                <h4 style="font-size:14px; font-weight:400; line-height:16.71px; color:#00AE80;">${distanceText}</h4>
+<div style="width:189px; padding:5px; cursor: pointer;" class="go-detail-button" data-id="${data.walkingTrailUid}">                
+    <h4 style="font-size:14px; font-weight:400; line-height:16.71px; color:#00AE80;">${distanceText}</h4>
                 <h5 style="font-size:14px; font-weight:400; line-height:16.71px; color: #283330;">${data.name}</h5>
             <div style="display:flex; width:100%; justify-content:space-between;">
                 <p style="font-size:14px; font-weight:400; line-height:16.71px; color:#00AE80;">예상 시간</p>
-                <p style="font-size:14px; font-weight:600; line-height:16.38px; color:#283330;">${data.time}</p>
+                <p style="font-size:14px; font-weight:600; line-height:16.38px; color:#283330;">${formatTime(data.time)}</p>
             </div>
             <div style="display:flex; width:100%; justify-content:space-between;">
                 <p style="font-size=14px; font-weight:400; line-height:16.71px; color:#00AE80;">거리</p>
-                <p style="font-size:14px; font-weight:600; line-height:16.38px; color:#283330;">${data.distance}km</p>
+                <p style="font-size:14px; font-weight:600; line-height:16.38px; color:#283330;">${formatDistance(data.distance)}</p>
             </div>
             <div style="display:flex; width: 100%; justify-content:center; align-items:center;">
                 <img src=${starIcon} alt="rating" width="24" height="24" />
-                <p style="font-size:12px; font-weight:400; line-height:14.32px; color:#283330;">${data.rating}</p>
+                <p style="font-size:12px; font-weight:400; line-height:14.32px; color:#283330;">${data.rating ? formatRating(String(data.rating)) : '0.0'}</p>
                 <img src=${peopleIcon} alt="people" width="24" height="24" />
-                <p style="font-size:12px; font-weight:400; line-height:14.32px; color:#283330;">${data.isWoked}</p>
+                <p style="font-size:12px; font-weight:400; line-height:14.32px; color:#283330;">${formatReviewCount(data.reviewCount)}</p>
             </div>
           </div>
         `;
@@ -274,7 +318,7 @@ const SearchMap = () => {
       if (target.closest('.go-detail-button')) {
         const id = target.closest('.go-detail-button')?.getAttribute('data-id');
         if (id) {
-          navigate(`/search_map/start/${id}`);
+          navigate(`/trail/select/${id}`);
         }
       }
     };
@@ -298,7 +342,7 @@ const SearchMap = () => {
         <SearchMapInput />
       </HeaderContainer>
       <WalkingControls onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} />
-      <WalkingMyLocation onClick={handleFindLocation} />
+      <WalkingMyLocation onClick={handleFindLocation} isActive={isActive} />
     </BaseBox>
   );
 };
