@@ -1,5 +1,7 @@
 /* eslint-disable import/prefer-default-export */
-export const myData = [
+import { DataItem } from '../types/DataItem';
+
+export const myData: DataItem[] = [
     {
         id: 1,
         date: '2024.07.01',
@@ -9,8 +11,8 @@ export const myData = [
         visibility: '전체공개',
         userUid: '김떙떙',
         rating: 3.5,
-        thumbnail: false,
-        photos: false,
+        photos: [],
+        image: undefined,
         memo: '일이삼사오륙칠팔구십일이삼사오륙칠팔구십',
     },
     {
@@ -22,7 +24,9 @@ export const myData = [
         visibility: '친구만',
         userUid: '이땡땡',
         rating: 3.5,
-        memo: '일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십',
+        photos: [],
+        image: undefined,
+        memo: '일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십일이삼사오륙칠팔구십',
     },
     {
         id: 3,
@@ -33,7 +37,9 @@ export const myData = [
         visibility: '비공개',
         userUid: '박땡땡',
         rating: 3.5,
-        memo: false,
+        photos: [],
+        image: undefined,
+        memo: '',
     },
     {
         id: 4,
@@ -44,6 +50,9 @@ export const myData = [
         visibility: '비공개',
         userUid: '최땡땡',
         rating: 3.5,
+        photos: [],
+        image: undefined,
+        memo: '일이삼사오륙칠팔구십일이삼사오륙칠팔구십',
     },
     {
         id: 5,
@@ -54,6 +63,9 @@ export const myData = [
         visibility: '전체공개',
         userUid: '최땡땡',
         rating: 3.5,
+        photos: [],
+        image: undefined,
+        memo: '일이삼사오륙칠팔구십일이삼사오륙칠팔구십',
     },
     {
         id: 6,
@@ -64,6 +76,9 @@ export const myData = [
         visibility: '전체공개',
         userUid: '최땡땡',
         rating: 3.5,
+        photos: [],
+        image: undefined,
+        memo: '일이삼사오륙칠팔구십일이삼사오륙칠팔구십',
     },
     {
         id: 7,
@@ -74,5 +89,8 @@ export const myData = [
         visibility: '친구만',
         userUid: '최땡땡',
         rating: 3.5,
+        photos: [],
+        image: undefined,
+        memo: '일이삼사오륙칠팔구십일이삼사오륙칠팔구십',
     },
 ];

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import MyBoardPage from './components/MyWalkingBoard/MyBoardPage.tsx';
-import BaseLayout from './layouts/Layout.tsx';
-import { AppProvider } from './context/AppContext.tsx';
-import GlobalStyle from './styles/GlobalStyle.ts';
-import DetailPage from './components/Detail/Detail.tsx';
+import MyBoardPage from './components/MyWalkingBoard/MyBoardPage';
+import BaseLayout from './layouts/Layout';
+import { AppProvider } from './context/AppContext';
+import GlobalStyle from './styles/GlobalStyle';
+import DetailPage from './components/Detail/Detail';
 
 function App() {
     return (

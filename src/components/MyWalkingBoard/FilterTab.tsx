@@ -1,7 +1,7 @@
 // src/components/FilterTab.tsx
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useAppContext } from '../../context/AppContext.tsx';
+import { useAppContext } from '../../context/AppContext';
 import ListIcon from '../../assets/List.png';
 import CalendarIcon from '../../assets/Calendar.png';
 

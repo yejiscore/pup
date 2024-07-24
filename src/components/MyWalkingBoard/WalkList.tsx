@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+// src/components/MyWalkingBoard/WalkList.tsx
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
@@ -7,11 +7,15 @@ import LinkCopyIcon from '../../assets/LinkCopy1.png';
 import HeartIcon from '../../assets/heart.png';
 import SelectCircleIcon from '../../assets/Ellipse 8 (Stroke).png';
 import SelectedCircleIcon from '../../assets/Group 58.png';
-import { useAppContext } from '../../context/AppContext.tsx';
-import DeleteModal from '../Modal/DeleteModal.tsx';
+import { useAppContext } from '../../context/AppContext';
+import DeleteModal from '../Modal/DeleteModal';
 import StarIcon from '../../assets/Star 2.png';
-import VisibilityTag from '../common/Tag.tsx';
-import CopyModal from '../Modal/CopyModal.tsx';
+import VisibilityTag from '../common/Tag';
+import CopyModal from '../Modal/CopyModal';
+
+interface ListItemProps {
+    isTrashIcon: boolean;
+}
 
 const WalkListContainer = styled.div`
     width: 100%;
@@ -20,7 +24,7 @@ const WalkListContainer = styled.div`
     align-items: center;
 `;
 
-const ListItem = styled.div`
+const ListItem = styled.div<ListItemProps>`
     width: 336px;
     height: 116px;
     gap: 0px;
@@ -134,7 +138,21 @@ const SelectCircle = styled.img`
     right: 17px;
 `;
 
-function WalkList({ data, activeSubTab }) {
+interface WalkListProps {
+    data: Array<{
+        id: number;
+        date: string;
+        title: string;
+        time: string;
+        distance: string;
+        visibility: string;
+        userUid: string;
+        rating: number;
+    }>;
+    activeSubTab: string;
+}
+
+function WalkList({ data, activeSubTab }: WalkListProps) {
     const {
         isTrashIcon,
         isModalOpen,
@@ -148,13 +166,13 @@ function WalkList({ data, activeSubTab }) {
     const [showModal, setShowModal] = useState(false);
     const [modalUrl, setModalUrl] = useState('');
 
-    const handleItemClick = (id) => {
+    const handleItemClick = (id: number) => {
         if (!isTrashIcon) {
             navigate(`/detail/${id}`);
         }
     };
 
-    const handleOptionsClick = (e, url) => {
+    const handleOptionsClick = (e: React.MouseEvent, url: string) => {
         e.stopPropagation();
         setModalUrl(url);
         setShowModal(true);

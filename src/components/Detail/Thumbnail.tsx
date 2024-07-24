@@ -2,12 +2,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-import { useAppContext } from '../../context/AppContext.tsx';
+import { useAppContext } from '../../context/AppContext';
 import DefaultThumbnail from '../../assets/Thumbnail.png';
 import StarIcon from '../../assets/Star 2.png';
-import Tag from '../common/Tag.tsx';
+import Tag from '../common/Tag';
 import LinkCopyIcon from '../../assets/LinkCopy2.png';
-import CopyModal from '../Modal/CopyModal.tsx';
+import CopyModal from '../Modal/CopyModal';
 
 const ThumbnailContainer = styled.div`
     width: 100%;
@@ -72,7 +72,11 @@ function Thumbnail() {
         return <div>Data not found</div>;
     }
 
-    const image = item.image ? item.image : DefaultThumbnail;
+    const image = item.image
+        ? typeof item.image === 'string'
+            ? item.image
+            : URL.createObjectURL(item.image)
+        : DefaultThumbnail;
 
     const handleOptionsClick = () => {
         setShowModal(true);

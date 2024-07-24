@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import MeatballsIcon from '../../assets/meatball.png';
 import TrashIcon from '../../assets/trash.png';
-import { useAppContext } from '../../context/AppContext.tsx';
+import { useAppContext } from '../../context/AppContext';
 
 const Container = styled.div`
     width: 100%;

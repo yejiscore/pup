@@ -2,12 +2,12 @@
 // src/components/Tab.tsx
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import WalkList from './WalkList.tsx';
-import { useAppContext } from '../../context/AppContext.tsx';
-import SubTab from './SubTab.tsx';
-import FilterTab from './FilterTab.tsx';
-import Container from '../common/Container.tsx';
-import Calendar from '../Calendar/components/Calendar.tsx';
+import WalkList from './WalkList';
+import { useAppContext } from '../../context/AppContext';
+import SubTab from './SubTab';
+import FilterTab from './FilterTab';
+import Container from '../common/Container';
+import Calendar from '../Calendar/components/Calendar';
 
 const TabContainer = styled.div`
     width: 100%;

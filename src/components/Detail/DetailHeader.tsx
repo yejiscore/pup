@@ -1,72 +1,3 @@
-// // src/components/DetailHeader.tsx
-// import React from 'react';
-// import styled from 'styled-components';
-// import { useNavigate, useParams } from 'react-router-dom';
-// import MeatballsIcon from '../../assets/meatball.png';
-// import BackIcon from '../../assets/Left.png';
-// import { useAppContext } from '../../context/AppContext.tsx';
-
-// const Container = styled.div`
-//     width: 100%;
-//     height: 49px;
-//     display: flex;
-//     justify-content: space-between;
-//     align-items: center;
-//     padding: 0 16px;
-//     box-sizing: border-box;
-//     position: relative;
-// `;
-
-// const TitleContainer = styled.div`
-//     position: absolute;
-//     left: 50%;
-//     transform: translateX(-50%);
-// `;
-
-// const Title = styled.div`
-//     font-size: 18px;
-//     color: #283330;
-//     text-align: center;
-// `;
-
-// const IconButton = styled.img`
-//     cursor: pointer;
-// `;
-
-// const BackButton = styled.img`
-//     cursor: pointer;
-// `;
-
-// function DetailHeader() {
-//     const { id } = useParams<{ id: string }>();
-//     const { myData, likeData } = useAppContext();
-//     const navigate = useNavigate();
-
-//     const handleBackClick = () => {
-//         navigate(-1);
-//     };
-
-//     const item =
-//         myData.find((data) => data.id === Number(id)) ||
-//         likeData.find((data) => data.id === Number(id));
-
-//     if (!item) {
-//         return <div>Data not found</div>;
-//     }
-
-//     return (
-//         <Container>
-//             <BackButton src={BackIcon} alt="Back" onClick={handleBackClick} />
-//             <TitleContainer>
-//                 <Title>{item.title}</Title>
-//             </TitleContainer>
-//             <IconButton src={MeatballsIcon} alt="Options" />
-//         </Container>
-//     );
-// }
-
-// export default DetailHeader;
-
 // src/components/DetailHeader.tsx
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -74,8 +5,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import MeatballsIcon from '../../assets/meatball.png';
 import TrashIcon from '../../assets/trash.png';
 import BackIcon from '../../assets/Left.png';
-import { useAppContext } from '../../context/AppContext.tsx';
-import DeleteModal from '../Modal/DeleteModal.tsx';
+import { useAppContext } from '../../context/AppContext';
+import DeleteModal from '../Modal/DeleteModal';
 
 const Container = styled.div`
     width: 100%;

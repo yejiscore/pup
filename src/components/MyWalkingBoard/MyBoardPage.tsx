@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Header from './Header.tsx';
-import Tab from './Tab.tsx';
-import BaseBox from '../../styles/common/BaseBox.ts';
-import Footer from '../common/Footer.tsx';
+import Header from './Header';
+import Tab from './Tab';
+import BaseBox from '../../styles/common/BaseBox';
+import Footer from '../common/Footer';
 
 function MyBoardPage() {
     const [activeTab, setActiveTab] = useState('산책로');

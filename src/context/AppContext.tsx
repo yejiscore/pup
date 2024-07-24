@@ -5,19 +5,7 @@
 import React, { createContext, useState, ReactNode, useContext } from 'react';
 import { myData as initialMyData } from '../data/mydata';
 import { likeData as initialLikeData } from '../data/likedata';
-
-interface DataItem {
-    id: number;
-    date: string;
-    title: string;
-    time: string;
-    distance: string;
-    visibility: string;
-    nickname: string;
-    rating: number;
-    photos: boolean;
-    memo: string;
-}
+import { DataItem } from '../types/DataItem';
 
 interface AppContextProps {
     isTrashIcon: boolean;

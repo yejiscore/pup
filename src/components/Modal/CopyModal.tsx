@@ -27,7 +27,7 @@ function CopyModal({ show, onClose, url }: CopyModalProps) {
     useEffect(() => {
         if (show) {
             navigator.clipboard.writeText(url).then(() => {
-                setTimeout(onClose, 1000); // 1초 후 모달 닫기
+                setTimeout(onClose, 1000);
             });
         }
     }, [show, onClose, url]);

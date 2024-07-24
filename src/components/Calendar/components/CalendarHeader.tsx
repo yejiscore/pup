@@ -2,9 +2,10 @@
 // src/components/calendar/CalendarHeader.tsx
 import React from 'react';
 import styled from 'styled-components';
-import { useCalendarContext } from './CalendarProvider.tsx';
+// import { CalendarContext } from './CalendarProvider';
 import LeftArrowIcon from '../../../assets/Left.png';
 import RightArrowIcon from '../../../assets/Right.png';
+import { useCalendarContext } from './useCalendarContext';
 
 const Container = styled.div`
     width: 100%;

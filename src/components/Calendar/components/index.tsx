@@ -3,11 +3,10 @@
 import { ReactNode } from 'react';
 import styled from 'styled-components';
 
-import { CalendarContext } from './useCalendarContext.ts';
-import CalendarHeader from './CalendarHeader.tsx';
-import CalendarBody from './CalendarBody.tsx';
-import useCalendar from '../hooks/useCalendar.tsx';
-import SelectedDate from './SelectedDate.tsx';
+import CalendarHeader from './CalendarHeader';
+import CalendarBody from './CalendarBody';
+import useCalendar from '../hooks/useCalendar';
+import { CalendarContext } from './CalendarProvider';
 
 function CalendarRoot({ children }: { children: ReactNode }) {
     const calendar = useCalendar();
@@ -21,7 +20,6 @@ function CalendarRoot({ children }: { children: ReactNode }) {
 const Calendar = Object.assign(CalendarRoot, {
     Header: CalendarHeader,
     Body: CalendarBody,
-    Footer: SelectedDate,
 });
 
 export default Calendar;

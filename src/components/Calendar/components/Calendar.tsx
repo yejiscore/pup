@@ -1,8 +1,8 @@
 import React from 'react';
-import Container from '../../common/Container.tsx';
-import CalendarBody from './CalendarBody.tsx';
-import CalendarHeader from './CalendarHeader.tsx';
-import { CalendarProvider } from './CalendarProvider.tsx';
+import Container from '../../common/Container';
+import CalendarBody from './CalendarBody';
+import CalendarHeader from './CalendarHeader';
+import { CalendarProvider } from './CalendarProvider';
 
 function Calendar() {
     return (

@@ -3,13 +3,13 @@
 import React from 'react';
 import { styled } from 'styled-components';
 import { useParams } from 'react-router-dom';
-import Thumbnail from './Thumbnail.tsx';
-import TimeDistance from './TimeDistance.tsx';
-import Photo from './Photo.tsx';
-import Memo from './Memo.tsx';
-import { useAppContext } from '../../context/AppContext.tsx';
-import StartButton from './StartButton.tsx';
-import DetailHeader from './DetailHeader.tsx';
+import Thumbnail from './Thumbnail';
+import TimeDistance from './TimeDistance';
+import Photo from './Photo';
+import Memo from './Memo';
+import { useAppContext } from '../../context/AppContext';
+import StartButton from './StartButton';
+import DetailHeader from './DetailHeader';
 
 // basebox 복붙 배경색상만 변경
 const Container = styled.div`
