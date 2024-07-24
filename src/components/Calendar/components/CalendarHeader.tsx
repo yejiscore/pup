@@ -7,64 +7,64 @@ import LeftArrowIcon from '../../../assets/Left.png';
 import RightArrowIcon from '../../../assets/Right.png';
 
 const Container = styled.div`
-    width: 100%;
-    height: 49px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0 16px;
-    box-sizing: border-box;
-    top: 0;
+  width: 100%;
+  height: 49px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 16px;
+  box-sizing: border-box;
+  top: 0;
 `;
 
 const ChangeButton = styled.div`
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ArrowIcon = styled.img`
-    cursor: pointer;
-    position: absolute;
+  cursor: pointer;
+  position: absolute;
 `;
 
 const LeftArrow = styled(ArrowIcon)`
-    left: 120px;
+  left: 120px;
 `;
 
 const RightArrow = styled(ArrowIcon)`
-    right: 120px;
+  right: 120px;
 `;
 
 const DateText = styled.span`
-    font-size: 20px;
-    line-height: 25.6px;
+  font-size: 20px;
+  line-height: 25.6px;
 `;
 
 function CalendarHeader() {
-    const { dispatch, currentDate } = useCalendarContext();
+  const { dispatch, currentDate } = useCalendarContext();
 
-    return (
-        <Container>
-            <ChangeButton>
-                <LeftArrow
-                    src={LeftArrowIcon}
-                    alt="Previous Month"
-                    onClick={dispatch.handlePrevMonth}
-                />
-                <DateText>
-                    {currentDate.year}.{currentDate.month}
-                </DateText>
-                <RightArrow
-                    src={RightArrowIcon}
-                    alt="Next Month"
-                    onClick={dispatch.handleNextMonth}
-                />
-            </ChangeButton>
-        </Container>
-    );
+  return (
+    <Container>
+      <ChangeButton>
+        <LeftArrow
+          src={LeftArrowIcon}
+          alt="Previous Month"
+          onClick={dispatch.handlePrevMonth}
+        />
+        <DateText>
+          {currentDate.year}.{currentDate.month}
+        </DateText>
+        <RightArrow
+          src={RightArrowIcon}
+          alt="Next Month"
+          onClick={dispatch.handleNextMonth}
+        />
+      </ChangeButton>
+    </Container>
+  );
 }
 
 export default CalendarHeader;

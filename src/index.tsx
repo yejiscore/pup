@@ -9,6 +9,7 @@ import GlobalStyle from './styles/GlobalStyle';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { theme } from './styles/theme/theme';
+import { AppProvider } from './context/AppContext';
 
 declare global {
   interface Window {
@@ -23,13 +24,15 @@ const root = ReactDOM.createRoot(
 root.render(
   <CookiesProvider>
     <RecoilRoot>
-      <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools initialIsOpen={false} />
-        <ThemeProvider theme={theme}>
-          <GlobalStyle />
-          <App />
-        </ThemeProvider>
-      </QueryClientProvider>
+      <AppProvider>
+        <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools initialIsOpen={false} />
+          <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <App />
+          </ThemeProvider>
+        </QueryClientProvider>
+      </AppProvider>
     </RecoilRoot>
   </CookiesProvider>
 );

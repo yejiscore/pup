@@ -11,6 +11,7 @@
     <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=yEiKCREP6d1WbNkSRexoX12a38UPnI4V8pCB3sEZ"></script>
     <link
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
+      crossorigin
       rel="stylesheet"
     />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
@@ -22,27 +23,3 @@
     <div id="root"></div>
   </body>
 </html>
-
-<!-- curl --request POST \
-     --url 'https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1&callback=function' \
-     --header 'accept: application/json' \
-     --header 'appKey: key' \
-     --header 'content-type: application/json' \
-     --data '
-{
-  "startX": 126.92365493654832,
-  "startY": 37.556770374096615,
-  "angle": 20,
-  "speed": 30,
-  "endPoiId": "10001",
-  "endX": 126.92432158129688,
-  "endY": 37.55279861528311,
-  "passList": "126.92774822,37.55395475_126.92577620,37.55337145",
-  "reqCoordType": "WGS84GEO",
-  "startName": "%EC%B6%9C%EB%B0%9C",
-  "endName": "%EB%8F%84%EC%B0%A9",
-  "searchOption": "0",
-  "resCoordType": "WGS84GEO",
-  "sort": "index"
-}
-' -->

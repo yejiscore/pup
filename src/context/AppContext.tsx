@@ -1,3 +1,4 @@
+/* eslint-disable function-paren-newline */
 /* eslint-disable no-shadow */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-no-constructed-context-values */
@@ -44,8 +45,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [isTrashIcon, setIsTrashIcon] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
-  const [myData, setMyData] = useState<DataItem[]>(initialMyData);
-  const [likeData, setLikeData] = useState<DataItem[]>(initialLikeData);
+  const [myData, setMyData] = useState<any[]>(initialMyData);
+  const [likeData, setLikeData] = useState<any[]>(initialLikeData);
   const [filter, setFilter] = useState('전체');
   const [showCalendar, setShowCalendar] = useState<boolean>(false);
 

@@ -5,14 +5,14 @@ import CalendarHeader from './CalendarHeader.tsx';
 import { CalendarProvider } from './CalendarProvider.tsx';
 
 function Calendar() {
-    return (
-        <Container>
-            <CalendarProvider>
-                <CalendarHeader />
-                <CalendarBody />
-            </CalendarProvider>
-        </Container>
-    );
+  return (
+    <Container>
+      <CalendarProvider>
+        <CalendarHeader />
+        <CalendarBody />
+      </CalendarProvider>
+    </Container>
+  );
 }
 
 export default Calendar;
