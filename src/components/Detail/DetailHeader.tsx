@@ -78,93 +78,96 @@ import { useAppContext } from '../../context/AppContext.tsx';
 import DeleteModal from '../Modal/DeleteModal.tsx';
 
 const Container = styled.div`
-  width: 100%;
-  height: 49px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 16px;
-  box-sizing: border-box;
-  position: relative;
+    width: 100%;
+    height: 49px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    box-sizing: border-box;
+    position: relative;
 `;
 
 const TitleContainer = styled.div`
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 `;
 
 const Title = styled.div`
-  font-size: 18px;
-  color: #283330;
-  text-align: center;
+    font-size: 18px;
+    color: #283330;
+    text-align: center;
 `;
 
 const IconButton = styled.img`
-  cursor: pointer;
+    cursor: pointer;
 `;
 
 const BackButton = styled.img`
-  cursor: pointer;
+    cursor: pointer;
 `;
 
 function DetailHeader() {
-  const { id } = useParams<{ id: string }>();
-  const { myData, setMyData, likeData, setLikeData } = useAppContext();
-  const navigate = useNavigate();
-  const [isTrashIcon, setIsTrashIcon] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const { id } = useParams<{ id: string }>();
+    const { myData, setMyData, likeData, setLikeData } = useAppContext();
+    const navigate = useNavigate();
+    const [isTrashIcon, setIsTrashIcon] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const handleBackClick = () => {
-    navigate(-1);
-  };
+    const handleBackClick = () => {
+        navigate(-1);
+    };
 
-  const handleIconClick = () => {
-    if (isTrashIcon) {
-      setShowDeleteModal(true);
-    } else {
-      setIsTrashIcon(true);
+    const handleIconClick = () => {
+        if (isTrashIcon) {
+            setShowDeleteModal(true);
+        } else {
+            setIsTrashIcon(true);
+        }
+    };
+
+    const handleCloseDeleteModal = () => {
+        setShowDeleteModal(false);
+        setIsTrashIcon(false);
+    };
+
+    const item =
+        myData.find((data) => data.id === Number(id)) ||
+        likeData.find((data) => data.id === Number(id));
+
+    if (!item) {
+        return <div>Data not found</div>;
     }
-  };
 
-  const handleCloseDeleteModal = () => {
-    setShowDeleteModal(false);
-    setIsTrashIcon(false);
-  };
+    const handleDelete = () => {
+        if (myData.some((data) => data.id === Number(id))) {
+            setMyData(myData.filter((data) => data.id !== Number(id)));
+        } else if (likeData.some((data) => data.id === Number(id))) {
+            setLikeData(likeData.filter((data) => data.id !== Number(id)));
+        }
+        navigate(-1);
+    };
 
-  const item =
-    myData.find((data) => data.id === Number(id)) ||
-    likeData.find((data) => data.id === Number(id));
-
-  if (!item) {
-    return <div>Data not found</div>;
-  }
-
-  const handleDelete = () => {
-    if (myData.some((data) => data.id === Number(id))) {
-      setMyData(myData.filter((data) => data.id !== Number(id)));
-    } else if (likeData.some((data) => data.id === Number(id))) {
-      setLikeData(likeData.filter((data) => data.id !== Number(id)));
-    }
-    navigate(-1);
-  };
-
-  return (
-    <Container>
-      <BackButton src={BackIcon} alt="Back" onClick={handleBackClick} />
-      <TitleContainer>
-        <Title>{item.title}</Title>
-      </TitleContainer>
-      <IconButton
-        src={isTrashIcon ? TrashIcon : MeatballsIcon}
-        alt="Options"
-        onClick={handleIconClick}
-      />
-      {showDeleteModal && (
-        <DeleteModal onClose={handleCloseDeleteModal} onDelete={handleDelete} />
-      )}
-    </Container>
-  );
+    return (
+        <Container>
+            <BackButton src={BackIcon} alt="Back" onClick={handleBackClick} />
+            <TitleContainer>
+                <Title>{item.title}</Title>
+            </TitleContainer>
+            <IconButton
+                src={isTrashIcon ? TrashIcon : MeatballsIcon}
+                alt="Options"
+                onClick={handleIconClick}
+            />
+            {showDeleteModal && (
+                <DeleteModal
+                    onClose={handleCloseDeleteModal}
+                    onDelete={handleDelete}
+                />
+            )}
+        </Container>
+    );
 }
 
 export default DetailHeader;
