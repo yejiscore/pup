@@ -4,21 +4,16 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styled from 'styled-components';
 import WalkingMain from './pages/walkingMain/WalkingMain';
-
-import LoginMain from './pages/login/LoginMain';
-import Footer from './components/common/Footer';
-import WalkingReport from './pages/walkingReport/WalkingReport';
-import SearchMain from './pages/searchMain/SearchMain';
-import SearchMap from './pages/searchMain/SearchMap';
-import SearchStartWalking from './pages/searchMap/SearchStartWalking';
-import SelectTrail from './pages/detail/SelectTrail';
-import TrailStart from './pages/trailStart/TrailStart';
-import FinishTrail from './pages/trailStart/FinishTrail';
-import MyBoardPage from './components/MyWalkingBoard/MyBoardPage';
 import BaseLayout from './layouts/Layout';
-import { AppProvider } from './context/AppContext';
-import GlobalStyle from './styles/GlobalStyle';
-import DetailPage from './components/Detail/Detail';
+import LoginMain from './pages/login/LoginMain.tsx';
+import Footer from './components/common/Footer.tsx';
+import WalkingReport from './pages/walkingReport/WalkingReport.tsx';
+import SearchMain from './pages/searchMain/SearchMain.tsx';
+import SearchMap from './pages/searchMain/SearchMap.tsx';
+import SearchStartWalking from './pages/searchMap/SearchStartWalking.tsx';
+import SelectTrail from './pages/detail/SelectTrail.tsx';
+import TrailStart from './pages/trailStart/TrailStart.tsx';
+import FinishTrail from './pages/trailStart/FinishTrail.tsx';
 
 function App() {
   return (
@@ -112,18 +107,25 @@ function App() {
             </BaseLayout>
           }
         />
-
-        <Route
-          path="/"
-          element={
-            <BaseLayout>
-              <MyBoardPage />
-            </BaseLayout>
-          }
-        />
       </Routes>
     </BrowserRouter>
   );
 }
 
 export default App;
+// 예지님이 작업 하신 부분
+// function App() {
+//   return (
+//     <AppContainer>
+//       <GlobalStyle/>
+//       <Container>
+//         <Routes>
+//           <Route path="/" element={<MyBoardPage />} />
+//           <Route path="/walking" element={<div>산책하기 페이지</div>} />
+//           <Route path="/search" element={<div>산책로 찾기 페이지</div>} />
+//         </Routes>
+//         <TabBar/>
+//       </Container>
+//     </AppContainer>
+//   );
+// }
