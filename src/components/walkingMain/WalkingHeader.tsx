@@ -24,7 +24,10 @@ const WalkingHeader = ({
     basePosition.lng
   ); // 서울의 위도와 경도 예시
   if (isLoading) return <div>Loading...</div>;
-
+  if (error) {
+    console.log(error);
+    return <div>Error...</div>;
+  }
   return (
     <StyledHeader>
       <WeatherInfo>
