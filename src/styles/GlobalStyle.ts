@@ -4,7 +4,7 @@ import { reset } from 'styled-reset';
 const GlobalStyle = createGlobalStyle`
   ${reset}
   body {
-    font-family: 'Pretendard', 'Arial', sans-serif;
+    font-family: 'Arial', sans-serif;
     background-color: #EDF9F6;
     margin: 0;
     padding: 0;

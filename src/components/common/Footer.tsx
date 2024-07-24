@@ -57,13 +57,13 @@ const Footer = () => {
 
   return (
     <NavBar>
-      <Link to="/" style={{ textDecoration: 'none' }}>
+      <Link to="/map" style={{ textDecoration: 'none' }}>
         <NavItem>
           <NavIcon
-            src={location.pathname === '/' ? bagOnIcon : bagOffIcon}
+            src={location.pathname === '/map' ? bagOnIcon : bagOffIcon}
             alt="내 산책지도"
           />
-          <NavText $active={location.pathname === '/'}>내 산책지도</NavText>
+          <NavText $active={location.pathname === '/map'}>내 산책지도</NavText>
         </NavItem>
       </Link>
       <Link to="/walking_main" style={{ textDecoration: 'none' }}>
