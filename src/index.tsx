@@ -18,7 +18,7 @@ declare global {
 const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+    document.getElementById('root') as HTMLElement
 );
 root.render(
   <CookiesProvider>
@@ -32,6 +32,7 @@ root.render(
       </QueryClientProvider>
     </RecoilRoot>
   </CookiesProvider>
+
 );
 
 reportWebVitals();
