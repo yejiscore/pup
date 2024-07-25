@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Slider from 'react-slick';
 import { useRecoilValue } from 'recoil';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import BaseBox from '../../styles/common/BaseBox';
 import WalkingReportHeader from '../../components/walkingReport/WalkingReportHeader';
 import offStarIcon from '../../assets/common/offStar.png';
@@ -13,26 +13,16 @@ import {
   MiddlewBox,
   ComBoxOne,
   ComBoxTwo,
-  BtnImage,
   Head4,
   Input,
   Body3,
   TimeDistance,
-  BottomBox,
-  ButtonWrapper,
-  ToggleButtonGroup,
-  ToggleButton,
   RegisterButton,
-  CharCount,
   ImageContainer,
   ImageWrapper,
   ImageBox,
-  DeleteButton,
-  ButtonMemo,
   MemoTextArea,
-  Text,
   MarginBox,
-  ButtonTitleHead4,
 } from '../../styles/walkingReportStyle/WalkingReportStyle';
 import { formatDistance, formatTime } from '../../utils/formatTime';
 import startTrailTimeState from '../../stores/startTrailTime';
@@ -48,6 +38,8 @@ const RatingBox = styled.div`
   height: 130px;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.white};
+  border-top: 5px solid ${({ theme }) => theme.colors.primary[1]};
+  padding-top: 20px;
 
   .title {
     font-size: 24px;
@@ -63,6 +55,11 @@ const RatingBox = styled.div`
     justify-content: center;
     align-items: center;
   }
+`;
+
+const BottomBox = styled(ComBoxTwo)`
+  background-color: ${({ theme }) => theme.colors.white};
+  padding-bottom: 40px;
 `;
 
 const Star = styled.img`
@@ -143,10 +140,11 @@ const settings = {
 
 const FinishTrail = () => {
   const { id: trailId } = useParams(); // URL 파라미터에서 id를 가져옴
+  const navigate = useNavigate();
 
   const [rating, setRating] = useState(0);
   const startTrailTime = useRecoilValue(startTrailTimeState);
-  console.log(startTrailTime);
+  // console.log(startTrailTime);
   const handleStarClick = (index: number) => {
     setRating(index + 1);
   };
@@ -163,21 +161,22 @@ const FinishTrail = () => {
   );
 
   const handleRegister = () => {
-    console.log('산책 등록하기');
-    console.log(rating);
-    console.log(startTrailTime);
+    // console.log('산책 등록하기');
+    // console.log(rating);
+    // console.log(startTrailTime);
     addReview({
       walkingTrailUid: trailData?.data.walkingTrailUid,
       rating,
       time: startTrailTime,
     });
+    navigate('/');
   };
 
   return (
     <BaseBox>
       <WalkingReportHeader />
       <RatingBox>
-        <h1 className="title">산책로 평가가 완료되었습니다.</h1>
+        <h1 className="title">오늘 산책은 어떠셨나요?</h1>
         <div className="starWapper">
           {[0, 1, 2, 3, 4].map((index) => (
             <Star
@@ -253,9 +252,9 @@ const FinishTrail = () => {
         </ComBoxTwo>
       </MiddlewBox>
 
-      <ComBoxTwo>
+      <BottomBox>
         <RegisterButton onClick={handleRegister}>산책 등록하기</RegisterButton>
-      </ComBoxTwo>
+      </BottomBox>
     </BaseBox>
   );
 };

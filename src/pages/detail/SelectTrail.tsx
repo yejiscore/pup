@@ -277,8 +277,8 @@ const SelectTrail = () => {
     `/walking-trail/${id}`,
     {}
   );
-  //   console.log('trailData', trailData);
-  //   console.log('MytrailData', MytrailData);
+  //   // console.log('trailData', trailData);
+  //   // console.log('MytrailData', MytrailData);
 
   const dummyData = {
     code: 200,

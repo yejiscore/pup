@@ -120,7 +120,7 @@ const WalkingMain = () => {
                   latitude,
                   longitude
                 );
-                console.log('Distance increment:', distanceIncrement);
+                // console.log('Distance increment:', distanceIncrement);
                 setDistance((prevDistance) => prevDistance + distanceIncrement);
               }
 
@@ -274,7 +274,7 @@ const WalkingMain = () => {
             },
             {
               onSuccess: (data) => {
-                console.log('Walking trail created:', data);
+                // console.log('Walking trail created:', data);
                 setUploadData((prevData) => ({
                   ...prevData,
                   walkingTrailUid: data.data,

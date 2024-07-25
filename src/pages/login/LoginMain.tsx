@@ -22,8 +22,8 @@ const LoginMain = () => {
       { email, password },
       {
         onSuccess: ({ data }) => {
-          console.log(email, password);
-          console.log('data:', data);
+          // // console.log(email, password);
+          // // console.log('data:', data);
           // main으로 페이지 이동
           setAuthState({
             userId: data.userId,
@@ -47,7 +47,7 @@ const LoginMain = () => {
           });
 
           navigate('/');
-          console.log('로그인 성공:', data);
+          // // console.log('로그인 성공:', data);
         },
         onError: (error) => {
           console.error('로그인 실패:', error);

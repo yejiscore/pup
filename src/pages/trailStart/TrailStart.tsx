@@ -185,14 +185,14 @@ const TrailStart = () => {
   // 산책 완료
   const handleComplete = () => {
     setShowStopModal(false);
-    console.log('startTime', startTime);
+    // console.log('startTime', startTime);
     if (startTime) {
       const endTime = new Date();
       const duration = Math.floor(
         (endTime.getTime() - startTime.getTime()) / 1000
       ); // 초 단위로 계산
-      console.log('time', endTime, startTime);
-      console.log(`산책 시간: ${formatTime(duration)}`); // 산책 시간 출력
+      // console.log('time', endTime, startTime);
+      // console.log(`산책 시간: ${formatTime(duration)}`); // 산책 시간 출력
       setStartTrailTime(duration);
     }
     navigate(`/trail/finish/${trailId}`);
@@ -204,8 +204,8 @@ const TrailStart = () => {
       const duration = Math.floor(
         (endTime.getTime() - startTime.getTime()) / 1000
       ); // 초 단위로 계산
-      console.log('time', endTime, startTime);
-      console.log(`산책 시간: ${formatTime(duration)}`); // 산책 시간 출력
+      // console.log('time', endTime, startTime);
+      // console.log(`산책 시간: ${formatTime(duration)}`); // 산책 시간 출력
       setStartTrailTime(duration);
     }
     navigate(`/trail/finish/${trailId}`);

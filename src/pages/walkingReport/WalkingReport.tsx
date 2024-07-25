@@ -95,7 +95,7 @@ const WalkingReport = () => {
   );
 
   const handleRegister = async () => {
-    console.log('uploadData:', uploadData);
+    // console.log('uploadData:', uploadData);
     try {
       const s3 = new AWS.S3({
         accessKeyId: process.env.REACT_APP_MINIO_ACCESS_KEY,
@@ -145,7 +145,7 @@ const WalkingReport = () => {
           }
         );
       }
-      console.log('uploadedPhotoUrls', uploadedPhotoUrls);
+      // console.log('uploadedPhotoUrls', uploadedPhotoUrls);
       // Add logic to send other data to the backend
       const dataToSend = {
         walkingTrailUid: uploadData.walkingTrailId,

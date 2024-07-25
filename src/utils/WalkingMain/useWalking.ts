@@ -137,7 +137,7 @@ const useWalking = () => {
   };
 
   const handleFindLocation = () => {
-    console.log('자신 위치 찾기');
+    // console.log('자신 위치 찾기');
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -195,9 +195,9 @@ const useWalking = () => {
     setIsModalOpen(false);
     setShowStopModal(false);
 
-    console.log('Positions:', positions);
-    console.log('Distance:', distance);
-    console.log('Time:', time);
+    // console.log('Positions:', positions);
+    // console.log('Distance:', distance);
+    // console.log('Time:', time);
     // 산책 종료 시 위치 좌표 백엔드로 전송
   };
 

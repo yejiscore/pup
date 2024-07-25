@@ -167,7 +167,7 @@ const SearchMap = () => {
       type,
     }
   );
-  // console.log('trailData', trailData);
+  // // console.log('trailData', trailData);
 
   const onChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setBaseName(e.target.value);

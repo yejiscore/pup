@@ -44,7 +44,7 @@ export const ImageUploader = ({ setPath, image }: PropsType) => {
           console.error(err);
           return;
         }
-        console.log(data);
+        // console.log(data);
         setPath(data.Location);
       });
     }

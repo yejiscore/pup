@@ -101,9 +101,9 @@ const SearchTopCom = () => {
       type,
     }
   );
-  // console.log('trailData', trailData);
+  // // console.log('trailData', trailData);
   // const { data: userData } = useFetch('user', '/walking-trail', {});
-  // console.log('userData', userData);
+  // // console.log('userData', userData);
 
   return (
     <TopCom>
