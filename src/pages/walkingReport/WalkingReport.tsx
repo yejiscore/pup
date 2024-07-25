@@ -95,6 +95,7 @@ const WalkingReport = () => {
   );
 
   const handleRegister = async () => {
+    console.log('uploadData:', uploadData);
     try {
       const s3 = new AWS.S3({
         accessKeyId: process.env.REACT_APP_MINIO_ACCESS_KEY,
@@ -144,7 +145,7 @@ const WalkingReport = () => {
           }
         );
       }
-
+      console.log('uploadedPhotoUrls', uploadedPhotoUrls);
       // Add logic to send other data to the backend
       const dataToSend = {
         walkingTrailUid: uploadData.walkingTrailId,
@@ -152,7 +153,7 @@ const WalkingReport = () => {
         time: Number(time),
         distance: Number(distance),
         description: memo,
-        mainImage: '',
+        mainImage: uploadedPhotoUrls.length > 0 ? uploadedPhotoUrls[0] : '',
         openRange:
           activeButton === '전체공개'
             ? 'PUBLIC'
@@ -181,20 +182,30 @@ const WalkingReport = () => {
   const settings = {
     dots: false,
     speed: 500,
-    slidesToShow: uploadData.walkingPhotos.length,
+    slidesToShow: 4,
     slidesToScroll: 1,
+    draggable: true, // 드래그 가능
     infinite: false,
   };
 
   return (
     <BaseBox>
       <WalkingReportHeader />
-      <img
-        src={WalkingReportThumbnail}
-        alt="thumbnail"
-        width={376}
-        height={281}
-      />
+      {uploadData.walkingPhotos.length === 0 ? (
+        <img
+          src={WalkingReportThumbnail}
+          alt="thumbnail"
+          width={376}
+          height={281}
+        />
+      ) : (
+        <img
+          src={uploadData.walkingPhotos[0]}
+          alt="thumbnail"
+          width={376}
+          height={281}
+        />
+      )}
 
       <MiddlewBox>
         <ComBoxOne>

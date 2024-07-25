@@ -1,5 +1,10 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+import useMutate from '../../hooks/useMutate';
+import uploadDataState from '../../stores/uploadDataState';
 
 interface StartButtonProps {
   onClick: () => void;
@@ -37,14 +42,48 @@ const WalkingStartButton = ({
   onClick,
   isModalOpen,
   buttonText,
+  onClose,
+  dogsId,
 }: {
   onClick: () => void;
   isModalOpen: boolean;
   buttonText: string;
-}) => (
-  <Button onClick={onClick} $isModalOpen={isModalOpen}>
-    <span className="text">{buttonText}</span>
-  </Button>
-);
+  onClose: () => void;
+  dogsId: number[];
+}) => {
+  const [uploadData, setUploadData] = useRecoilState(uploadDataState);
+
+  const { mutate: reChagneDog } = useMutate(
+    'rechage',
+    'walking-trail/dog',
+    'patch'
+  );
+
+  const handleReChagneDog = () => {
+    reChagneDog(
+      {
+        walkingTrailUid: uploadData.walkingTrailUid,
+        dogIdList: dogsId,
+      },
+      {
+        onSuccess: () => {
+          onClose();
+        },
+      }
+    );
+  };
+
+  return (
+    <Button onClick={onClick} $isModalOpen={isModalOpen}>
+      {buttonText === '산책으로 돌아가기' ? (
+        <span className="text" onClick={handleReChagneDog}>
+          {buttonText}
+        </span>
+      ) : (
+        <span className="text">{buttonText}</span>
+      )}
+    </Button>
+  );
+};
 
 export default WalkingStartButton;

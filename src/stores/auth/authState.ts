@@ -2,7 +2,7 @@
 import { atom } from 'recoil';
 import { v1 } from 'uuid';
 
-const authState = atom({
+export const authState = atom({
   key: `authState/${v1()}`,
   default: {
     userId: '',
@@ -16,4 +16,13 @@ const authState = atom({
   },
 });
 
-export default authState;
+export const userDataState = atom({
+  key: `userData/${v1()}`,
+  default: {
+    userId: 0,
+    email: '',
+    userUid: '',
+    profile: '',
+    description: '',
+  },
+});

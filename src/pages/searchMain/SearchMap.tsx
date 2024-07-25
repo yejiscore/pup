@@ -1,6 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  ChangeEvent,
+  KeyboardEvent,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import BaseBox from '../../styles/common/BaseBox';
 import SearchMapHeader from '../../components/searchMap/SearchMapHeader';
 import SearchMapInput from '../../components/searchMap/SearchMapInput';
@@ -16,6 +23,11 @@ import {
   formatReviewCount,
   formatTime,
 } from '../../utils/formatTime';
+import onSpot from '../../assets/map/onSpot.png';
+import offSpot from '../../assets/map/offSpot.png';
+import selectTrailState from '../../stores/selectTrail';
+import searchIcon from '../../assets/common/search.png';
+import callListIcon from '../../assets/common/callList.png';
 
 const MapContainer = styled.div`
   width: 100%;
@@ -35,10 +47,117 @@ const HeaderContainer = styled.div`
   align-items: center;
 `;
 
+const SearchBarContainer = styled.div`
+  display: flex;
+  align-items: center;
+  border-radius: 1000px;
+  height: 38px;
+  width: 100%;
+  justify-content: center;
+  background-color: #ffffff80;
+  padding-bottom: 10px;
+`;
+
+const InputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  background-color: ${(props) => props.theme.colors.white};
+  border-radius: 1000px;
+  height: 38px;
+  width: 100%;
+  min-width: 299px;
+  margin: 0 20px;
+`;
+
+const SearchInputCom = styled.input`
+  flex: 1;
+  border: none;
+  background-color: transparent;
+  color: ${(props) => props.theme.colors.darkGray};
+  font-size: 16px;
+  line-height: 18.72px;
+  &::placeholder {
+    color: ${(props) => props.theme.colors.offGray};
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 14.32px;
+  }
+  &:focus {
+    outline: none;
+  }
+`;
+
+const Icon = styled.img`
+  width: 36px;
+  height: 36px;
+`;
+
+const dummyData = [
+  {
+    walkingTrailId: 11,
+    mainImage: null,
+    name: '서울시 어쩌구',
+    description: '해당 산책에 대한 기록을 저장합니다.',
+    walkingTrailUid: 'cf2c63cc-8b06-4b3d-8b2d-30f78be5ada1',
+    time: 120,
+    distance: 1000,
+    openRange: 'PUBLIC',
+    createdDate: '2024-07-21T12:54:17.601',
+    rating: 2,
+    userId: 6,
+    userUid: 'b758c502-049e-42ab-ac19-95b9f7524e59',
+    reviewCount: 1,
+    likeCount: 0,
+    isLike: false,
+    lat: 37.497175,
+    lng: 127.027926,
+  },
+  {
+    walkingTrailId: 10,
+    mainImage: null,
+    name: '서울시 어쩌구',
+    description: '해당 산책에 대한 기록을 저장합니다.',
+    walkingTrailUid: 'cf2c63cc-8b06-4b3d-8b2d-30f78be5ada2',
+    time: 120,
+    distance: 400,
+    openRange: 'PUBLIC',
+    createdDate: '2024-07-21T12:53:17.601',
+    rating: 2,
+    userId: 6,
+    userUid: 'b758c502-049e-42ab-ac19-95b9f7524e59',
+    reviewCount: 2,
+    likeCount: 0,
+    isLike: false,
+    lat: 37.499175,
+    lng: 127.028926,
+  },
+  {
+    walkingTrailId: 9,
+    mainImage: null,
+    name: '서울시 어쩌구',
+    description: '해당 산책에 대한 기록을 저장합니다.',
+    walkingTrailUid: 'cf2c63cc-8b06-4b3d-8b2d-30f78be5ada3',
+    time: 120,
+    distance: 500,
+    openRange: 'PUBLIC',
+    createdDate: '2024-07-21T12:52:17.601437',
+    rating: null,
+    userId: 6,
+    userUid: 'b758c502-049e-42ab-ac19-95b9f7524e59',
+    reviewCount: 200,
+    likeCount: 1,
+    isLike: true,
+    lat: 37.498175,
+    lng: 127.029926,
+  },
+];
+
 const SearchMap = () => {
   const [baseName, setBaseName] = useState('');
   const [name, setName] = useState('');
+  const selectTrail = useRecoilValue(selectTrailState);
   const type = 'RECENT';
+  const navigate = useNavigate();
 
   const { data: trailData } = useFetch<ResIUserTrailLists>(
     `[trailData/search/${name}${type}]`,
@@ -48,65 +167,26 @@ const SearchMap = () => {
       type,
     }
   );
-  const dummyData = [
-    {
-      walkingTrailId: 11,
-      mainImage: null,
-      name: '서울시 어쩌구',
-      description: '해당 산책에 대한 기록을 저장합니다.',
-      walkingTrailUid: 'cf2c63cc-8b06-4b3d-8b2d-30f78be5ada1',
-      time: 120,
-      distance: 1000,
-      openRange: 'PUBLIC',
-      createdDate: '2024-07-21T12:54:17.601',
-      rating: 2,
-      userId: 6,
-      userUid: 'b758c502-049e-42ab-ac19-95b9f7524e59',
-      reviewCount: 1,
-      likeCount: 0,
-      isLike: false,
-      lat: 37.497175,
-      lng: 127.027926,
-    },
-    {
-      walkingTrailId: 10,
-      mainImage: null,
-      name: '서울시 어쩌구',
-      description: '해당 산책에 대한 기록을 저장합니다.',
-      walkingTrailUid: 'cf2c63cc-8b06-4b3d-8b2d-30f78be5ada2',
-      time: 120,
-      distance: 400,
-      openRange: 'PUBLIC',
-      createdDate: '2024-07-21T12:53:17.601',
-      rating: 2,
-      userId: 6,
-      userUid: 'b758c502-049e-42ab-ac19-95b9f7524e59',
-      reviewCount: 2,
-      likeCount: 0,
-      isLike: false,
-      lat: 37.499175,
-      lng: 127.028926,
-    },
-    {
-      walkingTrailId: 9,
-      mainImage: null,
-      name: '서울시 어쩌구',
-      description: '해당 산책에 대한 기록을 저장합니다.',
-      walkingTrailUid: 'cf2c63cc-8b06-4b3d-8b2d-30f78be5ada3',
-      time: 120,
-      distance: 500,
-      openRange: 'PUBLIC',
-      createdDate: '2024-07-21T12:52:17.601437',
-      rating: null,
-      userId: 6,
-      userUid: 'b758c502-049e-42ab-ac19-95b9f7524e59',
-      reviewCount: 200,
-      likeCount: 1,
-      isLike: true,
-      lat: 37.498175,
-      lng: 127.029926,
-    },
-  ];
+  // console.log('trailData', trailData);
+
+  const onChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    setBaseName(e.target.value);
+  };
+
+  const onSearch = () => {
+    setName(baseName);
+  };
+
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      onSearch();
+    }
+  };
+
+  const onGoText = () => {
+    navigate('/search');
+  };
+
   const calculateDistance = (
     lat1: number,
     lng1: number,
@@ -136,7 +216,7 @@ const SearchMap = () => {
     lng: number;
   } | null>(null);
   const isMapInitialized = useRef(false); // 맵 초기화 여부를 추적하는 useRef
-  const navigate = useNavigate();
+  const [selectedMarker, setSelectedMarker] = useState<number | null>(null);
 
   useEffect(() => {
     if (!isMapInitialized.current && tmapRef.current) {
@@ -156,6 +236,7 @@ const SearchMap = () => {
           const marker = new window.Tmapv2.Marker({
             position: new window.Tmapv2.LatLng(data.lat, data.lng),
             map: newMap,
+            icon: offSpot, // 초기 마커 아이콘 설정
           });
 
           let distanceText = '';
@@ -170,36 +251,46 @@ const SearchMap = () => {
           }
 
           const content = `
-            <div style="width:189px; padding:5px; cursor: pointer;" class="go-detail-button" data-id="${data.walkingTrailId}">
-              <h4 style="font-size:14px; font-weight:400; line-height:16.71px; color:#121413;">${distanceText}</h4>
-              <h5 style="font-size:14px; font-weight:400; line-height:16.71px; color: #283330;">${data.name}</h5>
-              <div style="display:flex; width:100%; justify-content:space-between;">
-                  <p style="font-size:14px; font-weight:400; line-height:16.71px; color:#00AE80;">예상 시간</p>
-                  <p style="font-size:14px; font-weight:600; line-height:16.38px; color:#283330;">${formatTime(data.time)}</p>
-              </div>
-              <div style="display:flex; width:100%; justify-content:space-between;">
-                  <p style="font-size=14px; font-weight:400; line-height:16.71px; color:#00AE80;">거리</p>
-                  <p style="font-size:14px; font-weight:600; line-height:16.38px; color:#283330;">${formatDistance(data.distance)}km</p>
-              </div>
-              <div style="display:flex; width: 100%; justify-content:center; align-items:center;">
-                  <img src=${starIcon} alt="rating" width="24" height="24" />
-                <p style="font-size:12px; font-weight:400; line-height:14.32px; color:#283330;">${data.rating ? formatRating(String(data.rating)) : '0.0'}</p>
-                  <img src=${peopleIcon} alt="people" width="24" height="24" />
-                  <p style="font-size:12px; font-weight:400; line-height:14.32px; color:#283330;">${formatReviewCount(data.reviewCount)}</p>
-              </div>
-
+          <div style="width:189px; padding:5px; cursor: pointer;" class="go-detail-button" data-id="${data.walkingTrailUid}">
+            <h4 style="font-size:14px; font-weight:400; line-height:16.71px; color:#121413;">${distanceText}</h4>
+            <h5 style="font-size:14px; font-weight:400; line-height:16.71px; color: #283330;">${data.name}</h5>
+            <div style="display:flex; width:100%; justify-content:space-between;">
+                <p style="font-size:14px; font-weight:400; line-height:16.71px; color:#00AE80;">예상 시간</p>
+                <p style="font-size:14px; font-weight:600; line-height:16.38px; color:#283330;">${formatTime(data.time)}</p>
             </div>
-          `;
+            <div style="display:flex; width:100%; justify-content:space-between;">
+                <p style="font-size=14px; font-weight:400; line-height:16.71px; color:#00AE80;">거리</p>
+                <p style="font-size:14px; font-weight:600; line-height:16.38px; color:#283330;">${formatDistance(data.distance)}km</p>
+            </div>
+            <div style="display:flex; width: 100%; justify-content:center; align-items:center;">
+                <img src=${starIcon} alt="rating" width="24" height="24" />
+              <p style="font-size:12px; font-weight:400; line-height:14.32px; color:#283330;">${data.rating ? formatRating(String(data.rating)) : '0.0'}</p>
+                <img src=${peopleIcon} alt="people" width="24" height="24" />
+                <p style="font-size:12px; font-weight:400; line-height:14.32px; color:#283330;">${formatReviewCount(data.reviewCount)}</p>
+            </div>
+          </div>
+        `;
 
           const infoWindow = new window.Tmapv2.InfoWindow({
             position: new window.Tmapv2.LatLng(data.lat, data.lng),
             content,
             type: 2,
-            map: newMap,
           });
 
           marker.addListener('click', () => {
-            infoWindow.open(newMap, marker);
+            if (selectedMarker !== data.walkingTrailId) {
+              setSelectedMarker(data.walkingTrailId);
+              marker.setIcon(onSpot);
+              infoWindow.setMap(newMap); // InfoWindow를 지도에 추가하여 열기
+            } else {
+              setSelectedMarker(null);
+              marker.setIcon(offSpot);
+              infoWindow.setMap(null); // InfoWindow를 지도에서 제거하여 닫기
+            }
+          });
+          // InfoWindow를 닫을 때 아이콘을 다시 offSpot으로 변경
+          infoWindow.addListener('close', () => {
+            marker.setIcon(offSpot);
           });
         });
       };
@@ -207,6 +298,17 @@ const SearchMap = () => {
       initTmap();
     }
   }, [userLocation]);
+
+  // 선택된 산책로 위치로 이동
+  useEffect(() => {
+    if (map && selectTrail && selectTrail.lat !== 0 && selectTrail.lng !== 0) {
+      const selectedLocation = new window.Tmapv2.LatLng(
+        selectTrail.lat,
+        selectTrail.lng
+      );
+      map.setCenter(selectedLocation);
+    }
+  }, [map, selectTrail]);
 
   // 내 위치 찾기 핸들러
   const handleFindLocation = () => {
@@ -259,7 +361,7 @@ const SearchMap = () => {
         const distanceText = `내 위치에서 ${distance} km`;
 
         const content = `
-<div style="width:189px; padding:5px; cursor: pointer;" class="go-detail-button" data-id="${data.walkingTrailUid}">                
+        <div style="width:189px; padding:5px; cursor: pointer;" class="go-detail-button" data-id="${data.walkingTrailUid}">                
     <h4 style="font-size:14px; font-weight:400; line-height:16.71px; color:#00AE80;">${distanceText}</h4>
                 <h5 style="font-size:14px; font-weight:400; line-height:16.71px; color: #283330;">${data.name}</h5>
             <div style="display:flex; width:100%; justify-content:space-between;">
@@ -283,16 +385,31 @@ const SearchMap = () => {
           position: new window.Tmapv2.LatLng(data.lat, data.lng),
           content,
           type: 2,
-          map,
         });
 
         const marker = new window.Tmapv2.Marker({
           position: new window.Tmapv2.LatLng(data.lat, data.lng),
           map,
+          icon: offSpot, // 초기 마커 아이콘 설정
         });
 
         marker.addListener('click', () => {
-          infoWindow.open(map, marker);
+          // 마커 클릭 시 이벤트
+          if (selectedMarker !== data.walkingTrailId) {
+            // 이미 선택된 마커가 아닌 경우
+            setSelectedMarker(data.walkingTrailId);
+            marker.setIcon(onSpot); // 클릭된 마커의 아이콘 변경
+            infoWindow.setMap(map); // InfoWindow 보이기
+          } else {
+            setSelectedMarker(null); // 선택된 마커 초기화
+            marker.setIcon(offSpot); // 마커 아이콘 초기화
+            infoWindow.setMap(null); // InfoWindow 숨기기
+          }
+        });
+
+        // InfoWindow를 닫을 때 아이콘을 다시 offSpot으로 변경
+        infoWindow.addListener('close', () => {
+          marker.setIcon(offSpot);
         });
       });
     }
@@ -339,7 +456,19 @@ const SearchMap = () => {
       <MapContainer ref={tmapRef} />
       <HeaderContainer>
         <SearchMapHeader />
-        <SearchMapInput />
+        {/* <SearchMapInput onChangeSearch={onChangeSearch} name={name} /> */}
+        <SearchBarContainer>
+          <InputContainer>
+            <Icon src={searchIcon} alt="search" />
+            <SearchInputCom
+              placeholder="원하는 산책로의 이름 또는 현재 지역을 검색해 보세요"
+              value={baseName}
+              onChange={onChangeSearch}
+              onKeyDown={onKeyDown}
+            />
+          </InputContainer>
+          <Icon src={callListIcon} alt="callListIcon" onClick={onGoText} />
+        </SearchBarContainer>
       </HeaderContainer>
       <WalkingControls onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} />
       <WalkingMyLocation onClick={handleFindLocation} isActive={isActive} />

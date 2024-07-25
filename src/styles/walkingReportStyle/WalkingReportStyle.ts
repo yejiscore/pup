@@ -6,10 +6,9 @@ export const MiddlewBox = styled.div`
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  /* height: 446px; */
   width: 100%;
   background-color: ${(props) => props.theme.colors.white};
-  margin-top: 30px;
+  padding-top: 20px;
 `;
 
 export const Head4 = styled(BaseHead4)`
@@ -26,6 +25,7 @@ export const ComBoxOne = styled.div`
   width: 100%;
   position: relative;
   margin-bottom: 30px;
+
   .firstBox {
     width: 100%;
     display: flex;
@@ -44,13 +44,15 @@ export const CharCount = styled.span`
 `;
 
 export const Input = styled.input<{ $isEditing: boolean }>`
+  margin-left: 12px;
   border: none;
   font-size: 22px;
   line-height: 26.25px;
   font-weight: 600;
+  width: 244px;
   background-color: ${({ theme }) => theme.colors.white};
   color: ${({ theme }) => theme.colors.darkGray};
-  padding: 8px;
+  padding: 3px;
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.offGray};
@@ -98,6 +100,8 @@ export const BtnImage = styled.button`
   border: none;
   background-color: transparent;
   cursor: pointer;
+  display: flex;
+  justify-content: flex-start;
 `;
 
 export const ComBoxTwo = styled.div`
@@ -117,11 +121,14 @@ export const ComBoxTwo = styled.div`
 `;
 
 export const MarginBox = styled.div`
-  margin-left: 40px;
   display: flex;
   width: 100%;
   align-items: center;
   flex-direction: column;
+  /* background-color: red; */
+  .title {
+    margin-left: 40px;
+  }
 `;
 
 export const Body3 = styled(BaseBody4)`
@@ -207,6 +214,7 @@ export const ToggleButton = styled.button<{ $active: boolean }>`
   width: 110px;
   height: 42px;
   font-size: 22px;
+  padding: 0;
 
   &:not(:last-child) {
     border-right: 2px solid ${(props) => props.theme.colors.primary[5]};
@@ -237,7 +245,7 @@ export const RegisterButton = styled.button`
 
 export const MemoTextArea = styled.textarea`
   width: 326px;
-  height: 500px;
+  height: 200px;
   max-height: 729px;
   min-height: 200px;
   border-radius: 18px;
@@ -246,35 +254,52 @@ export const MemoTextArea = styled.textarea`
   margin-right: 40px;
   padding: 5px 10px;
   border: none;
+  margin-bottom: 34px;
 `;
 
 export const ImageWrapper = styled.div`
+  width: 100px;
+  height: 100px;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const ImageContainer = styled.div`
   display: flex;
+  flex-direction: column;
   width: 100%;
-  height: 100px;
-  overflow: hidden;
+  height: 120px;
+  position: relative;
+  /* background-color: black; */
 
   .slick-slider {
+    margin-left: 20px;
+    margin-top: 12px;
     height: 100%;
   }
 
   .slick-list {
     height: 100%;
+    overflow: hidden; /* Add this line */
+    display: flex;
+    justify-content: flex-start; /* Add this line */
   }
 
   .slick-track {
     display: flex;
+    align-items: center;
     height: 100%;
+    width: 100% !important;
+    display: flex;
+    justify-content: flex-start; /* Add this line */
   }
 
   .slick-slide {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start; /* Add this line */
+    width: 100px; /* Modify this line to match the width of ImageWrapper */
     margin: 0 10px;
   }
 `;

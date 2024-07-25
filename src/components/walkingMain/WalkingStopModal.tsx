@@ -68,6 +68,7 @@ const RestartButton = styled.button`
   line-height: 23.4px;
   letter-spacing: -1%;
   text-align: center;
+  padding: 0;
 `;
 
 const StopButton = styled.button`

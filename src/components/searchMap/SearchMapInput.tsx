@@ -52,12 +52,14 @@ const Icon = styled.img`
   height: 36px;
 `;
 
-const SearchMapInput = () => {
+const SearchMapInput = ({
+  name,
+  onChangeSearch,
+}: {
+  name: string;
+  onChangeSearch: () => void;
+}) => {
   const navigate = useNavigate();
-  const [text, setText] = useState('');
-  const onChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    setText(e.target.value);
-  };
 
   const onGoText = () => {
     navigate('/search');
@@ -68,7 +70,7 @@ const SearchMapInput = () => {
         <Icon src={searchIcon} alt="search" />
         <SearchInputCom
           placeholder="원하는 산책로의 이름 또는 현재 지역을 검색해 보세요"
-          value={text}
+          value={name}
           onChange={onChangeSearch}
         />
       </InputContainer>

@@ -1,13 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { formatDistance, formatTime } from '../../utils/formatTime';
+import { useSetRecoilState } from 'recoil';
+import {
+  formatDistance,
+  formatRating,
+  formatTime,
+} from '../../utils/formatTime';
 import walkingReportThumbnail from '../../assets/walkingReport/walkingReportThumbnail.png';
 import holThumbnail from '../../assets/common/holThumbnail.png';
 import startIcon from '../../assets/common/star.png';
 import linkIcon from '../../assets/common/link.png';
 import { IUserTrailLists } from '../../types/getUserTrailListsType';
 import { BaseText2, BaseText3 } from '../../styles/common/textStyle';
+import selectTrailState from '../../stores/selectTrail';
 
 const Card = styled.div`
   background-color: ${(props) => props.theme.colors.white};
@@ -104,6 +110,7 @@ const Rate = styled.div`
   font-weight: 400;
   line-height: 18.72px;
   color: ${(props) => props.theme.colors.darkGray};
+  margin-left: 10px;
 
   .rating {
     font-size: 16px;
@@ -121,8 +128,15 @@ const LinkImg = styled.img`
 
 const HorizontalCard = ({ data }: { data: IUserTrailLists }) => {
   const navigate = useNavigate();
-  const onGoDetail = () => {
-    navigate(`/trail/select/${data.walkingTrailId}`);
+  const selectTrail = useSetRecoilState(selectTrailState);
+
+  const onClickPage = (id: string, item: any) => {
+    selectTrail({
+      selectId: id,
+      lat: item.length > 0 ? item[0].lat : 0,
+      lng: item.length > 0 ? item[0].lng : 0,
+    });
+    navigate('/search/map');
   };
 
   return (
@@ -134,7 +148,9 @@ const HorizontalCard = ({ data }: { data: IUserTrailLists }) => {
         height={88}
         style={{ borderRadius: '12px' }}
       />
-      <ContentWrapper onClick={onGoDetail}>
+      <ContentWrapper
+        onClick={() => onClickPage(data.walkingTrailUid, data.itemList)}
+      >
         <TopWrapper>
           <span className="name">{data.userUid.slice(0, 3)}의 산책길</span>
           <span className="content">{data.name}</span>
@@ -155,7 +171,9 @@ const HorizontalCard = ({ data }: { data: IUserTrailLists }) => {
           <span className="name">{data.userUid.slice(0, 3)}의 산책길</span>
           <Rate>
             <img src={startIcon} alt="star" width={24} height={24} />
-            <span className="rating">{data.rating}</span>
+            <span className="rating">
+              {data.rating ? formatRating(String(data.rating)) : '0,0'}
+            </span>
           </Rate>
         </NameRatingWrapper>
       </ContentWrapper>

@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React from 'react';
 import { v4 } from 'uuid';
 import styled from 'styled-components';
@@ -229,6 +230,7 @@ export const BottomBox = styled.div`
   align-items: center;
   width: 100%;
   background-color: ${(props) => props.theme.colors.white};
+  padding-bottom: 20px;
 `;
 
 export const RegisterButton = styled.button`
@@ -270,11 +272,11 @@ const SelectTrail = () => {
   const navigate = useNavigate();
   //   const { data: MytrailData } = useFetch('/walking-trail', 'walking-trail', {});
 
-  //   const { data: trailData } = useFetch(
-  //     `/walking-trail/${id}`,
-  //     `/walking-trail/${id}`,
-  //     {}
-  //   );
+  const { data: trailData } = useFetch(
+    `/walking-trail/${id}`,
+    `/walking-trail/${id}`,
+    {}
+  );
   //   console.log('trailData', trailData);
   //   console.log('MytrailData', MytrailData);
 
@@ -316,19 +318,39 @@ const SelectTrail = () => {
 
       <HeaderImgWrapper>
         <HeaderBox>
-          <img
-            src={WalkingReportThumbnail}
-            alt="thumbnail"
-            width={376}
-            height={281}
-          />
-          <img
-            src={heartIcon}
-            alt="heart"
-            className="heartIcon"
-            width={40}
-            height={40}
-          />
+          {dummyData.data.mainImage !== null &&
+          dummyData.data.mainImage !== '' ? (
+            <img
+              src={dummyData.data.mainImage}
+              alt="thumbnail"
+              width={376}
+              height={281}
+            />
+          ) : (
+            <img
+              src={WalkingReportThumbnail}
+              alt="thumbnail"
+              width={376}
+              height={281}
+            />
+          )}
+          {dummyData.data.isLike ? (
+            <img
+              src={redHeartIcon}
+              alt="heart"
+              className="heartIcon"
+              width={40}
+              height={40}
+            />
+          ) : (
+            <img
+              src={heartIcon}
+              alt="heart"
+              className="heartIcon"
+              width={40}
+              height={40}
+            />
+          )}
           <div className="starWrapper">
             <span className="name">{dummyData.data.name}의 산책로</span>
             <div className="ratingWrapper">
@@ -401,6 +423,3 @@ const SelectTrail = () => {
 };
 
 export default SelectTrail;
-
-// cf2c63cc-8b06-4b3d-8b2d-30f78be5ada3
-// 93a33519-4c7e-44be-828a-a2d33b001a79

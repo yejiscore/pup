@@ -1,6 +1,6 @@
 export interface IUserTrailLists {
-  mainImage: string;
   walkingTrailId: number;
+  mainImage: string | null;
   name: string;
   description: string;
   walkingTrailUid: string;
@@ -14,6 +14,7 @@ export interface IUserTrailLists {
   reviewCount: number;
   likeCount: number;
   isLike: boolean;
+  itemList: { walkingTrailItemId: number; lat: number; lng: number }[];
 }
 
 export interface ResIUserTrailLists {

@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useRecoilValue } from 'recoil';
 import cameraIcon from '../../assets/map/camera.png';
 import stopIcon from '../../assets/map/stop.png';
 import dogWalkingPic from '../../assets/map/dogwalkingpic.png';
+import useFetch from '../../hooks/useFetch';
+import { userDataState } from '../../stores/auth/authState';
 
 const ModalContainer = styled.div`
   width: 336px;
@@ -113,14 +116,17 @@ const WalkingModal = ({
   onStop,
   onTakePhoto,
   photoCount,
+  dogChange,
 }: {
   distance: number;
   time: number;
   onStop: () => void;
   onTakePhoto: () => void;
   photoCount: number;
+  dogChange: () => void;
 }) => {
-  console.log(distance);
+  const userData = useRecoilValue(userDataState);
+
   const formatTime = (time: number) => {
     const hours = String(Math.floor(time / 3600)).padStart(2, '0');
     const minutes = String(Math.floor((time % 3600) / 60)).padStart(2, '0');
@@ -136,11 +142,21 @@ const WalkingModal = ({
     return distanceNum.toFixed(2).padStart(5, '0');
   };
 
+  const [imgSrc, setImgSrc] = useState(userData.profile);
+  const handleError = () => {
+    setImgSrc(dogWalkingPic);
+  };
   return (
     <ModalContainer>
       <Header>
         <HeaderBox>
-          <Img src={dogWalkingPic} alt="dogWalking" width={58} height={58} />
+          <Img
+            src={imgSrc}
+            alt="userProfile"
+            width={58}
+            height={58}
+            onError={handleError}
+          />
           <span className="title">즐겁게 산책중!</span>
         </HeaderBox>
         <HeaderBox>

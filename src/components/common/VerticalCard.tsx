@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import {
   Card,
   DescriptionContent,
@@ -28,11 +29,13 @@ import {
   formatReviewCount,
   formatTime,
 } from '../../utils/formatTime';
+import selectTrailState from '../../stores/selectTrail';
 
 const VerticalCard = ({ data }: { data: IUserTrailLists }) => {
   const navigate = useNavigate();
   const [isUserLiked, setIsUserLiked] = useState(data.isLike);
   const [walkingTrailUid, setWalkingTrailUid] = useState('1');
+  const selectTrail = useSetRecoilState(selectTrailState);
 
   const { mutate: likeAction } = useMutate(
     'walking-trail/like',
@@ -52,8 +55,13 @@ const VerticalCard = ({ data }: { data: IUserTrailLists }) => {
     );
   };
 
-  const onClickPage = () => {
-    navigate(`/trail/select/${data.walkingTrailUid}`);
+  const onClickPage = (id: string, item: any) => {
+    selectTrail({
+      selectId: id,
+      lat: item.length > 0 ? item[0].lat : 0,
+      lng: item.length > 0 ? item[0].lng : 0,
+    });
+    navigate('/search/map');
   };
 
   return (
@@ -69,7 +77,9 @@ const VerticalCard = ({ data }: { data: IUserTrailLists }) => {
         />
       </ImageContainer>
 
-      <TitleWrapper onClick={onClickPage}>
+      <TitleWrapper
+        onClick={() => onClickPage(data.walkingTrailUid, data.itemList)}
+      >
         <img
           src={dogWalkingPicIcon}
           alt="dogWalkingPic"
@@ -78,16 +88,16 @@ const VerticalCard = ({ data }: { data: IUserTrailLists }) => {
         />
         <Text2>{data.name}</Text2>
       </TitleWrapper>
-      <Info onClick={onClickPage}>
+      <Info onClick={() => onClickPage(data.walkingTrailUid, data.itemList)}>
         <DescriptionTitle>산책 시간</DescriptionTitle>
         <DescriptionContent>{formatTime(data.time)}</DescriptionContent>
       </Info>
-      <Info onClick={onClickPage}>
+      <Info onClick={() => onClickPage(data.walkingTrailUid, data.itemList)}>
         <DescriptionTitle>산책 거리</DescriptionTitle>
         <DescriptionContent>{formatDistance(data.distance)}</DescriptionContent>
       </Info>
 
-      <Rate onClick={onClickPage}>
+      <Rate onClick={() => onClickPage(data.walkingTrailUid, data.itemList)}>
         <img src={startIcon} alt="star" width={24} height={24} />
         {data.rating ? formatRating(String(data.rating)) : '0.0'}
         <img src={peopleIcon} alt="people" width={24} height={24} />

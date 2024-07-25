@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Slider from 'react-slick';
+import { useRecoilValue } from 'recoil';
+import { useParams } from 'react-router-dom';
 import BaseBox from '../../styles/common/BaseBox';
 import WalkingReportHeader from '../../components/walkingReport/WalkingReportHeader';
 import offStarIcon from '../../assets/common/offStar.png';
@@ -33,6 +35,10 @@ import {
   ButtonTitleHead4,
 } from '../../styles/walkingReportStyle/WalkingReportStyle';
 import { formatDistance, formatTime } from '../../utils/formatTime';
+import startTrailTimeState from '../../stores/startTrailTime';
+import useMutate from '../../hooks/useMutate';
+import useFetch from '../../hooks/useFetch';
+import { IGetUserTrailType } from '../../types/getUserTrailType';
 
 const RatingBox = styled.div`
   display: flex;
@@ -73,11 +79,11 @@ const dummyData = {
   data: {
     walkingTrailId: 4,
     mainImage: null,
-    name: null,
-    description: null,
+    name: '즐거운 산책로',
+    description: '재밌는 산책로',
     walkingTrailUid: '93e1ce84-4e96-468b-b21e-7622f9cc0e42',
     time: 0,
-    distance: 0,
+    distance: 20,
     openRange: null,
     createdDate: '2024-07-18T00:40:02.808216',
     rating: 2,
@@ -136,10 +142,35 @@ const settings = {
 };
 
 const FinishTrail = () => {
-  const [rating, setRating] = useState(0);
+  const { id: trailId } = useParams(); // URL 파라미터에서 id를 가져옴
 
+  const [rating, setRating] = useState(0);
+  const startTrailTime = useRecoilValue(startTrailTimeState);
+  console.log(startTrailTime);
   const handleStarClick = (index: number) => {
     setRating(index + 1);
+  };
+
+  const { mutate: addReview } = useMutate(
+    'addReview',
+    '/walking-trail/review',
+    'post'
+  );
+  const { data: trailData } = useFetch<IGetUserTrailType>(
+    `/walking-trail/${trailId}`,
+    `/walking-trail/${trailId}`,
+    {}
+  );
+
+  const handleRegister = () => {
+    console.log('산책 등록하기');
+    console.log(rating);
+    console.log(startTrailTime);
+    addReview({
+      walkingTrailUid: trailData?.data.walkingTrailUid,
+      rating,
+      time: startTrailTime,
+    });
   };
 
   return (
@@ -181,7 +212,7 @@ const FinishTrail = () => {
         <ComBoxOne>
           <TimeDistance>
             <Head4>시간</Head4>
-            <Body3>{formatTime(dummyData.data.time)}</Body3>
+            <Body3>{formatTime(startTrailTime)}</Body3>
           </TimeDistance>
           <TimeDistance>
             <Head4>거리</Head4>
@@ -221,6 +252,10 @@ const FinishTrail = () => {
           </MarginBox>
         </ComBoxTwo>
       </MiddlewBox>
+
+      <ComBoxTwo>
+        <RegisterButton onClick={handleRegister}>산책 등록하기</RegisterButton>
+      </ComBoxTwo>
     </BaseBox>
   );
 };

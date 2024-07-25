@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import BaseBox from '../../styles/common/BaseBox';
 import pawIcon from '../../assets/map/paw.png';
 import DogSelectModal from '../../components/walkingMain/DogSelectModal';
@@ -10,6 +11,9 @@ import WalkingStopModal from '../../components/walkingMain/WalkingStopModal';
 import calculateDistance from '../../utils/calculateDistance';
 import WalkingControls from '../../components/walkingMain/WalkingControls';
 import WalkingMyLocation from '../../components/walkingMain/WalkingMyLocation';
+import useFetch from '../../hooks/useFetch';
+import { formatTime } from '../../utils/formatTime';
+import startTrailTimeState from '../../stores/startTrailTime';
 
 declare global {
   interface Window {
@@ -145,7 +149,16 @@ const TrailStart = () => {
   const [isNearby, setIsNearby] = useState<boolean>(false);
   const [buttonText, setButtonText] = useState<string>('산책 중');
   const [isActive, setIsActive] = useState(false);
+  const [startTime, setStartTime] = useState<Date | null>(null);
+  const setStartTrailTime = useSetRecoilState(startTrailTimeState);
+
   const navigate = useNavigate();
+
+  const { data: trailData } = useFetch(
+    `/walking-trail/${trailId}`,
+    `/walking-trail/${trailId}`,
+    {}
+  );
 
   const handleDogSelect = (dogId: number) => {
     setDogsId((prevIds) => {
@@ -159,6 +172,7 @@ const TrailStart = () => {
   const handleStartClick = () => {
     if (isModalOpen) {
       setIsModalOpen(false);
+      setStartTime(new Date()); // 산책 시작 시간 저장
     } else {
       setIsModalOpen(true);
     }
@@ -171,18 +185,31 @@ const TrailStart = () => {
   // 산책 완료
   const handleComplete = () => {
     setShowStopModal(false);
+    console.log('startTime', startTime);
+    if (startTime) {
+      const endTime = new Date();
+      const duration = Math.floor(
+        (endTime.getTime() - startTime.getTime()) / 1000
+      ); // 초 단위로 계산
+      console.log('time', endTime, startTime);
+      console.log(`산책 시간: ${formatTime(duration)}`); // 산책 시간 출력
+      setStartTrailTime(duration);
+    }
     navigate(`/trail/finish/${trailId}`);
   };
 
   const handleTraiLStart = () => {
+    if (startTime) {
+      const endTime = new Date();
+      const duration = Math.floor(
+        (endTime.getTime() - startTime.getTime()) / 1000
+      ); // 초 단위로 계산
+      console.log('time', endTime, startTime);
+      console.log(`산책 시간: ${formatTime(duration)}`); // 산책 시간 출력
+      setStartTrailTime(duration);
+    }
     navigate(`/trail/finish/${trailId}`);
   };
-
-  //   const { data: trailData } = useFetch(
-  //     `/walking-trail/${id}`,
-  //     `/walking-trail/${id}`,
-  //     {}
-  //   );
 
   const drawLine = (arrPoint: any[], color: string = '#FF0000') => {
     new window.Tmapv2.Polyline({

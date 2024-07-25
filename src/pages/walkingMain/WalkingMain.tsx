@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, ChangeEvent } from 'react';
 
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import BaseBox from '../../styles/common/BaseBox';
 import Tmap, { TmapHandles } from '../../components/map/Tmap';
@@ -15,6 +15,9 @@ import WalkingStopModal from '../../components/walkingMain/WalkingStopModal';
 import uploadDataState from '../../stores/uploadDataState';
 import useMutate from '../../hooks/useMutate';
 import pawIcon from '../../assets/map/paw.png';
+import useFetch from '../../hooks/useFetch';
+import { userDataState } from '../../stores/auth/authState';
+import { UserDataType } from '../../types/authType.ts';
 
 declare global {
   interface Window {
@@ -68,6 +71,7 @@ const WalkingMain = () => {
   const [showStopModal, setShowStopModal] = useState(false);
   const [dogsId, setDogsId] = useState<number[]>([]);
   const [isActive, setIsActive] = useState(false);
+  const [isReChangeDogSelect, setIsReChangeDogSelect] = useState(false);
 
   // ref
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -76,6 +80,19 @@ const WalkingMain = () => {
   const lineRef = useRef<any>(null);
   const path = useRef<any[]>([]); // 경로를 저장할 배열
   const markerRef = useRef<any>(null);
+
+  const { data: userData, isSuccess: userDataSuccess } = useFetch<UserDataType>(
+    '/user',
+    '/user',
+    {}
+  );
+  const setUserData = useSetRecoilState(userDataState);
+
+  useEffect(() => {
+    if (userDataSuccess) {
+      setUserData(userData.data);
+    }
+  }, [userDataSuccess]);
 
   // 좌표 얻기
   useEffect(() => {
@@ -248,6 +265,7 @@ const WalkingMain = () => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
           const { latitude, longitude } = position.coords;
+
           createWalkingTrail(
             {
               dogIdList: dogsId,
@@ -259,7 +277,8 @@ const WalkingMain = () => {
                 console.log('Walking trail created:', data);
                 setUploadData((prevData) => ({
                   ...prevData,
-                  walkingTrailId: data.data,
+                  walkingTrailUid: data.data,
+                  dogId: dogsId,
                 }));
               },
               onError: (error) => {
@@ -336,6 +355,12 @@ const WalkingMain = () => {
     });
   };
 
+  const dogChangeId = () => {
+    setIsReChangeDogSelect(true);
+    setDogsId([]);
+    setButtonText('산책으로 돌아가기');
+  };
+
   return (
     <BaseBox>
       <Tmap ref={tmapRef} />
@@ -346,14 +371,17 @@ const WalkingMain = () => {
         onClick={handleStartClick}
         isModalOpen={isModalOpen}
         buttonText={buttonText}
+        onClose={() => setIsReChangeDogSelect(false)}
+        dogsId={dogsId}
       />
-      {isWalking && (
+      {isWalking && !isReChangeDogSelect && (
         <WalkingModal
           distance={distance}
           time={time}
           onStop={handleStop}
           onTakePhoto={handleTakePhoto}
           photoCount={uploadData.walkingPhotos.length}
+          dogChange={dogChangeId}
         />
       )}
       {!isWalking && !isModalOpen && <Footer />}
@@ -364,6 +392,17 @@ const WalkingMain = () => {
           onClose={() => setIsModalOpen(false)}
           onDogSelect={handleDogSelect}
           selectedDogs={dogsId}
+          rechange={false}
+        />
+      )}
+
+      {isReChangeDogSelect && (
+        <DogSelectModal
+          isOpen={isReChangeDogSelect}
+          onClose={() => setIsReChangeDogSelect(false)}
+          onDogSelect={handleDogSelect}
+          selectedDogs={dogsId}
+          rechange
         />
       )}
 

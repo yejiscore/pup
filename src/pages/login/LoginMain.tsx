@@ -4,8 +4,9 @@ import { useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 
 import useMutate from '../../hooks/useMutate';
-import authState from '../../stores/auth/authState';
+
 import { setCookie } from '../../utils/cookiesUtils';
+import { authState } from '../../stores/auth/authState';
 
 const LoginMain = () => {
   const navigate = useNavigate();
