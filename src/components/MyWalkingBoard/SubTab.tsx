@@ -6,20 +6,28 @@ import styled from 'styled-components';
 const SubTabContainer = styled.div`
   display: flex;
   justify-content: space-around;
-  // width: 100%;
-  background-color: #ffffff;
+  width: 100%;
+  height: 49px;
+  justify-content: flex-start;
+  margin-left: 10px;
+  position: absolute;
+  top: 98px;
 `;
 
 const SubTabButton = styled.button<{ active: boolean }>`
-  background-color: ${(props) => (props.active ? '#00AE80' : '#B7CAC4')};
   border: none;
-  padding: 10px;
   cursor: pointer;
-  flex: 1;
-  font-size: 1em;
-  weight: 10px;
+  font-size: 18px;
+  weight: 100px;
   height: 49px;
-  color: ${(props) => (props.active ? '#fff' : '#000')};
+  color: ${(props) => (props.active ? '#00AE80' : '#B7CAC4')};
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  gap: 10px;
+  font-weight: bold;
 `;
 
 interface SubTabProps {

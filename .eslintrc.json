@@ -38,6 +38,8 @@
     "no-new": "off",
     "no-nested-ternary": "off",
     "no-await-in-loop": "off",
-    "no-plusplus": "off"
+    "no-plusplus": "off",
+    "function-paren-newline": "off",
+    "react/jsx-curly-newline": "off"
   }
 }
