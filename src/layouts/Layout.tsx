@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 
 import styled from 'styled-components';
+import SharePopup from '../components/Modal/CopyIsModal';
 
 const BaseLayoutStyled = styled.div`
   background-color: ${(props) => props.theme.colors.background};
@@ -31,7 +32,10 @@ const Main = styled.main`
 const BaseLayout = ({ children }: { children: ReactNode }) => {
   return (
     <BaseLayoutStyled>
-      <Main>{children}</Main>
+      <Main>
+        {children}
+        <SharePopup />
+      </Main>
     </BaseLayoutStyled>
   );
 };

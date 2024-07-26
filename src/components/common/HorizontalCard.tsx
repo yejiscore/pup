@@ -14,6 +14,7 @@ import linkIcon from '../../assets/common/link.png';
 import { IUserTrailLists } from '../../types/getUserTrailListsType';
 import { BaseText2, BaseText3 } from '../../styles/common/textStyle';
 import selectTrailState from '../../stores/selectTrail';
+import linkShareState from '../../stores/linkShare';
 
 const Card = styled.div`
   background-color: ${(props) => props.theme.colors.white};
@@ -129,6 +130,11 @@ const LinkImg = styled.img`
 const HorizontalCard = ({ data }: { data: IUserTrailLists }) => {
   const navigate = useNavigate();
   const selectTrail = useSetRecoilState(selectTrailState);
+  const setLinkShare = useSetRecoilState(linkShareState);
+
+  const handleShowPopup = (url: string) => {
+    setLinkShare({ isLinkShare: true, shareUrl: url });
+  };
 
   const onClickPage = (id: string, item: any) => {
     selectTrail({
@@ -178,7 +184,14 @@ const HorizontalCard = ({ data }: { data: IUserTrailLists }) => {
           </Rate>
         </NameRatingWrapper>
       </ContentWrapper>
-      <LinkImg src={linkIcon} />
+      <LinkImg
+        src={linkIcon}
+        onClick={() =>
+          handleShowPopup(
+            `https://www.domountainbe.shop/trail/select/${data.walkingTrailUid}`
+          )
+        }
+      />
     </Card>
   );
 };

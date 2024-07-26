@@ -22,6 +22,7 @@ import {
 } from '../../utils/formatTime';
 import downIcon from '../../assets/common/down.png';
 import selectTrailState from '../../stores/selectTrail';
+import linkShareState from '../../stores/linkShare';
 
 const Container = styled.div`
   display: flex;
@@ -249,6 +250,11 @@ const SearchResult = () => {
   const [baseName, setBaseName] = useState('');
   const [name, setName] = useState('');
   const [type, setType] = useState('RECENT');
+  const setLinkShare = useSetRecoilState(linkShareState);
+
+  const handleShowPopup = (url: string) => {
+    setLinkShare({ isLinkShare: true, shareUrl: url });
+  };
 
   const { data: trailData } = useFetch<ResIUserTrailLists>(
     `[trailData/search/${name}${type}]`,
@@ -414,7 +420,14 @@ const SearchResult = () => {
                 </Rate>
               </NameRatingWrapper>
             </ContentWrapper>
-            <LinkImg src={linkIcon} />
+            <LinkImg
+              src={linkIcon}
+              onClick={() =>
+                handleShowPopup(
+                  `https://www.domountainbe.shop/trail/select/${data.walkingTrailUid}`
+                )
+              }
+            />
           </Card>
         ))}
     </Container>

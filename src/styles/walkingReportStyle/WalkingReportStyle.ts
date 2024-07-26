@@ -251,10 +251,21 @@ export const MemoTextArea = styled.textarea`
   border-radius: 18px;
   background-color: ${(props) => props.theme.colors.background};
   margin-top: 12px;
-  margin-right: 40px;
+  /* margin-right: 40px; */
   padding: 5px 10px;
   border: none;
   margin-bottom: 34px;
+`;
+
+export const MemoBox = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-direction: column;
+  /* background-color: red; */
+  .title {
+    margin-left: 40px;
+  }
 `;
 
 export const ImageWrapper = styled.div`
@@ -312,8 +323,8 @@ export const ImageBox = styled.img`
 `;
 export const DeleteButton = styled.button`
   position: absolute;
-  top: 0;
-  right: 0;
+  top: -5px;
+  right: -10px;
   background: none;
   border: none;
   cursor: pointer;

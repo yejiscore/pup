@@ -290,11 +290,10 @@ const SearchStartWalking = () => {
   // 산책 완료
   const handleComplete = () => {
     setShowStopModal(false);
-    // navigate('/walking_main/report');
+    navigate('/');
   };
 
   const handleTraiLStart = () => {
-    // // console.log('산책 시작');
     navigate(`/trail/startTrail/${id}`);
   };
 

@@ -6,6 +6,7 @@ import { Text2 } from '../../styles/WalkintSreachStyle/SearchTopCom';
 import useFetch from '../../hooks/useFetch';
 import { ResIUserTrailLists } from '../../types/getUserTrailListsType';
 import HorizontalCard from '../common/HorizontalCard';
+import { UserDataType } from '../../types/authType';
 
 const Wrapper = styled.div`
   display: flex;
@@ -125,12 +126,14 @@ const dummyData = {
 const SearchBottomCom = () => {
   const [name, setName] = useState('');
   const [type, setType] = useState('RECENT');
+
+  const { data: userData } = useFetch<UserDataType>('userData', 'user', {});
+
   const { data: trailData } = useFetch<ResIUserTrailLists>(
-    `[trailData/search/${name}${type}]`,
-    '/walking-trail/search',
+    `[trailData/review/${userData?.data.userId}]`,
+    '/walking-trail/review',
     {
-      name,
-      type,
+      userId: userData?.data.userId,
     }
   );
 

@@ -23,6 +23,7 @@ import {
 } from '../../utils/formatTime';
 import { IGetUserTrailType } from '../../types/getUserTrailType';
 import useMutate from '../../hooks/useMutate';
+import linkShareState from '../../stores/linkShare';
 
 export const Box = styled(BaseBox)`
   background-color: ${(props) => props.theme.colors.white};
@@ -261,6 +262,12 @@ const HeartIcon = styled.img`
   cursor: pointer;
 `;
 
+const LinkIcon = styled.img`
+  margin-right: 20px;
+
+  cursor: pointer;
+`;
+
 const settings = {
   dots: false,
   infinite: false,
@@ -273,13 +280,18 @@ const settings = {
 const SelectTrail = () => {
   const { id } = useParams(); // URL 파라미터에서 id를 가져옴
   const navigate = useNavigate();
+  const setLinkShare = useSetRecoilState(linkShareState);
+
+  const handleShowPopup = (url: string) => {
+    setLinkShare({ isLinkShare: true, shareUrl: url });
+  };
 
   const { data: trailData } = useFetch<IGetUserTrailType>(
     `/walking-trail/${id}`,
     `/walking-trail/${id}`,
     {}
   );
-
+  console.log('trailData', trailData);
   const [mainImage, setMainImage] = useState<string>('');
   const [isUserLiked, setIsUserLiked] = useState(false);
   useEffect(() => {
@@ -384,12 +396,16 @@ const SelectTrail = () => {
                   </Body1>
                 </div>
               </div>
-              <img
+              <LinkIcon
                 src={greenLink}
                 alt="greenLink"
                 width={64}
                 height={64}
-                className="greenLink"
+                onClick={() =>
+                  handleShowPopup(
+                    `https://www.domountainbe.shop/trail/select/${id}`
+                  )
+                }
               />
             </ComBoxOne>
 

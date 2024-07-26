@@ -16,7 +16,7 @@ const getWeather = async (lat: number, lon: number) => {
 
   // 날씨 아이콘 가져오기
   const weatherIcon = res.data.weather[0].icon;
-  const weatherIconAdrs = `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
+  const weatherIconAdrs = `https://openweathermap.org/img/wn/${weatherIcon}@2x.png`;
   // 소수점 버리기
   const temp = Math.round(res.data.main.temp);
 

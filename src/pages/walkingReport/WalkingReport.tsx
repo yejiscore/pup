@@ -37,6 +37,7 @@ import {
   Text,
   MarginBox,
   ButtonTitleHead4,
+  MemoBox,
 } from '../../styles/walkingReportStyle/WalkingReportStyle';
 import uploadDataState from '../../stores/uploadDataState';
 import { formatDistance, formatTime } from '../../utils/formatTime';
@@ -96,8 +97,8 @@ const WalkingReport = () => {
     'post'
   );
 
-  console.log('uploadData:', uploadData);
   const handleRegister = async () => {
+    console.log('uploadData:', uploadData);
     try {
       const s3 = new AWS.S3({
         accessKeyId: process.env.REACT_APP_MINIO_ACCESS_KEY,
@@ -125,7 +126,7 @@ const WalkingReport = () => {
           console.error(`Error uploading file ${file.name}:`, uploadError);
         }
       }
-
+      console.log('uploadedPhotoUrls:', uploadedPhotoUrls);
       for (let i = 0; i < uploadedPhotoUrls.length; i++) {
         await uploadPicture(
           {
@@ -142,7 +143,7 @@ const WalkingReport = () => {
           }
         );
       }
-
+      console.log('uploadedPhotoUrls:', uploadedPhotoUrls);
       const dataToSend = {
         walkingTrailUid: uploadData.walkingTrailUid,
         name,
@@ -258,7 +259,7 @@ const WalkingReport = () => {
         </ComBoxTwo>
 
         <ComBoxTwo style={{ marginTop: '20px' }}>
-          <MarginBox>
+          <MemoBox>
             <div className="title">
               <Head4>메모</Head4>
             </div>
@@ -277,7 +278,7 @@ const WalkingReport = () => {
                 <Text>메모 작성하기</Text>
               </ButtonMemo>
             )}
-          </MarginBox>
+          </MemoBox>
         </ComBoxTwo>
       </MiddlewBox>
 
