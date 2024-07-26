@@ -41,10 +41,12 @@ import {
 import uploadDataState from '../../stores/uploadDataState';
 import { formatDistance, formatTime } from '../../utils/formatTime';
 import useMutate from '../../hooks/useMutate';
+import selectedImageState from '../../stores/selectedImageState';
 
 const WalkingReport = () => {
   const navigate = useNavigate();
   const [uploadData, setUploadData] = useRecoilState(uploadDataState);
+  const [selectedImage, setSelectedImage] = useRecoilState(selectedImageState);
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState('작성해 주세요');
   const [time, setTime] = useState(uploadData.walkingTime || 11);
@@ -94,8 +96,8 @@ const WalkingReport = () => {
     'post'
   );
 
+  console.log('uploadData:', uploadData);
   const handleRegister = async () => {
-    // console.log('uploadData:', uploadData);
     try {
       const s3 = new AWS.S3({
         accessKeyId: process.env.REACT_APP_MINIO_ACCESS_KEY,
@@ -108,31 +110,26 @@ const WalkingReport = () => {
       const uploadedPhotoUrls: string[] = [];
 
       for (let i = 0; i < uploadData.walkingPhotos.length; i++) {
-        const photo = uploadData.walkingPhotos[i];
-        const base64Data = photo.split(',')[1];
-        const binaryData = atob(base64Data);
-        const bufferData = new Uint8Array(binaryData.length);
-
-        for (let j = 0; j < binaryData.length; j++) {
-          bufferData[j] = binaryData.charCodeAt(j);
-        }
+        const file = uploadData.walkingPhotos[i];
 
         const params = {
           Bucket: process.env.REACT_APP_MINIO_BUCKET_NAME || '',
-          Key: `photos/${v4()}_${Date.now()}.jpg`,
-          Body: bufferData,
-          ContentEncoding: 'base64',
-          ContentType: 'image/jpeg',
+          Key: file.name,
+          Body: file,
         };
 
-        const uploadResult = await s3.upload(params).promise();
-        uploadedPhotoUrls.push(uploadResult.Location);
+        try {
+          const uploadResult = await s3.upload(params).promise();
+          uploadedPhotoUrls.push(uploadResult.Location);
+        } catch (uploadError) {
+          console.error(`Error uploading file ${file.name}:`, uploadError);
+        }
       }
 
       for (let i = 0; i < uploadedPhotoUrls.length; i++) {
         await uploadPicture(
           {
-            walkingTrailUid: uploadData.walkingTrailId,
+            walkingTrailUid: uploadData.walkingTrailUid,
             path: uploadedPhotoUrls[i],
             lat: uploadData.walkingCoordinates[0].lat,
             lng: uploadData.walkingCoordinates[0].lng,
@@ -145,10 +142,9 @@ const WalkingReport = () => {
           }
         );
       }
-      // console.log('uploadedPhotoUrls', uploadedPhotoUrls);
-      // Add logic to send other data to the backend
+
       const dataToSend = {
-        walkingTrailUid: uploadData.walkingTrailId,
+        walkingTrailUid: uploadData.walkingTrailUid,
         name,
         time: Number(time),
         distance: Number(distance),
@@ -191,7 +187,7 @@ const WalkingReport = () => {
   return (
     <BaseBox>
       <WalkingReportHeader />
-      {uploadData.walkingPhotos.length === 0 ? (
+      {selectedImage.length === 0 ? (
         <img
           src={WalkingReportThumbnail}
           alt="thumbnail"
@@ -199,12 +195,7 @@ const WalkingReport = () => {
           height={281}
         />
       ) : (
-        <img
-          src={uploadData.walkingPhotos[0]}
-          alt="thumbnail"
-          width={376}
-          height={281}
-        />
+        <img src={selectedImage[0]} alt="thumbnail" width={376} height={281} />
       )}
 
       <MiddlewBox>
@@ -253,7 +244,7 @@ const WalkingReport = () => {
             </div>
             <ImageContainer>
               <Slider {...settings}>
-                {uploadData.walkingPhotos.map((photo: any, index: number) => (
+                {selectedImage.map((photo: any, index: number) => (
                   <ImageWrapper key={index}>
                     <ImageBox src={photo} alt={`Walking Photo ${index + 1}`} />
                     <DeleteButton onClick={() => handleDeletePhoto(index)}>

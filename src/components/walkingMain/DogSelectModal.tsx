@@ -91,13 +91,13 @@ const DogSelectModal = ({
   onClose,
   onDogSelect,
   selectedDogs,
-  rechange,
+  rechange = false,
 }: {
   isOpen: boolean;
   onClose: () => void;
   onDogSelect: (dogId: number) => void;
   selectedDogs: number[];
-  rechange: boolean;
+  rechange?: boolean;
 }) => {
   const {
     data: dogData,

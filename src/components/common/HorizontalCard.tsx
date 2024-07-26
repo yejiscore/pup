@@ -133,6 +133,7 @@ const HorizontalCard = ({ data }: { data: IUserTrailLists }) => {
   const onClickPage = (id: string, item: any) => {
     selectTrail({
       selectId: id,
+      name: data.name,
       lat: item.length > 0 ? item[0].lat : 0,
       lng: item.length > 0 ? item[0].lng : 0,
     });

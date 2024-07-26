@@ -48,8 +48,8 @@ const WalkingStartButton = ({
   onClick: () => void;
   isModalOpen: boolean;
   buttonText: string;
-  onClose: () => void;
-  dogsId: number[];
+  onClose?: () => void;
+  dogsId?: number[];
 }) => {
   const [uploadData, setUploadData] = useRecoilState(uploadDataState);
 
@@ -60,6 +60,7 @@ const WalkingStartButton = ({
   );
 
   const handleReChagneDog = () => {
+    console.log('reChagneDog', uploadData);
     reChagneDog(
       {
         walkingTrailUid: uploadData.walkingTrailUid,
@@ -67,7 +68,9 @@ const WalkingStartButton = ({
       },
       {
         onSuccess: () => {
-          onClose();
+          if (onClose) {
+            onClose();
+          }
         },
       }
     );

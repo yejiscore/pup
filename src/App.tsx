@@ -5,19 +5,19 @@ import 'slick-carousel/slick/slick-theme.css';
 import styled from 'styled-components';
 import WalkingMain from './pages/walkingMain/WalkingMain';
 import BaseLayout from './layouts/Layout';
-import LoginMain from './pages/login/LoginMain.tsx';
-import Footer from './components/common/Footer.tsx';
-import WalkingReport from './pages/walkingReport/WalkingReport.tsx';
-import SearchMain from './pages/searchMain/SearchMain.tsx';
-import SearchMap from './pages/searchMain/SearchMap.tsx';
-import SearchStartWalking from './pages/searchMap/SearchStartWalking.tsx';
-import SelectTrail from './pages/detail/SelectTrail.tsx';
-import TrailStart from './pages/trailStart/TrailStart.tsx';
-import FinishTrail from './pages/trailStart/FinishTrail.tsx';
-import MyBoardPage from './components/MyWalkingBoard/MyBoardPage.tsx';
+import LoginMain from './pages/login/LoginMain';
+import Footer from './components/common/Footer';
+import WalkingReport from './pages/walkingReport/WalkingReport';
+import SearchMain from './pages/searchMain/SearchMain';
+import SearchMap from './pages/searchMain/SearchMap';
+import SearchStartWalking from './pages/searchMap/SearchStartWalking';
+import SelectTrail from './pages/detail/SelectTrail';
+import TrailStart from './pages/trailStart/TrailStart';
+import FinishTrail from './pages/trailStart/FinishTrail';
+import MyBoardPage from './components/MyWalkingBoard/MyBoardPage';
 import DetailPage from './components/Detail/Detail';
-import { AppProvider } from './context/AppContext.tsx';
-import GlobalStyle from './styles/GlobalStyle.ts';
+import { AppProvider } from './context/AppContext';
+import GlobalStyle from './styles/GlobalStyle';
 
 function App() {
   return (
@@ -88,6 +88,8 @@ function App() {
               </BaseLayout>
             }
           />
+
+          {/* 등산로 정보 확인 */}
           <Route
             path="/trail/select/:id"
             element={
@@ -96,6 +98,8 @@ function App() {
               </BaseLayout>
             }
           />
+
+          {/* 유저가 만든 산책로 시작 */}
           <Route
             path="/trail/startTrail/:id"
             element={

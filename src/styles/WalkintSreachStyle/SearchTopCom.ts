@@ -150,7 +150,7 @@ export const Rate = styled.div`
 
 export const HeartIcon = styled.div<{ $isLiked: boolean }>`
   position: absolute;
-  top: 28px;
+  top: 35px;
   right: 12px;
   font-size: 24px;
   color: ${(props) =>

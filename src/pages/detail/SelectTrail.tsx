@@ -1,5 +1,6 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable indent */
-import React from 'react';
+import React, { SyntheticEvent, useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
@@ -20,6 +21,8 @@ import {
   formatRating,
   formatTime,
 } from '../../utils/formatTime';
+import { IGetUserTrailType } from '../../types/getUserTrailType';
+import useMutate from '../../hooks/useMutate';
 
 export const Box = styled(BaseBox)`
   background-color: ${(props) => props.theme.colors.white};
@@ -56,13 +59,6 @@ const HeaderImgWrapper = styled.div`
 const HeaderBox = styled.div`
   width: 376px;
   position: relative;
-
-  .heartIcon {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    cursor: pointer;
-  }
 
   .starWrapper {
     display: flex;
@@ -258,6 +254,13 @@ export const MemoTextArea = styled.textarea`
   border: none;
 `;
 
+const HeartIcon = styled.img`
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  cursor: pointer;
+`;
+
 const settings = {
   dots: false,
   infinite: false,
@@ -270,154 +273,163 @@ const settings = {
 const SelectTrail = () => {
   const { id } = useParams(); // URL 파라미터에서 id를 가져옴
   const navigate = useNavigate();
-  //   const { data: MytrailData } = useFetch('/walking-trail', 'walking-trail', {});
 
-  const { data: trailData } = useFetch(
+  const { data: trailData } = useFetch<IGetUserTrailType>(
     `/walking-trail/${id}`,
     `/walking-trail/${id}`,
     {}
   );
-  //   // console.log('trailData', trailData);
-  //   // console.log('MytrailData', MytrailData);
 
-  const dummyData = {
-    code: 200,
-    status: 'OK',
-    data: {
-      walkingTrailId: 9,
-      mainImage: null,
-      name: '서울시 어쩌구',
-      description: '해당 산책에 대한 기록을 저장합니다.',
-      walkingTrailUid: 'cf2c63cc-8b06-4b3d-8b2d-30f78be5ada3',
-      time: 120,
-      distance: 7.5,
-      openRange: 'PUBLIC',
-      createdDate: '2024-07-21T12:52:17.601437',
-      rating: null,
-      userId: 6,
-      reviewCount: 0,
-      likeCount: 1,
-      isLike: true,
-      imageList: [
-        WalkingReportThumbnail,
-        WalkingReportThumbnail,
-        WalkingReportThumbnail,
-        WalkingReportThumbnail,
-        WalkingReportThumbnail,
-      ],
-    },
-    message: '산책로를 조회합니다.',
-  };
+  const [mainImage, setMainImage] = useState<string>('');
+  const [isUserLiked, setIsUserLiked] = useState(false);
+  useEffect(() => {
+    if (trailData) {
+      setIsUserLiked(trailData.data.isLike);
+      setMainImage(trailData.data.mainImage || WalkingReportThumbnail);
+    }
+  }, [trailData]);
 
   const handleStart = () => {
     navigate(`/trail/start/${id}`);
   };
+
+  const onErrorHandler = () => {
+    setMainImage(WalkingReportThumbnail);
+  };
+
+  const handleImageError = (event: any) => {
+    event.target.src = WalkingReportThumbnail;
+  };
+
+  const { mutate: likeAction } = useMutate(
+    'walking-trail/like',
+    `/walking-trail/like/${id}`,
+    'patch'
+  );
+
+  const handleLikeClick = () => {
+    likeAction(
+      { like: !isUserLiked },
+      {
+        onSuccess: () => {
+          setIsUserLiked(!isUserLiked);
+        },
+      }
+    );
+  };
+
   return (
     <Box>
-      <StartWalkingHeader data={dummyData.data} />
+      {trailData && (
+        <>
+          <StartWalkingHeader data={trailData.data} />
 
-      <HeaderImgWrapper>
-        <HeaderBox>
-          {dummyData.data.mainImage !== null &&
-          dummyData.data.mainImage !== '' ? (
-            <img
-              src={dummyData.data.mainImage}
-              alt="thumbnail"
-              width={376}
-              height={281}
-            />
-          ) : (
-            <img
-              src={WalkingReportThumbnail}
-              alt="thumbnail"
-              width={376}
-              height={281}
-            />
-          )}
-          {dummyData.data.isLike ? (
-            <img
-              src={redHeartIcon}
-              alt="heart"
-              className="heartIcon"
-              width={40}
-              height={40}
-            />
-          ) : (
-            <img
-              src={heartIcon}
-              alt="heart"
-              className="heartIcon"
-              width={40}
-              height={40}
-            />
-          )}
-          <div className="starWrapper">
-            <span className="name">{dummyData.data.name}의 산책로</span>
-            <div className="ratingWrapper">
+          <HeaderImgWrapper>
+            <HeaderBox>
               <img
-                src={starIcon}
-                alt="star"
-                className="starIcon"
-                width={36}
-                height={36}
+                src={mainImage}
+                alt="thumbnail"
+                width={376}
+                height={281}
+                onError={onErrorHandler}
               />
-              <span className="rating">
-                {formatRating(String(dummyData.data.rating || '0,0'))}
-              </span>
-            </div>
-          </div>
-        </HeaderBox>
-      </HeaderImgWrapper>
 
-      <MiddlewBox>
-        <ComBoxOne>
-          <div className="contentWrapper">
-            <div className="contentBox">
-              <Head4>예상시간</Head4>
-              <Body1>{formatTime(dummyData.data.time)}</Body1>
-            </div>
-            <div className="contentBox">
-              <Head4>거리</Head4>
-              <Body1>{formatDistance(dummyData.data.distance)}</Body1>
-            </div>
-          </div>
-          <img
-            src={greenLink}
-            alt="greenLink"
-            width={64}
-            height={64}
-            className="greenLink"
-          />
-        </ComBoxOne>
+              {isUserLiked ? (
+                <HeartIcon
+                  src={redHeartIcon}
+                  alt="heart"
+                  className="heartIcon"
+                  width={40}
+                  height={40}
+                  onClick={handleLikeClick}
+                />
+              ) : (
+                <HeartIcon
+                  src={heartIcon}
+                  alt="heart"
+                  className="heartIcon"
+                  width={40}
+                  height={40}
+                  onClick={handleLikeClick}
+                />
+              )}
+              <div className="starWrapper">
+                <span className="name">{trailData.data.name}의 산책로</span>
+                <div className="ratingWrapper">
+                  <img
+                    src={starIcon}
+                    alt="star"
+                    className="starIcon"
+                    width={36}
+                    height={36}
+                  />
+                  <span className="rating">
+                    {formatRating(String(trailData.data.rating || '0,0'))}
+                  </span>
+                </div>
+              </div>
+            </HeaderBox>
+          </HeaderImgWrapper>
+          <MiddlewBox>
+            <ComBoxOne>
+              <div className="contentWrapper">
+                <div className="contentBox">
+                  <Head4>예상시간</Head4>
+                  <Body1>{trailData && formatTime(trailData.data.time)}</Body1>
+                </div>
+                <div className="contentBox">
+                  <Head4>거리</Head4>
+                  <Body1>
+                    {trailData && formatDistance(trailData.data.distance)}
+                  </Body1>
+                </div>
+              </div>
+              <img
+                src={greenLink}
+                alt="greenLink"
+                width={64}
+                height={64}
+                className="greenLink"
+              />
+            </ComBoxOne>
 
-        <ComBoxTwo>
-          <MainBox>
-            <div className="title">
-              <Head4>기록</Head4>
-            </div>
-            <ImageContainer>
-              <Slider {...settings}>
-                {dummyData.data.imageList.map((photo: any, index: number) => (
-                  <ImageWrapper key={v4()}>
-                    <ImageBox src={photo} alt={`Walking Photo ${index + 1}`} />
-                  </ImageWrapper>
-                ))}
-              </Slider>
-            </ImageContainer>
-          </MainBox>
-        </ComBoxTwo>
+            <ComBoxTwo>
+              <MainBox>
+                <div className="title">
+                  <Head4>기록</Head4>
+                </div>
+                <ImageContainer>
+                  <Slider {...settings}>
+                    {trailData.data.imageList.map(
+                      (photo: any, index: number) => (
+                        <ImageWrapper key={v4()}>
+                          <ImageBox
+                            src={photo}
+                            alt={`Walking Photo ${index + 1}`}
+                            onError={handleImageError}
+                          />
+                        </ImageWrapper>
+                      )
+                    )}
+                  </Slider>
+                </ImageContainer>
+              </MainBox>
+            </ComBoxTwo>
 
-        <ComBoxThree>
-          <div className="comBoxThreeWraperr">
-            <Head4>메모</Head4>
-            <div className="memo">{dummyData.data.description}</div>
-          </div>
-        </ComBoxThree>
-      </MiddlewBox>
-
-      <BottomBox>
-        <RegisterButton onClick={handleStart}>이 산책로 선택</RegisterButton>
-      </BottomBox>
+            <ComBoxThree>
+              <div className="comBoxThreeWraperr">
+                <Head4>메모</Head4>
+                <div className="memo">{trailData.data.description}</div>
+              </div>
+            </ComBoxThree>
+          </MiddlewBox>
+          <BottomBox>
+            <RegisterButton onClick={handleStart}>
+              이 산책로 선택
+            </RegisterButton>
+          </BottomBox>
+        </>
+      )}
     </Box>
   );
 };

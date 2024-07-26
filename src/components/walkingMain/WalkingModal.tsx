@@ -125,6 +125,7 @@ const WalkingModal = ({
   photoCount: number;
   dogChange: () => void;
 }) => {
+  console.log('photoCount', photoCount);
   const userData = useRecoilValue(userDataState);
 
   const formatTime = (time: number) => {
@@ -146,6 +147,7 @@ const WalkingModal = ({
   const handleError = () => {
     setImgSrc(dogWalkingPic);
   };
+
   return (
     <ModalContainer>
       <Header>
@@ -156,6 +158,7 @@ const WalkingModal = ({
             width={58}
             height={58}
             onError={handleError}
+            onClick={dogChange}
           />
           <span className="title">즐겁게 산책중!</span>
         </HeaderBox>

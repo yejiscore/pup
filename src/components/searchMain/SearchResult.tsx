@@ -1,7 +1,7 @@
 import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import BackIcon from '../../assets/common/back.png';
 import CloseIcon from '../../assets/common/close.png';
 import MapIcon from '../../assets/common/map.png';
@@ -21,6 +21,7 @@ import {
   formatTime,
 } from '../../utils/formatTime';
 import downIcon from '../../assets/common/down.png';
+import selectTrailState from '../../stores/selectTrail';
 
 const Container = styled.div`
   display: flex;
@@ -260,6 +261,7 @@ const SearchResult = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('전체');
+  const selectTrail = useSetRecoilState(selectTrailState);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -299,8 +301,14 @@ const SearchResult = () => {
     });
   };
 
-  const onGoDetail = (walkingTrailUid: string) => {
-    navigate(`/trail/select/${walkingTrailUid}`);
+  const onGoDetail = (id: string, item: any, selectName: string) => {
+    selectTrail({
+      selectId: id,
+      name: selectName,
+      lat: item.length > 0 ? item[0].lat : 0,
+      lng: item.length > 0 ? item[0].lng : 0,
+    });
+    navigate('/search/map');
   };
 
   return (
@@ -360,7 +368,11 @@ const SearchResult = () => {
               height={88}
               style={{ borderRadius: '12px' }}
             />
-            <ContentWrapper onClick={() => onGoDetail(data.walkingTrailUid)}>
+            <ContentWrapper
+              onClick={() =>
+                onGoDetail(data.walkingTrailUid, data.itemList, data.name)
+              }
+            >
               <TopWrapper>
                 <span className="name">
                   {data.userUid.slice(0, 3)}의 산책길

@@ -58,10 +58,16 @@ const VerticalCard = ({ data }: { data: IUserTrailLists }) => {
   const onClickPage = (id: string, item: any) => {
     selectTrail({
       selectId: id,
-      lat: item.length > 0 ? item[0].lat : 0,
-      lng: item.length > 0 ? item[0].lng : 0,
+      name: data.name,
+      lat: item.length > 0 ? item[0].lat : 37.4971,
+      lng: item.length > 0 ? item[0].lng : 127.0276,
     });
     navigate('/search/map');
+  };
+
+  const [mainImage, setMainImage] = useState(data.mainImage);
+  const handeleError = () => {
+    setMainImage(walkingReportThumbnail);
   };
 
   return (
@@ -73,6 +79,7 @@ const VerticalCard = ({ data }: { data: IUserTrailLists }) => {
           alt="dog"
           width={130}
           height={87}
+          onError={handeleError}
           style={{ borderRadius: '12px' }}
         />
       </ImageContainer>

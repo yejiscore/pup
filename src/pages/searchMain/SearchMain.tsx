@@ -14,8 +14,6 @@ import useFetch from '../../hooks/useFetch';
 const SearchMain = () => {
   const [serachData, setSearchData] = useRecoilState(searchDataState);
 
-  // const { data } = useFetch('trailData/search', '/walking-trail', {});
-  // // console.log('data', data);
   return (
     <BaseBox>
       {serachData.isSearch ? (

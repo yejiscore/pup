@@ -187,7 +187,7 @@ export const ButtonWrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-right: 40px;
+  /* margin-right: 40px; */
   margin-top: 12px;
   margin-bottom: 20px;
 `;
@@ -240,7 +240,7 @@ export const RegisterButton = styled.button`
   font-weight: 700;
   line-height: 30.24px;
   cursor: pointer;
-  margin-right: 40px;
+  /* margin-right: 40px; */
 `;
 
 export const MemoTextArea = styled.textarea`

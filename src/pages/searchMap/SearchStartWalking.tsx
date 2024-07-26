@@ -9,6 +9,8 @@ import WalkingStopModal from '../../components/walkingMain/WalkingStopModal';
 import calculateDistance from '../../utils/calculateDistance';
 import WalkingControls from '../../components/walkingMain/WalkingControls';
 import WalkingMyLocation from '../../components/walkingMain/WalkingMyLocation';
+import useFetch from '../../hooks/useFetch';
+import { IGetUserTrailType } from '../../types/getUserTrailType';
 
 declare global {
   interface Window {
@@ -128,16 +130,12 @@ const SearchStartWalking = () => {
   const { id } = useParams(); // URL 파라미터에서 id를 가져옴
   const navigate = useNavigate();
 
-  //   const { data: trailData } = useFetch(
-  //     `/walking-trail/${id}`,
-  //     `/walking-trail/${id}`,
-  //     {}
-  //   );
-
-  const dummyData = {
-    lat: 37.497175,
-    lng: 127.027926,
-  };
+  const { data: trailData } = useFetch<IGetUserTrailType>(
+    `/walking-trail/${id}`,
+    `/walking-trail/${id}`,
+    {}
+  );
+  console.log('trailData:', trailData);
 
   const tmapRef = useRef<HTMLDivElement | null | any>(null);
   const [map, setMap] = useState<any>(null);
@@ -213,8 +211,8 @@ const SearchStartWalking = () => {
           {
             startX: userLocation.lng.toString(),
             startY: userLocation.lat.toString(),
-            endX: dummyData.lng.toString(),
-            endY: dummyData.lat.toString(),
+            endX: trailData?.data.itemList[0].lng.toString(),
+            endY: trailData?.data.itemList[0].lat.toString(),
             reqCoordType: 'WGS84GEO',
             resCoordType: 'EPSG3857',
             startName: '출발지',
@@ -271,8 +269,8 @@ const SearchStartWalking = () => {
       const distance = calculateDistance(
         userLocation.lat,
         userLocation.lng,
-        dummyData.lat,
-        dummyData.lng
+        trailData?.data.itemList[0]?.lat || 0,
+        trailData?.data.itemList[0]?.lng || 0
       );
       setDistanceToDestination(distance);
       // 거리가 0.05km 이하일 때 (즉, 50미터 이내일 때)

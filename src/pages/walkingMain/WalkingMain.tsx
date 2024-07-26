@@ -17,7 +17,8 @@ import useMutate from '../../hooks/useMutate';
 import pawIcon from '../../assets/map/paw.png';
 import useFetch from '../../hooks/useFetch';
 import { userDataState } from '../../stores/auth/authState';
-import { UserDataType } from '../../types/authType.ts';
+import { UserDataType } from '../../types/authType';
+import selectedImageState from '../../stores/selectedImageState';
 
 declare global {
   interface Window {
@@ -53,6 +54,7 @@ const WalkingMain = () => {
   const navigate = useNavigate();
   // 리코일
   const [uploadData, setUploadData] = useRecoilState(uploadDataState);
+  const [selectedImage, setSelectedImage] = useRecoilState(selectedImageState);
 
   // 상태
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -333,13 +335,17 @@ const WalkingMain = () => {
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setUploadData((prevData) => ({
+        ...prevData,
+        walkingPhotos: [...prevData.walkingPhotos, file],
+      }));
       const reader = new FileReader();
       reader.onloadend = () => {
         if (reader.result) {
-          setUploadData((prevData) => ({
+          setSelectedImage((prevData: any) => [
             ...prevData,
-            walkingPhotos: [...prevData.walkingPhotos, reader.result as string],
-          }));
+            reader.result as string,
+          ]);
         }
       };
       reader.readAsDataURL(file);
@@ -380,7 +386,7 @@ const WalkingMain = () => {
           time={time}
           onStop={handleStop}
           onTakePhoto={handleTakePhoto}
-          photoCount={uploadData.walkingPhotos.length}
+          photoCount={selectedImage.length}
           dogChange={dogChangeId}
         />
       )}

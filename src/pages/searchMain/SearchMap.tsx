@@ -92,65 +92,28 @@ const Icon = styled.img`
   height: 36px;
 `;
 
-const dummyData = [
-  {
-    walkingTrailId: 11,
-    mainImage: null,
-    name: '서울시 어쩌구',
-    description: '해당 산책에 대한 기록을 저장합니다.',
-    walkingTrailUid: 'cf2c63cc-8b06-4b3d-8b2d-30f78be5ada1',
-    time: 120,
-    distance: 1000,
-    openRange: 'PUBLIC',
-    createdDate: '2024-07-21T12:54:17.601',
-    rating: 2,
-    userId: 6,
-    userUid: 'b758c502-049e-42ab-ac19-95b9f7524e59',
-    reviewCount: 1,
-    likeCount: 0,
-    isLike: false,
-    lat: 37.497175,
-    lng: 127.027926,
-  },
-  {
-    walkingTrailId: 10,
-    mainImage: null,
-    name: '서울시 어쩌구',
-    description: '해당 산책에 대한 기록을 저장합니다.',
-    walkingTrailUid: 'cf2c63cc-8b06-4b3d-8b2d-30f78be5ada2',
-    time: 120,
-    distance: 400,
-    openRange: 'PUBLIC',
-    createdDate: '2024-07-21T12:53:17.601',
-    rating: 2,
-    userId: 6,
-    userUid: 'b758c502-049e-42ab-ac19-95b9f7524e59',
-    reviewCount: 2,
-    likeCount: 0,
-    isLike: false,
-    lat: 37.499175,
-    lng: 127.028926,
-  },
-  {
-    walkingTrailId: 9,
-    mainImage: null,
-    name: '서울시 어쩌구',
-    description: '해당 산책에 대한 기록을 저장합니다.',
-    walkingTrailUid: 'cf2c63cc-8b06-4b3d-8b2d-30f78be5ada3',
-    time: 120,
-    distance: 500,
-    openRange: 'PUBLIC',
-    createdDate: '2024-07-21T12:52:17.601437',
-    rating: null,
-    userId: 6,
-    userUid: 'b758c502-049e-42ab-ac19-95b9f7524e59',
-    reviewCount: 200,
-    likeCount: 1,
-    isLike: true,
-    lat: 37.498175,
-    lng: 127.029926,
-  },
-];
+const WalkingStartButton = styled.button`
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: ${(props) => props.theme.colors.primary[5]};
+  color: ${(props) => props.theme.colors.white};
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 36px;
+  border: none;
+  border-radius: 1000px;
+  width: 300px;
+  height: 63px;
+  cursor: pointer;
+  box-shadow:
+    0px 3px 6px 0px #37ae7f33,
+    0px 10px 10px 0px #37ae7f2b,
+    0px 23px 14px 0px #37ae7f1a,
+    0px 41px 17px 0px #37ae7f08,
+    0px 65px 18px 0px #37ae7f00;
+`;
 
 const SearchMap = () => {
   const [baseName, setBaseName] = useState('');
@@ -158,6 +121,13 @@ const SearchMap = () => {
   const selectTrail = useRecoilValue(selectTrailState);
   const type = 'RECENT';
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const selectedName = selectTrail.name;
+    if (selectedName) {
+      setName(selectedName);
+    }
+  }, []);
 
   const { data: trailData } = useFetch<ResIUserTrailLists>(
     `[trailData/search/${name}${type}]`,
@@ -167,7 +137,6 @@ const SearchMap = () => {
       type,
     }
   );
-  // // console.log('trailData', trailData);
 
   const onChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setBaseName(e.target.value);
@@ -210,13 +179,25 @@ const SearchMap = () => {
 
   const tmapRef = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<any>(null);
+  const [markers, setMarkers] = useState<any[]>([]);
+  const [infoWindows, setInfoWindows] = useState<any[]>([]);
   const [isActive, setIsActive] = useState(false);
   const [userLocation, setUserLocation] = useState<{
     lat: number;
     lng: number;
   } | null>(null);
   const isMapInitialized = useRef(false); // 맵 초기화 여부를 추적하는 useRef
-  const [selectedMarker, setSelectedMarker] = useState<number | null>(null);
+
+  const handleInfoWindowClick = (event: Event) => {
+    const target = event.target as HTMLElement;
+    const goDetailButton = target.closest('.go-detail-button');
+    if (goDetailButton) {
+      const id = goDetailButton.getAttribute('data-id');
+      if (id) {
+        navigate(`/trail/select/${id}`);
+      }
+    }
+  };
 
   useEffect(() => {
     if (!isMapInitialized.current && tmapRef.current) {
@@ -225,32 +206,50 @@ const SearchMap = () => {
           center: new window.Tmapv2.LatLng(37.566, 126.9784),
           width: '100%',
           height: '100%',
-          zoom: 12,
+          zoom: 17,
           zoomControl: false, // 확대 축소 컨트롤 제거
         });
 
         setMap(newMap);
         isMapInitialized.current = true; // 맵이 초기화되었음을 표시
+      };
 
-        dummyData.forEach((data) => {
-          const marker = new window.Tmapv2.Marker({
-            position: new window.Tmapv2.LatLng(data.lat, data.lng),
-            map: newMap,
-            icon: offSpot, // 초기 마커 아이콘 설정
-          });
+      initTmap();
+    }
+  }, []);
 
-          let distanceText = '';
-          if (userLocation) {
-            const distance = calculateDistance(
-              userLocation.lat,
-              userLocation.lng,
-              data.lat,
-              data.lng
-            );
-            distanceText = `내 위치에서 ${distance} km`;
-          }
+  useEffect(() => {
+    if (map && trailData) {
+      // 기존 마커와 정보 창 제거
+      markers.forEach((marker) => marker.setMap(null));
+      infoWindows.forEach((infoWindow) => infoWindow.setMap(null));
 
-          const content = `
+      const newMarkers: any[] = [];
+      const newInfoWindows: any[] = [];
+
+      trailData.data.forEach((data) => {
+        const initailLat =
+          data.itemList.length > 0 ? data.itemList[0].lat : 37.3971;
+        const initialLng =
+          data.itemList.length > 0 ? data.itemList[0].lng : 127.0279;
+        const marker = new window.Tmapv2.Marker({
+          position: new window.Tmapv2.LatLng(initailLat, initialLng),
+          map,
+          icon: offSpot, // 초기 마커 아이콘 설정
+        });
+
+        let distanceText = '';
+        if (userLocation) {
+          const distance = calculateDistance(
+            userLocation.lat,
+            userLocation.lng,
+            initailLat,
+            initialLng
+          );
+          distanceText = `내 위치에서 ${distance} km`;
+        }
+
+        const content = `
           <div style="width:189px; padding:5px; cursor: pointer;" class="go-detail-button" data-id="${data.walkingTrailUid}">
             <h4 style="font-size:14px; font-weight:400; line-height:16.71px; color:#121413;">${distanceText}</h4>
             <h5 style="font-size:14px; font-weight:400; line-height:16.71px; color: #283330;">${data.name}</h5>
@@ -271,33 +270,26 @@ const SearchMap = () => {
           </div>
         `;
 
-          const infoWindow = new window.Tmapv2.InfoWindow({
-            position: new window.Tmapv2.LatLng(data.lat, data.lng),
-            content,
-            type: 2,
-          });
-
-          marker.addListener('click', () => {
-            if (selectedMarker !== data.walkingTrailId) {
-              setSelectedMarker(data.walkingTrailId);
-              marker.setIcon(onSpot);
-              infoWindow.setMap(newMap); // InfoWindow를 지도에 추가하여 열기
-            } else {
-              setSelectedMarker(null);
-              marker.setIcon(offSpot);
-              infoWindow.setMap(null); // InfoWindow를 지도에서 제거하여 닫기
-            }
-          });
-          // InfoWindow를 닫을 때 아이콘을 다시 offSpot으로 변경
-          infoWindow.addListener('close', () => {
-            marker.setIcon(offSpot);
-          });
+        const infoWindow = new window.Tmapv2.InfoWindow({
+          position: new window.Tmapv2.LatLng(initailLat, initialLng),
+          content,
+          type: 2,
+          map,
         });
-      };
 
-      initTmap();
+        marker.addListener('click', () => {
+          navigate(`/trail/select/${data.walkingTrailUid}`);
+        });
+
+        newMarkers.push(marker);
+        newInfoWindows.push(infoWindow);
+      });
+
+      // 새로운 마커와 정보 창을 상태에 저장
+      setMarkers(newMarkers);
+      setInfoWindows(newInfoWindows);
     }
-  }, [userLocation]);
+  }, [trailData, map, userLocation]);
 
   // 선택된 산책로 위치로 이동
   useEffect(() => {
@@ -350,13 +342,16 @@ const SearchMap = () => {
         map,
       });
 
+      const initailLat = trailData?.data[0].itemList[0].lat || 37.3971;
+      const initialLng = trailData?.data[0].itemList[0].lng || 127.0279;
+
       // 사용자 위치에 따라 dummyData의 content 업데이트
-      dummyData.forEach((data) => {
+      trailData?.data.forEach((data) => {
         const distance = calculateDistance(
           userLocation.lat,
           userLocation.lng,
-          data.lat,
-          data.lng
+          initailLat,
+          initialLng
         );
         const distanceText = `내 위치에서 ${distance} km`;
 
@@ -370,7 +365,7 @@ const SearchMap = () => {
             </div>
             <div style="display:flex; width:100%; justify-content:space-between;">
                 <p style="font-size=14px; font-weight:400; line-height:16.71px; color:#00AE80;">거리</p>
-                <p style="font-size:14px; font-weight:600; line-height:16.38px; color:#283330;">${formatDistance(data.distance)}</p>
+                <p style="font-size:14px; font-weight:600; line-height:16.38px; color:#283330;">${formatDistance(data.distance)}km</p>
             </div>
             <div style="display:flex; width: 100%; justify-content:center; align-items:center;">
                 <img src=${starIcon} alt="rating" width="24" height="24" />
@@ -381,35 +376,14 @@ const SearchMap = () => {
           </div>
         `;
 
-        const infoWindow = new window.Tmapv2.InfoWindow({
-          position: new window.Tmapv2.LatLng(data.lat, data.lng),
-          content,
-          type: 2,
-        });
-
         const marker = new window.Tmapv2.Marker({
-          position: new window.Tmapv2.LatLng(data.lat, data.lng),
+          position: new window.Tmapv2.LatLng(initailLat, initialLng),
           map,
           icon: offSpot, // 초기 마커 아이콘 설정
         });
 
         marker.addListener('click', () => {
-          // 마커 클릭 시 이벤트
-          if (selectedMarker !== data.walkingTrailId) {
-            // 이미 선택된 마커가 아닌 경우
-            setSelectedMarker(data.walkingTrailId);
-            marker.setIcon(onSpot); // 클릭된 마커의 아이콘 변경
-            infoWindow.setMap(map); // InfoWindow 보이기
-          } else {
-            setSelectedMarker(null); // 선택된 마커 초기화
-            marker.setIcon(offSpot); // 마커 아이콘 초기화
-            infoWindow.setMap(null); // InfoWindow 숨기기
-          }
-        });
-
-        // InfoWindow를 닫을 때 아이콘을 다시 offSpot으로 변경
-        infoWindow.addListener('close', () => {
-          marker.setIcon(offSpot);
+          navigate(`/trail/select/${data.walkingTrailUid}`);
         });
       });
     }
@@ -430,33 +404,29 @@ const SearchMap = () => {
   };
 
   useEffect(() => {
-    const handleInfoWindowClick = (event: Event) => {
-      const target = event.target as HTMLElement;
-      if (target.closest('.go-detail-button')) {
-        const id = target.closest('.go-detail-button')?.getAttribute('data-id');
-        if (id) {
-          navigate(`/trail/select/${id}`);
-        }
-      }
-    };
-
     // 클릭 및 터치 이벤트 리스너 추가
     document.addEventListener('click', handleInfoWindowClick);
     document.addEventListener('touchstart', handleInfoWindowClick);
+    // 휴대폰에서 터치 이벤트 리스너 추가
+    document.addEventListener('touchend', handleInfoWindowClick);
 
     // 컴포넌트 언마운트 시 이벤트 리스너 제거
     return () => {
       document.removeEventListener('click', handleInfoWindowClick);
       document.removeEventListener('touchstart', handleInfoWindowClick);
+      document.removeEventListener('touchend', handleInfoWindowClick);
     };
   }, [navigate]);
+
+  const onClickDetailTrail = () => {
+    navigate(`/trail/select/${selectTrail.selectId}`);
+  };
 
   return (
     <BaseBox>
       <MapContainer ref={tmapRef} />
       <HeaderContainer>
         <SearchMapHeader />
-        {/* <SearchMapInput onChangeSearch={onChangeSearch} name={name} /> */}
         <SearchBarContainer>
           <InputContainer>
             <Icon src={searchIcon} alt="search" />
@@ -472,6 +442,10 @@ const SearchMap = () => {
       </HeaderContainer>
       <WalkingControls onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} />
       <WalkingMyLocation onClick={handleFindLocation} isActive={isActive} />
+
+      <WalkingStartButton onClick={onClickDetailTrail}>
+        위치 확인
+      </WalkingStartButton>
     </BaseBox>
   );
 };

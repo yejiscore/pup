@@ -14,6 +14,7 @@ import WalkingMyLocation from '../../components/walkingMain/WalkingMyLocation';
 import useFetch from '../../hooks/useFetch';
 import { formatTime } from '../../utils/formatTime';
 import startTrailTimeState from '../../stores/startTrailTime';
+import { IGetUserTrailType } from '../../types/getUserTrailType';
 
 declare global {
   interface Window {
@@ -73,66 +74,6 @@ const BottomBox = styled.div`
   }
 `;
 
-const dummyData = {
-  code: 200,
-  status: 'OK',
-  data: {
-    walkingTrailId: 4,
-    mainImage: null,
-    name: null,
-    description: null,
-    walkingTrailUid: '93e1ce84-4e96-468b-b21e-7622f9cc0e42',
-    time: 0,
-    distance: 0,
-    openRange: null,
-    createdDate: '2024-07-18T00:40:02.808216',
-    rating: 2,
-    userId: 4,
-    reviewCount: 2,
-    likeCount: 0,
-    isLike: false,
-    itemList: [
-      {
-        walkingTrailItemId: 3,
-        lat: 37.5665,
-        lng: 126.978,
-      },
-      {
-        walkingTrailItemId: 4,
-        lat: 37.5675,
-        lng: 126.979,
-      },
-      {
-        walkingTrailItemId: 5,
-        lat: 37.5685,
-        lng: 126.98,
-      },
-      {
-        walkingTrailItemId: 6,
-        lat: 37.5695,
-        lng: 126.981,
-      },
-      {
-        walkingTrailItemId: 7,
-        lat: 37.5705,
-        lng: 126.982,
-      },
-      {
-        walkingTrailItemId: 8,
-        lat: 37.5715,
-        lng: 126.983,
-      },
-      {
-        walkingTrailItemId: 9,
-        lat: 37.5725,
-        lng: 126.984,
-      },
-    ],
-    imageList: ['https://123.png'],
-  },
-  message: '산책로를 조회합니다.',
-};
-
 const TrailStart = () => {
   const { id: trailId } = useParams(); // URL 파라미터에서 id를 가져옴
   const tmapRef = useRef<HTMLDivElement | null>(null);
@@ -154,12 +95,12 @@ const TrailStart = () => {
 
   const navigate = useNavigate();
 
-  const { data: trailData } = useFetch(
+  const { data: trailData } = useFetch<IGetUserTrailType>(
     `/walking-trail/${trailId}`,
     `/walking-trail/${trailId}`,
     {}
   );
-
+  console.log('trailData', trailData);
   const handleDogSelect = (dogId: number) => {
     setDogsId((prevIds) => {
       if (prevIds.includes(dogId)) {
@@ -185,14 +126,11 @@ const TrailStart = () => {
   // 산책 완료
   const handleComplete = () => {
     setShowStopModal(false);
-    // console.log('startTime', startTime);
     if (startTime) {
       const endTime = new Date();
       const duration = Math.floor(
         (endTime.getTime() - startTime.getTime()) / 1000
       ); // 초 단위로 계산
-      // console.log('time', endTime, startTime);
-      // console.log(`산책 시간: ${formatTime(duration)}`); // 산책 시간 출력
       setStartTrailTime(duration);
     }
     navigate(`/trail/finish/${trailId}`);
@@ -204,8 +142,6 @@ const TrailStart = () => {
       const duration = Math.floor(
         (endTime.getTime() - startTime.getTime()) / 1000
       ); // 초 단위로 계산
-      // console.log('time', endTime, startTime);
-      // console.log(`산책 시간: ${formatTime(duration)}`); // 산책 시간 출력
       setStartTrailTime(duration);
     }
     navigate(`/trail/finish/${trailId}`);
@@ -249,19 +185,21 @@ const TrailStart = () => {
           ]);
           setIsActive(true);
           // 현재 위치가 산책로의 마지막 좌표와 가까운지 확인
-          const lastPoint =
-            dummyData.data.itemList[dummyData.data.itemList.length - 1];
-          const distanceToLastPoint = calculateDistance(
-            latitude,
-            longitude,
-            lastPoint.lat,
-            lastPoint.lng
-          );
-          setIsNearby(Number(distanceToLastPoint) < 0.05); // 50m 이내로 설정
-          if (Number(distanceToLastPoint) < 0.05) {
-            setButtonText('산책 완료');
-          } else {
-            setButtonText('산책 중');
+          if (trailData && trailData.data.itemList.length > 0) {
+            const lastPoint =
+              trailData.data.itemList[trailData.data.itemList.length - 1];
+            const distanceToLastPoint = calculateDistance(
+              latitude,
+              longitude,
+              lastPoint.lat,
+              lastPoint.lng
+            );
+            setIsNearby(Number(distanceToLastPoint) < 0.05); // 50m 이내로 설정
+            if (Number(distanceToLastPoint) < 0.05) {
+              setButtonText('산책 완료');
+            } else {
+              setButtonText('산책 중');
+            }
           }
         },
         (error) => {
@@ -270,7 +208,7 @@ const TrailStart = () => {
       );
       return () => navigator.geolocation.clearWatch(watchId);
     }
-  }, []);
+  }, [trailData]);
 
   useEffect(() => {
     if (map && userLocation) {
@@ -298,13 +236,13 @@ const TrailStart = () => {
   }, [userLocation]);
 
   useEffect(() => {
-    if (map && dummyData.data.itemList) {
-      const routePoints = dummyData.data.itemList.map(
+    if (map && trailData && trailData.data.itemList) {
+      const routePoints = trailData.data.itemList.map(
         (item) => new window.Tmapv2.LatLng(item.lat, item.lng)
       );
       drawLine(routePoints, '#0000FF'); // 산책로를 파란색으로 표시
     }
-  }, [map, dummyData.data.itemList]);
+  }, [map, trailData]);
 
   // 줌 인 핸들러
   const handleZoomIn = () => {
