@@ -140,8 +140,8 @@ const HorizontalCard = ({ data }: { data: IUserTrailLists }) => {
     selectTrail({
       selectId: id,
       name: data.name,
-      lat: item.length > 0 ? item[0].lat : 0,
-      lng: item.length > 0 ? item[0].lng : 0,
+      lat: item.length > 0 ? item[0].lat : 37.4971,
+      lng: item.length > 0 ? item[0].lng : 127.0276,
     });
     navigate('/search/map');
   };

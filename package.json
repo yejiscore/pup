@@ -38,11 +38,11 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start:prod": "./node_modules/.bin/react-scripts start",
-    "start": "webpack serve --mode development",
-    "build": "webpack --mode production",
-    "start:dev": "react-scripts start development",
-    "build:dev": "react-scripts build production",
+    "start:prod:server": "./node_modules/.bin/react-scripts start",
+    "start:prod": "webpack serve --mode development",
+    "build:prod": "webpack --mode production",
+    "start": "react-scripts start development",
+    "build": "react-scripts build production",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint 'src/**/*.{ts,tsx}'"

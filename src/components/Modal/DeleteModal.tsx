@@ -108,3 +108,8 @@ const DeleteModal: React.FC<ModalProps> = ({ onClose, onDelete }) => (
 );
 
 export default DeleteModal;
+
+
+1. 깃에 공유 
+2. 로그인 API 연동 10시까지 
+3. 내 산책보드 삭제 기능 구현 12시까지
