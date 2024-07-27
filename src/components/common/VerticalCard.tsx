@@ -3,9 +3,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import {
+  BottomBtnWrapper,
   Card,
   DescriptionContent,
   DescriptionTitle,
+  GoTrailBtn,
   HeartIcon,
   ImageContainer,
   Info,
@@ -65,7 +67,7 @@ const VerticalCard = ({ data }: { data: IUserTrailLists }) => {
     navigate('/search/map');
   };
 
-  const [mainImage, setMainImage] = useState(data.mainImage);
+  const [mainImage, setMainImage] = useState(data.mainImage ?? '');
   const handeleError = () => {
     setMainImage(walkingReportThumbnail);
   };
@@ -75,7 +77,7 @@ const VerticalCard = ({ data }: { data: IUserTrailLists }) => {
       <Text5>{data.userUid.slice(0, 3)}의 산책길</Text5>
       <ImageContainer>
         <img
-          src={walkingReportThumbnail}
+          src={mainImage}
           alt="dog"
           width={130}
           height={87}
@@ -116,6 +118,9 @@ const VerticalCard = ({ data }: { data: IUserTrailLists }) => {
       >
         <img src={isUserLiked ? redHeartIcon : heartIcon} alt="heart" />
       </HeartIcon>
+      <BottomBtnWrapper>
+        <GoTrailBtn type="button">산책하러가기</GoTrailBtn>
+      </BottomBtnWrapper>
     </Card>
   );
 };

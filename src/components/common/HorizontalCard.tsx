@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
@@ -140,13 +140,19 @@ const HorizontalCard = ({ data }: { data: IUserTrailLists }) => {
     navigate('/search/map');
   };
 
+  const [mainImage, setMainImage] = useState(data.mainImage ?? '');
+  const handeleError = () => {
+    setMainImage(holThumbnail);
+  };
+
   return (
     <Card key={data.walkingTrailId}>
       <img
-        src={holThumbnail}
+        src={mainImage}
         alt="thumbnail"
         width={69}
         height={88}
+        onError={handeleError}
         style={{ borderRadius: '12px' }}
       />
       <ContentWrapper

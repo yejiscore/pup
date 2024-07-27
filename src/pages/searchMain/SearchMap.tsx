@@ -90,6 +90,7 @@ const SearchInputCom = styled.input`
 const Icon = styled.img`
   width: 36px;
   height: 36px;
+  margin-right: 20px;
 `;
 
 const WalkingStartButton = styled.button`

@@ -22,8 +22,6 @@ const LoginMain = () => {
       { email, password },
       {
         onSuccess: ({ data }) => {
-          // // console.log(email, password);
-          // // console.log('data:', data);
           // main으로 페이지 이동
           setAuthState({
             userId: data.userId,
