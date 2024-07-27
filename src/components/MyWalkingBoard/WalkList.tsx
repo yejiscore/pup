@@ -1,4 +1,3 @@
-// src/components/MyWalkingBoard/WalkList.tsx
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +11,7 @@ import DeleteModal from '../Modal/DeleteModal';
 import StarIcon from '../../assets/Star 2.png';
 import VisibilityTag from '../common/Tag';
 import CopyModal from '../Modal/CopyModal';
+import { DataItem } from '../../types/DataItem';
 
 interface ListItemProps {
   isTrashIcon: boolean;
@@ -59,7 +59,7 @@ const Row = styled.div`
   align-items: center;
 `;
 
-const Date = styled.div`
+const DateText = styled.div`
   font-size: 14px;
   color: #888;
   text-align: left;
@@ -67,8 +67,8 @@ const Date = styled.div`
 
 const Title = styled.div`
   font-size: 18px;
-  font-weight: bold;
   text-align: left;
+  font-weight: bold;
 `;
 
 const Time = styled.div`
@@ -139,16 +139,7 @@ const SelectCircle = styled.img`
 `;
 
 interface WalkListProps {
-  data: Array<{
-    id: number;
-    date: string;
-    title: string;
-    time: string;
-    distance: string;
-    visibility: string;
-    userUid: string;
-    rating: number;
-  }>;
+  data: DataItem[];
   activeSubTab: string;
 }
 
@@ -188,49 +179,52 @@ function WalkList({ data, activeSubTab }: WalkListProps) {
       )}
       {data.map((item) => (
         <ListItem
-          key={item.id}
+          key={item.walkingTrailId}
           isTrashIcon={isTrashIcon}
-          onClick={() => handleItemClick(item.id)}
+          onClick={() => handleItemClick(item.walkingTrailId)}
         >
           <ItemImage src={ListImage} alt="list item" />
           <ItemContent>
             <Row>
-              <Date>{item.date}</Date>
+              <DateText>
+                {new Date(item.createdDate).toLocaleDateString()}
+              </DateText>
             </Row>
-            <Title>{item.title}</Title>
+            <Title>{item.name || 'Untitled'}</Title>
             <Row>
               <Time>
-                시간 <span>{item.time}</span>
+                시간 <span>{item.time}분</span>
               </Time>
               <Distance>
-                거리 <span>{item.distance}</span>
+                거리 <span>{item.distance.toFixed(2)} km</span>
               </Distance>
             </Row>
             <Row>
               <Visibility
-                visibility={item.visibility}
+                visibility={item.openRange || 'UNKNOWN'}
                 width="56px"
                 height="16px"
                 fontSize="12px"
               />
-              <UserUid>{item.userUid}의 산책길</UserUid>
               <Rating>
                 <Star src={StarIcon} alt="star" />
-                <RatingText>{item.rating}</RatingText>
+                <RatingText>
+                  {item.rating !== null ? item.rating : 'N/A'}
+                </RatingText>
               </Rating>
             </Row>
           </ItemContent>
           {isTrashIcon ? (
             <SelectCircle
               src={
-                selectedItems.includes(item.id)
+                selectedItems.includes(item.walkingTrailId)
                   ? SelectedCircleIcon
                   : SelectCircleIcon
               }
               alt="select circle"
               onClick={(e) => {
                 e.stopPropagation();
-                toggleSelectItem(item.id);
+                toggleSelectItem(item.walkingTrailId);
               }}
             />
           ) : (
@@ -242,7 +236,7 @@ function WalkList({ data, activeSubTab }: WalkListProps) {
                   onClick={(e) =>
                     handleOptionsClick(
                       e,
-                      `${window.location.origin}/detail/${item.id}`
+                      `${window.location.origin}/detail/${item.walkingTrailId}`
                     )
                   }
                 />
@@ -253,7 +247,7 @@ function WalkList({ data, activeSubTab }: WalkListProps) {
                   onClick={(e) =>
                     handleOptionsClick(
                       e,
-                      `${window.location.origin}/detail/${item.id}`
+                      `${window.location.origin}/detail/${item.walkingTrailId}`
                     )
                   }
                 />

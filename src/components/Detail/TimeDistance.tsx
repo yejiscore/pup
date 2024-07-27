@@ -1,8 +1,8 @@
-// src/components/Detail/DetailInfo.tsx
 import React from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
+import { DataItem } from '../../types/DataItem';
 
 const Container = styled.div`
   width: 100%;
@@ -46,9 +46,9 @@ function TimeDistance() {
   const { id } = useParams<{ id: string }>();
   const { myData, likeData } = useAppContext();
 
-  const item =
-    myData.find((data) => data.id === Number(id)) ||
-    likeData.find((data) => data.id === Number(id));
+  const item: DataItem | undefined =
+    myData.find((data) => data.walkingTrailId === Number(id)) ||
+    likeData.find((data) => data.walkingTrailId === Number(id));
 
   if (!item) {
     return <div>Data not found</div>;
@@ -58,10 +58,10 @@ function TimeDistance() {
     <Container>
       <Wrapper>
         <Time>
-          시간 <span>{item.time}</span>
+          시간 <span>{item.time}분</span>
         </Time>
         <Distance>
-          거리 <span>{item.distance}</span>
+          거리 <span>{item.distance.toFixed(2)} km</span>
         </Distance>
       </Wrapper>
     </Container>

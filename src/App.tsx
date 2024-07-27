@@ -133,19 +133,3 @@ function App() {
 }
 
 export default App;
-// 예지님이 작업 하신 부분
-// function App() {
-//   return (
-//     <AppContainer>
-//       <GlobalStyle/>
-//       <Container>
-//         <Routes>
-//           <Route path="/" element={<MyBoardPage />} />
-//           <Route path="/walking" element={<div>산책하기 페이지</div>} />
-//           <Route path="/search" element={<div>산책로 찾기 페이지</div>} />
-//         </Routes>
-//         <TabBar/>
-//       </Container>
-//     </AppContainer>
-//   );
-// }

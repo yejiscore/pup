@@ -42,6 +42,7 @@
     "function-paren-newline": "off",
     "react/jsx-curly-newline": "off",
     "import/no-extraneous-dependencies": "off",
-    "react/require-default-props": "off"
+    "react/require-default-props": "off",
+    "indent": "off"
   }
 }

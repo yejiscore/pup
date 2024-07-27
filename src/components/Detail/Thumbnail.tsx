@@ -1,4 +1,3 @@
-// src/components/Detail/Thumbnail.tsx
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
@@ -8,6 +7,7 @@ import StarIcon from '../../assets/Star 2.png';
 import Tag from '../common/Tag';
 import LinkCopyIcon from '../../assets/LinkCopy2.png';
 import CopyModal from '../Modal/CopyModal';
+import { DataItem } from '../../types/DataItem'; // DataItem 타입 import
 
 const ThumbnailContainer = styled.div`
   width: 100%;
@@ -19,8 +19,6 @@ const ThumbnailContainer = styled.div`
 `;
 
 const ThumbnailImage = styled.img`
-  // width: 100%;
-  // height: 100%;
   object-fit: cover;
 `;
 
@@ -64,19 +62,15 @@ function Thumbnail() {
   const { myData, likeData } = useAppContext();
   const [showModal, setShowModal] = useState(false);
 
-  const item =
-    myData.find((data) => data.id === Number(id)) ||
-    likeData.find((data) => data.id === Number(id));
+  const item: DataItem | undefined =
+    myData.find((data) => data.walkingTrailId === Number(id)) ||
+    likeData.find((data) => data.walkingTrailId === Number(id));
 
   if (!item) {
     return <div>Data not found</div>;
   }
 
-  const image = item.image
-    ? typeof item.image === 'string'
-      ? item.image
-      : URL.createObjectURL(item.image)
-    : DefaultThumbnail;
+  const image = item.image ? item.image : DefaultThumbnail;
 
   const handleOptionsClick = () => {
     setShowModal(true);
@@ -87,7 +81,7 @@ function Thumbnail() {
       <ThumbnailImage src={image} alt="Thumbnail" />
       <TopContainer>
         <Tag
-          visibility={item.visibility}
+          visibility={item.openRange || 'UNKNOWN'}
           width="74px"
           height="23px"
           fontSize="14px"
@@ -105,7 +99,7 @@ function Thumbnail() {
       />
       <BottomContainer>
         <Star src={StarIcon} alt="star" />
-        <RatingText>{item.rating}</RatingText>
+        <RatingText>{item.rating !== null ? item.rating : 'N/A'}</RatingText>
       </BottomContainer>
     </ThumbnailContainer>
   );

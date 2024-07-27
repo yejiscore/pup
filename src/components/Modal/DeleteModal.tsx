@@ -1,7 +1,8 @@
 /* eslint-disable react/function-component-definition */
-import React from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 import WarningIcon from '../../assets/warn.png';
+import useMutate from '../../hooks/useMutate';
 
 const Overlay = styled.div`
   position: fixed;
@@ -85,26 +86,50 @@ interface ModalProps {
   onDelete: () => void;
 }
 
-const DeleteModal: React.FC<ModalProps> = ({ onClose, onDelete }) => (
-  <Overlay>
-    <ModalContainer>
-      <WarningImage src={WarningIcon} alt="Warning" />
-      <Message>
-        선택한 산책보드를 정말
-        <br />
-        삭제하시겠습니까?
-      </Message>
-      <SubMessage>
-        산책보드를 삭제하면
-        <br />
-        복구가 불가능해요.
-      </SubMessage>
-      <ButtonGroup>
-        <CancelButton onClick={onClose}>취소</CancelButton>
-        <DeleteButton onClick={onDelete}>삭제</DeleteButton>
-      </ButtonGroup>
-    </ModalContainer>
-  </Overlay>
-);
+const DeleteModal: FC<ModalProps> = ({ onClose, onDelete }) => {
+  const {
+    mutate: deleteBoard,
+    isLoading: deleteBoardLoading,
+    isError: deleteBoardError,
+  } = useMutate('deleteBoard', '/delte/board', 'delete');
+
+  // const onClick = () => {
+  //   deleteBoard(
+  //     {
+  //       id: uid,
+  //     },
+  //     {
+  //       onSuccess: () => {
+  //         navigate('/board');
+  //       },
+  //       onError: (error) => {
+  //         console.log(error);
+  //       },
+  //     }
+  //   );
+  // };
+
+  return (
+    <Overlay>
+      <ModalContainer>
+        <WarningImage src={WarningIcon} alt="Warning" />
+        <Message>
+          선택한 산책보드를 정말
+          <br />
+          삭제하시겠습니까?
+        </Message>
+        <SubMessage>
+          산책보드를 삭제하면
+          <br />
+          복구가 불가능해요.
+        </SubMessage>
+        <ButtonGroup>
+          <CancelButton onClick={onClose}>취소</CancelButton>
+          <DeleteButton onClick={onDelete}>삭제</DeleteButton>
+        </ButtonGroup>
+      </ModalContainer>
+    </Overlay>
+  );
+};
 
 export default DeleteModal;
