@@ -1,29 +1,32 @@
+/* eslint-disable react/jsx-no-undef */
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import MyBoardPage from './pages/MyBoardPage';
 import BaseLayout from './layouts/Layout';
-import { AppProvider } from './context/AppContext';
 import GlobalStyle from './styles/GlobalStyle';
 import DetailPage from './components/Detail/Detail';
-import LoginPage from './pages/LoginPage';
 import SignupSocial from './pages/SignUpSocial';
 import SignUpFinal from './components/SignUp/common/SignUpFinal';
 import SignupMember from './pages/SignUpMember';
 import SignupPage from './pages/SignUpPage';
+import LoginPages from './pages/LoginPages';
+import { useAppContext, AppProvider } from './context/AppContext';
 
 function App() {
   return (
     <AppProvider>
       <GlobalStyle />
       <Routes>
+        <Route path="/login" element={<LoginPages />} />
         <Route
-          path="/"
+          path="/walking_board"
           element={
             <BaseLayout>
               <MyBoardPage />
             </BaseLayout>
           }
         />
+        <Route path="*" element={<Navigate to="/login" />} />
         <Route
           path="/detail/:id"
           element={
@@ -45,14 +48,6 @@ function App() {
           element={
             <BaseLayout>
               <div>산책로 찾기 페이지</div>
-            </BaseLayout>
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            <BaseLayout>
-              <LoginPage />
             </BaseLayout>
           }
         />

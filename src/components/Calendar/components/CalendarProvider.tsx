@@ -60,14 +60,14 @@ import useCalendar, { CalendarContextType } from '../hooks/useCalendar';
 export const CalendarContext = createContext<CalendarContextType | null>(null);
 
 interface CalendarProviderProps {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 export function CalendarProvider({ children }: CalendarProviderProps) {
-    const calendar = useCalendar();
-    return (
-        <CalendarContext.Provider value={calendar}>
-            {children}
-        </CalendarContext.Provider>
-    );
+  const calendar = useCalendar();
+  return (
+    <CalendarContext.Provider value={calendar}>
+      {children}
+    </CalendarContext.Provider>
+  );
 }

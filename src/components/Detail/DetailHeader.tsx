@@ -7,6 +7,7 @@ import TrashIcon from '../../assets/trash.png';
 import BackIcon from '../../assets/left.png';
 import { useAppContext } from '../../context/AppContext';
 import DeleteModal from '../Modal/DeleteModal';
+import { DataItem } from '../../types/DataItem';
 
 const Container = styled.div`
   width: 100%;
@@ -63,19 +64,21 @@ function DetailHeader() {
     setIsTrashIcon(false);
   };
 
-  const item =
-    myData.find((data) => data.id === Number(id)) ||
-    likeData.find((data) => data.id === Number(id));
+  const item: DataItem | undefined =
+    myData.find((data) => data.walkingTrailId === Number(id)) ||
+    likeData.find((data) => data.walkingTrailId === Number(id));
 
   if (!item) {
     return <div>Data not found</div>;
   }
 
   const handleDelete = () => {
-    if (myData.some((data) => data.id === Number(id))) {
-      setMyData(myData.filter((data) => data.id !== Number(id)));
-    } else if (likeData.some((data) => data.id === Number(id))) {
-      setLikeData(likeData.filter((data) => data.id !== Number(id)));
+    if (myData.some((data) => data.walkingTrailId === Number(id))) {
+      setMyData(myData.filter((data) => data.walkingTrailId !== Number(id)));
+    } else if (likeData.some((data) => data.walkingTrailId === Number(id))) {
+      setLikeData(
+        likeData.filter((data) => data.walkingTrailId !== Number(id))
+      );
     }
     navigate(-1);
   };
@@ -84,7 +87,7 @@ function DetailHeader() {
     <Container>
       <BackButton src={BackIcon} alt="Back" onClick={handleBackClick} />
       <TitleContainer>
-        <Title>{item.title}</Title>
+        <Title>{item.name}</Title>
       </TitleContainer>
       <IconButton
         src={isTrashIcon ? TrashIcon : MeatballsIcon}

@@ -1,20 +1,28 @@
-import React, { useState } from 'react';
+// src/pages/MyBoardPage.tsx
+import React, { useEffect, useState } from 'react';
 import Header from '../components/MyWalkingBoard/Header';
 import Tab from '../components/MyWalkingBoard/Tab';
 import BaseBox from '../styles/common/BaseBox';
 import Footer from '../components/common/Footer';
-// import useFetch from '../../hooks/useFetch';
+import { useAppContext } from '../context/AppContext';
 
 function MyBoardPage() {
   const [activeTab, setActiveTab] = useState('산책로');
+  const { isAuthenticated, isLoading } = useAppContext();
 
-  // const {
-  //   data: myWalkingBoardData,
-  //   error,
-  //   isLoading,
-  // } = useFetch('myData', 'walking-trail', {});
+  useEffect(() => {
+    if (!isAuthenticated) {
+      window.location.href = '/login';
+    }
+  }, [isAuthenticated]);
 
-  // console.log(myWalkingBoardData);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return <div>Error: Not authenticated</div>;
+  }
 
   return (
     <BaseBox>

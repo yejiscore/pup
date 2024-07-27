@@ -129,7 +129,7 @@ const SignUpFinal: React.FC = () => {
   };
 
   const handleStartWalking = () => {
-    navigate('/walking_main', { state: { petDetails } });
+    navigate('/', { state: { petDetails } });
   };
 
   return (
