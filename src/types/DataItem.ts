@@ -13,14 +13,15 @@
 // }
 
 export interface DataItem {
+  id: any;
   walkingTrailId: number;
   createdDate: string;
-  name: string | null;
-  time: number;
-  distance: number;
+  name: number | null;
+  time: any;
+  distance: any;
   openRange: string | null;
   rating: number | null;
   memo: string;
   photos: string[];
-  image: string;
+  image: any;
 }

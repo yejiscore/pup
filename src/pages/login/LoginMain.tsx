@@ -45,7 +45,6 @@ const LoginMain = () => {
           });
 
           navigate('/');
-          // // console.log('로그인 성공:', data);
         },
         onError: (error) => {
           console.error('로그인 실패:', error);

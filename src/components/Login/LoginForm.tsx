@@ -122,7 +122,7 @@ const LoginForm: FC = () => {
     trigger,
   } = useForm<FormValues>();
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+  const onSubmit: SubmitHandler<FormValues> = async (data:any) => {
     const isValid = await trigger();
     if (isValid) {
       console.log(data);
