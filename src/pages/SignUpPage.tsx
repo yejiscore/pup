@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 import { styled } from 'styled-components';
 import SignupForm from '../components/SignUp/SignUp';
 import BaseBox from '../styles/common/BaseBox';
-import step1 from '../assets/login/step1.png';
-import step2 from '../assets/login/step2.png';
+// import step1 from '../assets/login/step1.png';
+// import step2 from '../assets/login/step2.png';
 import Header from '../components/SignUp/common/Header';
 import { Text1, Text2 } from '../components/SignUp/common/Text';
 
@@ -30,10 +30,10 @@ const SignupPage: FC = () => {
     <BaseBox>
       <Step>
         <Header />
-        <StepImages>
+        {/* <StepImages>
           <StepImage src={step1} alt="Step 1" />
           <StepImage src={step2} alt="Step 2" />
-        </StepImages>
+        </StepImages> */}
 
         <Text1>반려견과 함께 산책을 시작해볼까요?</Text1>
         <Text2>

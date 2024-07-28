@@ -9,6 +9,7 @@ import checkedBox from '../../assets/login/checkedbox.png';
 import errorBox from '../../assets/login/errcheckbox.png';
 import rightIcon from '../../assets/right.png';
 import Terms from './Terms/Terms';
+import useMutate from '../../hooks/useMutate';
 
 type FormValues = {
   email: string;
@@ -170,12 +171,24 @@ const SignupForm: FC = () => {
     trigger,
   } = useForm<FormValues>();
 
+  const { mutate: joinUser } = useMutate('joinUser', '/auth', 'post');
+
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const isValid = await trigger();
     if (isValid) {
       if (checked.service && checked.personalinfor && checked.locationinfor) {
-        console.log(data);
-        navigate('/signup_member');
+        joinUser(
+          { email: data.email, password: data.password },
+          {
+            onSuccess: () => {
+              navigate('/login');
+            },
+            onError: (error) => {
+              console.log('error', error);
+            },
+          }
+        );
+        // navigate('/signup_member');
       } else {
         setErrorState({
           service: !checked.service,
@@ -355,24 +368,7 @@ const SignupForm: FC = () => {
             </WhiteBox>
           </CheckboxContainer>
 
-          <NextButton
-            type="submit"
-            onClick={() => {
-              if (
-                !checked.service ||
-                !checked.personalinfor ||
-                !checked.locationinfor
-              ) {
-                setErrorState({
-                  service: !checked.service,
-                  personalinfor: !checked.personalinfor,
-                  locationinfor: !checked.locationinfor,
-                });
-              }
-            }}
-          >
-            다음
-          </NextButton>
+          <NextButton type="submit">등록완료</NextButton>
         </Form>
       </Container>
     </BaseBox>

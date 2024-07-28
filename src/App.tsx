@@ -2,11 +2,8 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import styled from 'styled-components';
 import WalkingMain from './pages/walkingMain/WalkingMain';
 import BaseLayout from './layouts/Layout';
-import LoginMain from './pages/login/LoginMain';
-import Footer from './components/common/Footer';
 import WalkingReport from './pages/walkingReport/WalkingReport';
 import SearchMain from './pages/searchMain/SearchMain';
 import SearchMap from './pages/searchMain/SearchMap';
@@ -18,6 +15,11 @@ import MyBoardPage from './components/MyWalkingBoard/MyBoardPage';
 import DetailPage from './components/Detail/Detail';
 import { AppProvider } from './context/AppContext';
 import GlobalStyle from './styles/GlobalStyle';
+import LoginForm from './components/Login/LoginForm';
+import SignupPage from './pages/SignUpPage';
+import SignupMember from './pages/SignUpMember';
+import SignUpFinal from './components/SignUp/common/SignUpFinal';
+import SignupSocial from './pages/SignUpSocial';
 
 function App() {
   return (
@@ -117,12 +119,53 @@ function App() {
             }
           />
 
-          <Route
+          {/* <Route
             path="/login"
             element={
               <BaseLayout>
                 <LoginMain />
                 <Footer />
+              </BaseLayout>
+            }
+          /> */}
+
+          <Route
+            path="/login"
+            element={
+              <BaseLayout>
+                <LoginForm />
+              </BaseLayout>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <BaseLayout>
+                <SignupPage />
+              </BaseLayout>
+            }
+          />
+          <Route
+            path="/signup_member"
+            element={
+              <BaseLayout>
+                <SignupMember />
+              </BaseLayout>
+            }
+          />
+          <Route
+            path="/signup_social"
+            element={
+              <BaseLayout>
+                <SignupSocial />
+              </BaseLayout>
+            }
+          />
+          <Route
+            path="/signupfinal"
+            element={
+              <BaseLayout>
+                <SignUpFinal />
               </BaseLayout>
             }
           />

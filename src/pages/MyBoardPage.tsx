@@ -32,5 +32,3 @@ function MyBoardPage() {
     </BaseBox>
   );
 }
-
-export default MyBoardPage;

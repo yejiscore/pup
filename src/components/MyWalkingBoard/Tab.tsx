@@ -3,11 +3,25 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import WalkList from './WalkList';
-import { useAppContext } from '../../context/AppContext';
 import SubTab from './SubTab';
 import FilterTab from './FilterTab';
 import Container from '../common/Container';
 import Calendar from '../Calendar/components/Calendar';
+import { useAppContext } from '../../context/AppContext';
+import MyInfo from './MyInfo';
+
+const InfoContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  position: absolute;
+  top: 98px;
+  overflow-y: auto;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
 
 const TabContainer = styled.div`
   width: 100%;
@@ -92,7 +106,11 @@ function Tab({ activeTab, setActiveTab }: TabProps) {
         </>
       )}
       {activeTab === '친구' && <div>친구 내용</div>}
-      {activeTab === '내정보' && <div>내정보 내용</div>}
+      {activeTab === '내정보' && (
+        <InfoContainer>
+          <MyInfo />
+        </InfoContainer>
+      )}
     </>
   );
 }
