@@ -8,7 +8,7 @@ import FilterTab from './FilterTab';
 import Container from '../common/Container';
 import Calendar from '../Calendar/components/Calendar';
 import { useAppContext } from '../../context/AppContext';
-import MyInfo from './MyInfo';
+import MyInfo from '../../pages/MyInfo';
 
 const InfoContainer = styled.div`
   width: 100%;
@@ -70,7 +70,7 @@ function Tab({ activeTab, setActiveTab }: TabProps) {
         >
           산책로
         </Button>
-        <Button
+        {/* <Button
           active={activeTab === '친구'}
           onClick={() => setActiveTab('친구')}
         >
@@ -81,7 +81,7 @@ function Tab({ activeTab, setActiveTab }: TabProps) {
           onClick={() => setActiveTab('내정보')}
         >
           내정보
-        </Button>
+        </Button> */}
       </TabContainer>
       {activeTab === '산책로' && (
         <>
@@ -105,12 +105,12 @@ function Tab({ activeTab, setActiveTab }: TabProps) {
           )}
         </>
       )}
-      {activeTab === '친구' && <div>친구 내용</div>}
+      {/* {activeTab === '친구' && <div>친구 내용</div>}
       {activeTab === '내정보' && (
         <InfoContainer>
           <MyInfo />
         </InfoContainer>
-      )}
+      )} */}
     </>
   );
 }

@@ -2,8 +2,6 @@ import React, { FC } from 'react';
 import { styled } from 'styled-components';
 import SignupForm from '../components/SignUp/SignUp';
 import BaseBox from '../styles/common/BaseBox';
-// import step1 from '../assets/login/step1.png';
-// import step2 from '../assets/login/step2.png';
 import Header from '../components/SignUp/common/Header';
 import { Text1, Text2 } from '../components/SignUp/common/Text';
 

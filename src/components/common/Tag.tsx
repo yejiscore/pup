@@ -43,7 +43,11 @@ function Tag({ visibility, width, height, fontSize }: TagProps) {
       height={height}
       fontSize={fontSize}
     >
-      {visibility}
+      {visibility === 'PUBLIC'
+        ? '전체공개'
+        : visibility === 'PROTECTED'
+          ? '친구만'
+          : '비공개'}
     </StyledTag>
   );
 }
