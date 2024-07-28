@@ -86,9 +86,7 @@ const VerticalCard = ({ data }: { data: IUserTrailLists }) => {
         />
       </ImageContainer>
 
-      <TitleWrapper
-        onClick={() => onClickPage(data.walkingTrailUid, data.itemList)}
-      >
+      <TitleWrapper>
         <img
           src={dogWalkingPicIcon}
           alt="dogWalkingPic"
@@ -97,16 +95,16 @@ const VerticalCard = ({ data }: { data: IUserTrailLists }) => {
         />
         <Text2>{data.name}</Text2>
       </TitleWrapper>
-      <Info onClick={() => onClickPage(data.walkingTrailUid, data.itemList)}>
+      <Info>
         <DescriptionTitle>산책 시간</DescriptionTitle>
         <DescriptionContent>{formatTime(data.time)}</DescriptionContent>
       </Info>
-      <Info onClick={() => onClickPage(data.walkingTrailUid, data.itemList)}>
+      <Info>
         <DescriptionTitle>산책 거리</DescriptionTitle>
         <DescriptionContent>{formatDistance(data.distance)}</DescriptionContent>
       </Info>
 
-      <Rate onClick={() => onClickPage(data.walkingTrailUid, data.itemList)}>
+      <Rate>
         <img src={startIcon} alt="star" width={24} height={24} />
         {data.rating ? formatRating(String(data.rating)) : '0.0'}
         <img src={peopleIcon} alt="people" width={24} height={24} />
@@ -118,7 +116,9 @@ const VerticalCard = ({ data }: { data: IUserTrailLists }) => {
       >
         <img src={isUserLiked ? redHeartIcon : heartIcon} alt="heart" />
       </HeartIcon>
-      <BottomBtnWrapper>
+      <BottomBtnWrapper
+        onClick={() => onClickPage(data.walkingTrailUid, data.itemList)}
+      >
         <GoTrailBtn type="button">산책하러가기</GoTrailBtn>
       </BottomBtnWrapper>
     </Card>

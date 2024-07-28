@@ -179,4 +179,5 @@ export const GoTrailBtn = styled.button`
   background-color: ${(props) => props.theme.colors.primary[5]};
   color: ${(props) => props.theme.colors.white};
   border: none;
+  cursor: pointer;
 `;

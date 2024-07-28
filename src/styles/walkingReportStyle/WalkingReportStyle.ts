@@ -15,7 +15,7 @@ export const Head4 = styled(BaseHead4)`
   color: ${(props) => props.theme.colors.primary[5]};
   font-weight: 400;
   line-height: 26.25px;
-  width: 40px;
+  width: 50px;
 `;
 
 export const ComBoxOne = styled.div`

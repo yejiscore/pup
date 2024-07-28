@@ -83,6 +83,31 @@ const WalkingMain = () => {
   const path = useRef<any[]>([]); // 경로를 저장할 배열
   const markerRef = useRef<any>(null);
 
+  useEffect(() => {
+    setButtonText('산책 시작하기');
+    setIsWalking(false);
+    setDistance(0);
+    setTime(0);
+    setIsPaused(false);
+    setPositions([]);
+    setBasePosition({ lat: 37.514575, lng: 127.0495556 });
+    setShowStopModal(false);
+    setDogsId([]);
+    setIsActive(false);
+    setIsReChangeDogSelect(false);
+
+    // Ref 초기화
+    if (fileInputRef.current) fileInputRef.current.value = '';
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    if (lineRef.current) lineRef.current = null;
+    path.current = [];
+    if (markerRef.current) markerRef.current.setMap(null);
+    markerRef.current = null;
+  }, []);
+
   const { data: userData, isSuccess: userDataSuccess } = useFetch<UserDataType>(
     '/user',
     '/user',
@@ -165,13 +190,13 @@ const WalkingMain = () => {
               alert('브라우저 설정을 변경해주세요.');
               // console.error('Error getting location: Permission denied');
             } else if (error.code === 2) {
-              alert('브라우저 설정을 변경해주세요.');
+              // alert('브라우저 설정을 변경해주세요.');
               // console.error('Error getting location: Position unavailable');
             } else if (error.code === 3) {
-              alert('브라우저 설정을 변경해주세요.');
+              // alert('브라우저 설정을 변경해주세요.');
               // console.error('Error getting location: Timeout');
             } else {
-              alert('브라우저 설정을 변경해주세요.');
+              // alert('브라우저 설정을 변경해주세요.');
               // console.error('Error getting location:', error);
             }
           }
@@ -227,13 +252,13 @@ const WalkingMain = () => {
             alert('브라우저 설정을 변경해주세요.');
             // console.error('Error getting location: Permission denied');
           } else if (error.code === 2) {
-            alert('브라우저 설정을 변경해주세요.');
+            // alert('브라우저 설정을 변경해주세요.');
             // console.error('Error getting location: Position unavailable');
           } else if (error.code === 3) {
-            alert('브라우저 설정을 변경해주세요.');
+            // alert('브라우저 설정을 변경해주세요.');
             // console.error('Error getting location: Timeout');
           } else {
-            alert('브라우저 설정을 변경해주세요.');
+            // alert('브라우저 설정을 변경해주세요.');
             // console.error('Error getting location:', error);
           }
         }
