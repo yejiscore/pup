@@ -23,9 +23,9 @@ const CalendarContainer = styled.div`
 `;
 
 const Day = styled.div<{
-  isCurrentMonth: boolean;
-  hasData: boolean;
-  isSelected: boolean;
+  isCurrentMonth: string;
+  hasData: string;
+  isSelected: string;
 }>`
   width: 48px;
   height: 48px;
@@ -35,12 +35,15 @@ const Day = styled.div<{
   box-sizing: border-box;
   font-size: 18px;
   position: relative;
-  visibility: ${(props) => (props.isCurrentMonth ? 'visible' : 'hidden')};
-  cursor: ${(props) => (props.hasData ? 'pointer' : 'default')};
-  color: ${(props) => (props.hasData ? 'white' : '#000')};
-  background-color: ${(props) => (props.hasData ? '#00ae80' : 'transparent')};
-  border-radius: ${(props) => (props.hasData ? '50%' : '0')};
-  border: ${(props) => (props.isSelected ? '2px solid #00684D' : 'none')};
+  visibility: ${(props) =>
+    props.isCurrentMonth === 'true' ? 'visible' : 'hidden'};
+  cursor: ${(props) => (props.hasData === 'true' ? 'pointer' : 'default')};
+  color: ${(props) => (props.hasData === 'true' ? 'white' : '#000')};
+  background-color: ${(props) =>
+    props.hasData === 'true' ? '#00ae80' : 'transparent'};
+  border-radius: ${(props) => (props.hasData === 'true' ? '50%' : '0')};
+  border: ${(props) =>
+    props.isSelected === 'true' ? '2px solid #00684D' : 'none'};
 `;
 
 const Weekday = styled.div`
@@ -102,9 +105,9 @@ function CalendarBody() {
         {filteredDays.map((day) => (
           <Day
             key={day.date}
-            isCurrentMonth={day.isCurrentMonth}
-            hasData={day.hasData}
-            isSelected={day.isSelected}
+            isCurrentMonth={day.isCurrentMonth ? 'true' : 'false'}
+            hasData={day.hasData ? 'true' : 'false'}
+            isSelected={day.isSelected ? 'true' : 'false'}
             onClick={() => day.hasData && handleDayClick(day.date)}
           >
             {day.day}
