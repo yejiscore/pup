@@ -14,10 +14,11 @@ import SearchStartWalking from './pages/searchMap/SearchStartWalking';
 import SelectTrail from './pages/detail/SelectTrail';
 import TrailStart from './pages/trailStart/TrailStart';
 import FinishTrail from './pages/trailStart/FinishTrail';
-import MyBoardPage from './components/MyWalkingBoard/MyBoardPage';
+// import MyBoardPage from './components/MyWalkingBoard/MyBoardPage';
 import DetailPage from './components/Detail/Detail';
 import { AppProvider } from './context/AppContext';
 import GlobalStyle from './styles/GlobalStyle';
+import MyBoardPage from './pages/MyBoardPage';
 
 function App() {
   return (

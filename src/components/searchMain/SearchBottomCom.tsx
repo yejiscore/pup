@@ -133,7 +133,7 @@ const SearchBottomCom = () => {
       type,
     }
   );
-  console.log('trailData', trailData);
+
   return (
     <Wrapper>
       <Box>

@@ -27,7 +27,7 @@ const SearchTopCom = () => {
       type,
     }
   );
-  console.log('trailData', trailData);
+
   return (
     <TopCom>
       <Body1>인기 산책로</Body1>

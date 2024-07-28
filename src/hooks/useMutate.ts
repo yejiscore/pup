@@ -32,10 +32,8 @@ const useMutate = (key: string, url: string, method: HttpMethod) => {
       queryClient.invalidateQueries([key]);
     },
     onError: (error, variables, context) => {
-      // console.error('Mutation error:', error);
     },
     onSettled: (data, error, variables, context) => {
-      // // console.log('Mutation settled');
     },
   });
 };

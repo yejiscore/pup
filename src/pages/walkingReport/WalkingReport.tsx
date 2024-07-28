@@ -97,7 +97,6 @@ const WalkingReport = () => {
     'post'
   );
 
-  console.log('uploadData:', uploadData);
   const handleRegister = async () => {
     try {
       // const s3 = new AWS.S3({
@@ -143,16 +142,16 @@ const WalkingReport = () => {
               },
             }
           );
-          console.log('response', response);
+
           if (response.data && response.data.data.url) {
             uploadedPhotoUrls.push(response.data.data.url);
           } else {
-            console.error(
-              `Error uploading file ${file.name}: No URL in response`
-            );
+            // console.error(
+            //   `Error uploading file ${file.name}: No URL in response`
+            // );
           }
         } catch (uploadError) {
-          console.error(`Error uploading file ${file.name}:`, uploadError);
+          // console.error(`Error uploading file ${file.name}:`, uploadError);
         }
       }
       for (let i = 0; i < uploadedPhotoUrls.length; i++) {
@@ -166,7 +165,7 @@ const WalkingReport = () => {
 
           {
             onError: (error) => {
-              console.error('Error sending photo URL to backend:', error);
+              // console.error('Error sending photo URL to backend:', error);
             },
           }
         );
@@ -194,13 +193,13 @@ const WalkingReport = () => {
           onSuccess: () => {
             navigate('/');
           },
-          onError: (error) => {
-            console.error('Error registering walking trail:', error);
-          },
+          // onError: (error) => {
+          //   console.error('Error registering walking trail:', error);
+          // },
         }
       );
     } catch (err) {
-      console.error('Error uploading photo or sending data:', err);
+      // console.error('Error uploading photo or sending data:', err);
     }
   };
 

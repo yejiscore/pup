@@ -100,7 +100,7 @@ const TrailStart = () => {
     `/walking-trail/${trailId}`,
     {}
   );
-  console.log('trailData', trailData);
+
   const handleDogSelect = (dogId: number) => {
     setDogsId((prevIds) => {
       if (prevIds.includes(dogId)) {
@@ -203,7 +203,7 @@ const TrailStart = () => {
           }
         },
         (error) => {
-          console.error('Error getting location:', error);
+          // console.error('Error getting location:', error);
         }
       );
       return () => navigator.geolocation.clearWatch(watchId);

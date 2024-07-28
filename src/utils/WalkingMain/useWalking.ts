@@ -99,13 +99,17 @@ const useWalking = () => {
           },
           (error) => {
             if (error.code === 1) {
-              console.error('Error getting location: Permission denied');
+              alert('브라우저 설정을 변경해주세요.');
+              // console.error('Error getting location: Permission denied');
             } else if (error.code === 2) {
-              console.error('Error getting location: Position unavailable');
+              alert('브라우저 설정을 변경해주세요.');
+              // console.error('Error getting location: Position unavailable');
             } else if (error.code === 3) {
-              console.error('Error getting location: Timeout');
+              alert('브라우저 설정을 변경해주세요.');
+              // console.error('Error getting location: Timeout');
             } else {
-              console.error('Error getting location:', error);
+              alert('브라우저 설정을 변경해주세요.');
+              // console.error('Error getting location:', error);
             }
           }
         );
@@ -137,7 +141,6 @@ const useWalking = () => {
   };
 
   const handleFindLocation = () => {
-    // console.log('자신 위치 찾기');
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -148,18 +151,22 @@ const useWalking = () => {
         },
         (error) => {
           if (error.code === 1) {
-            console.error('Error getting location: Permission denied');
+            alert('브라우저 설정을 변경해주세요.');
+            // console.error('Error getting location: Permission denied');
           } else if (error.code === 2) {
-            console.error('Error getting location: Position unavailable');
+            alert('브라우저 설정을 변경해주세요.');
+            // console.error('Error getting location: Position unavailable');
           } else if (error.code === 3) {
-            console.error('Error getting location: Timeout');
+            alert('브라우저 설정을 변경해주세요.');
+            // console.error('Error getting location: Timeout');
           } else {
-            console.error('Error getting location:', error);
+            alert('브라우저 설정을 변경해주세요.');
+            // console.error('Error getting location:', error);
           }
         }
       );
     } else {
-      alert('Geolocation is not supported by this browser.');
+      // alert('Geolocation is not supported by this browser.');
     }
   };
 
@@ -194,11 +201,6 @@ const useWalking = () => {
     setButtonText('산책 시작하기');
     setIsModalOpen(false);
     setShowStopModal(false);
-
-    // console.log('Positions:', positions);
-    // console.log('Distance:', distance);
-    // console.log('Time:', time);
-    // 산책 종료 시 위치 좌표 백엔드로 전송
   };
 
   const handleTakePhoto = () => {

@@ -43,6 +43,7 @@
     "react/jsx-curly-newline": "off",
     "import/no-extraneous-dependencies": "off",
     "react/require-default-props": "off",
-    "indent": "off"
+    "indent": "off",
+    "no-alert": "off"
   }
 }
