@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import useFetch from '../../hooks/useFetch';
+import { useAppContext } from '../../context/AppContext';
 
 const SubTabContainer = styled.div`
   display: flex;
@@ -37,6 +39,20 @@ interface SubTabProps {
 }
 
 function SubTab({ activeSubTab, setActiveSubTab }: SubTabProps) {
+  const { filter } = useAppContext();
+  const {
+    data: likeWalkingBoardData,
+    error,
+    isLoading,
+  } = useFetch(
+    'likeData',
+    'walking-trail/like',
+    {
+      type: filter === ('전체' || '최신순') ? 'RECENT' : 'POPULAR',
+    },
+    activeSubTab === '찜한 산책로'
+  );
+
   return (
     <SubTabContainer>
       <SubTabButton

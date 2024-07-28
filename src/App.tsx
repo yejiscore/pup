@@ -21,6 +21,8 @@ import SignupMember from './pages/SignUpMember';
 import SignUpFinal from './components/SignUp/common/SignUpFinal';
 import SignupSocial from './pages/SignUpSocial';
 import MyBoardPage from './pages/MyBoardPage';
+import EditUser from './pages/EditUser';
+import EditPet from './pages/EditPet';
 
 function App() {
   return (
@@ -167,6 +169,22 @@ function App() {
             element={
               <BaseLayout>
                 <SignUpFinal />
+              </BaseLayout>
+            }
+          />
+          <Route
+            path="/edit_user"
+            element={
+              <BaseLayout>
+                <EditUser />
+              </BaseLayout>
+            }
+          />
+          <Route
+            path="/edit_pet"
+            element={
+              <BaseLayout>
+                <EditPet />
               </BaseLayout>
             }
           />
