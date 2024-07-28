@@ -90,6 +90,7 @@ const SearchInputCom = styled.input`
 const Icon = styled.img`
   width: 36px;
   height: 36px;
+  margin-right: 20px;
 `;
 
 const WalkingStartButton = styled.button`
@@ -313,18 +314,22 @@ const SearchMap = () => {
         },
         (error) => {
           if (error.code === 1) {
-            console.error('Error getting location: Permission denied');
+            alert('브라우저 설정을 변경해주세요.');
+            // console.error('Error getting location: Permission denied');
           } else if (error.code === 2) {
-            console.error('Error getting location: Position unavailable');
+            alert('브라우저 설정을 변경해주세요.');
+            // console.error('Error getting location: Position unavailable');
           } else if (error.code === 3) {
-            console.error('Error getting location: Timeout');
+            alert('브라우저 설정을 변경해주세요.');
+            // console.error('Error getting location: Timeout');
           } else {
-            console.error('Error getting location:', error);
+            alert('브라우저 설정을 변경해주세요.');
+            // console.error('Error getting location:', error);
           }
         }
       );
     } else {
-      alert('Geolocation is not supported by this browser.');
+      // alert('Geolocation is not supported by this browser.');
     }
   };
 

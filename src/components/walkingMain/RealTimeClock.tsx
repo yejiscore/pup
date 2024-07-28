@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useInterval from 'use-interval';
 import moment from 'moment';
 import 'moment/locale/ko'; // 한국어 로케일을 사용하려면 추가합니다.
@@ -12,13 +12,14 @@ const Body1 = styled(BaseBody2)`
 `;
 
 const RealTimeClock = () => {
-  const [time, setTime] = useState(moment());
+  const [date, setDate] = useState(moment().format('MM:DD'));
 
-  useInterval(() => {
-    setTime(moment());
-  }, 1000); // 1초마다 시간 업데이트
+  useEffect(() => {
+    const now = moment();
+    setDate(now.format('MM:DD'));
+  }, []);
 
-  return <Body1>{time.format('HH:mm')}</Body1>;
+  return <Body1>{date}</Body1>;
 };
 
 export default RealTimeClock;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
@@ -15,6 +15,8 @@ import { IUserTrailLists } from '../../types/getUserTrailListsType';
 import { BaseText2, BaseText3 } from '../../styles/common/textStyle';
 import selectTrailState from '../../stores/selectTrail';
 import linkShareState from '../../stores/linkShare';
+import arrowCircleIcon from '../../assets/common/arrowCircle.png';
+import useMutate from '../../hooks/useMutate';
 
 const Card = styled.div`
   background-color: ${(props) => props.theme.colors.white};
@@ -125,6 +127,16 @@ const LinkImg = styled.img`
   position: absolute;
   right: 5px;
   top: 5px;
+  width: 40px;
+  height: 40px;
+`;
+
+const GoPageImg = styled.img`
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 31px;
+  height: 31px;
 `;
 
 const HorizontalCard = ({ data }: { data: IUserTrailLists }) => {
@@ -146,18 +158,22 @@ const HorizontalCard = ({ data }: { data: IUserTrailLists }) => {
     navigate('/search/map');
   };
 
+  const [mainImage, setMainImage] = useState(data.mainImage ?? '');
+  const handeleError = () => {
+    setMainImage(holThumbnail);
+  };
+
   return (
     <Card key={data.walkingTrailId}>
       <img
-        src={holThumbnail}
+        src={mainImage}
         alt="thumbnail"
         width={69}
         height={88}
+        onError={handeleError}
         style={{ borderRadius: '12px' }}
       />
-      <ContentWrapper
-        onClick={() => onClickPage(data.walkingTrailUid, data.itemList)}
-      >
+      <ContentWrapper>
         <TopWrapper>
           <span className="name">{data.userUid.slice(0, 3)}의 산책길</span>
           <span className="content">{data.name}</span>
@@ -191,6 +207,10 @@ const HorizontalCard = ({ data }: { data: IUserTrailLists }) => {
             `https://www.domountainbe.shop/trail/select/${data.walkingTrailUid}`
           )
         }
+      />
+      <GoPageImg
+        src={arrowCircleIcon}
+        onClick={() => onClickPage(data.walkingTrailUid, data.itemList)}
       />
     </Card>
   );

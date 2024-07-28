@@ -20,3 +20,26 @@ const useFetch = <T>(
 };
 
 export default useFetch;
+
+// import { useQuery, UseQueryResult } from '@tanstack/react-query';
+// import { fetchData } from '../services/apiService';
+
+// const useFetch = <T>(
+//   key: string,
+//   url: string,
+//   params?: any,
+//   enabled = true
+// ): UseQueryResult<T> => {
+//   return useQuery<T>([key, params], () => fetchData(url, params), {
+//     staleTime: 5 * 60 * 1000,
+//     cacheTime: 30 * 60 * 1000,
+//     retry: 2,
+//     refetchOnWindowFocus: true,
+//     refetchOnReconnect: true,
+//     refetchOnMount: true,
+//     refetchInterval: false,
+//     enabled,
+//   });
+// };
+
+// export default useFetch;

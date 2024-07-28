@@ -83,6 +83,31 @@ const WalkingMain = () => {
   const path = useRef<any[]>([]); // 경로를 저장할 배열
   const markerRef = useRef<any>(null);
 
+  useEffect(() => {
+    setButtonText('산책 시작하기');
+    setIsWalking(false);
+    setDistance(0);
+    setTime(0);
+    setIsPaused(false);
+    setPositions([]);
+    setBasePosition({ lat: 37.514575, lng: 127.0495556 });
+    setShowStopModal(false);
+    setDogsId([]);
+    setIsActive(false);
+    setIsReChangeDogSelect(false);
+
+    // Ref 초기화
+    if (fileInputRef.current) fileInputRef.current.value = '';
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    if (lineRef.current) lineRef.current = null;
+    path.current = [];
+    if (markerRef.current) markerRef.current.setMap(null);
+    markerRef.current = null;
+  }, []);
+
   const { data: userData, isSuccess: userDataSuccess } = useFetch<UserDataType>(
     '/user',
     '/user',
@@ -122,7 +147,6 @@ const WalkingMain = () => {
                   latitude,
                   longitude
                 );
-                // console.log('Distance increment:', distanceIncrement);
                 setDistance((prevDistance) => prevDistance + distanceIncrement);
               }
 
@@ -163,13 +187,17 @@ const WalkingMain = () => {
           },
           (error) => {
             if (error.code === 1) {
-              console.error('Error getting location: Permission denied');
+              alert('브라우저 설정을 변경해주세요.');
+              // console.error('Error getting location: Permission denied');
             } else if (error.code === 2) {
-              console.error('Error getting location: Position unavailable');
+              // alert('브라우저 설정을 변경해주세요.');
+              // console.error('Error getting location: Position unavailable');
             } else if (error.code === 3) {
-              console.error('Error getting location: Timeout');
+              // alert('브라우저 설정을 변경해주세요.');
+              // console.error('Error getting location: Timeout');
             } else {
-              console.error('Error getting location:', error);
+              // alert('브라우저 설정을 변경해주세요.');
+              // console.error('Error getting location:', error);
             }
           }
         );
@@ -221,18 +249,22 @@ const WalkingMain = () => {
         },
         (error) => {
           if (error.code === 1) {
-            console.error('Error getting location: Permission denied');
+            alert('브라우저 설정을 변경해주세요.');
+            // console.error('Error getting location: Permission denied');
           } else if (error.code === 2) {
-            console.error('Error getting location: Position unavailable');
+            // alert('브라우저 설정을 변경해주세요.');
+            // console.error('Error getting location: Position unavailable');
           } else if (error.code === 3) {
-            console.error('Error getting location: Timeout');
+            // alert('브라우저 설정을 변경해주세요.');
+            // console.error('Error getting location: Timeout');
           } else {
-            console.error('Error getting location:', error);
+            // alert('브라우저 설정을 변경해주세요.');
+            // console.error('Error getting location:', error);
           }
         }
       );
     } else {
-      alert('Geolocation is not supported by this browser.');
+      // alert('Geolocation is not supported by this browser.');
     }
   };
 
@@ -276,7 +308,6 @@ const WalkingMain = () => {
             },
             {
               onSuccess: (data) => {
-                // console.log('Walking trail created:', data);
                 setUploadData((prevData) => ({
                   ...prevData,
                   walkingTrailUid: data.data,
@@ -284,7 +315,7 @@ const WalkingMain = () => {
                 }));
               },
               onError: (error) => {
-                console.error('Error creating walking trail:', error);
+                // console.error('Error creating walking trail:', error);
               },
             }
           );

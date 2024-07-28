@@ -18,7 +18,7 @@ export const Header = styled.div`
 export const WeatherInfo = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   padding: 0 20px;
 `;

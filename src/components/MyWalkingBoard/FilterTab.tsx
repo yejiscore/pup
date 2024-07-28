@@ -18,7 +18,7 @@ const Container = styled.div`
 `;
 
 interface FilterSelectContainerProps {
-  active: boolean;
+  'data-active'?: string;
 }
 
 const FilterSelectContainer = styled.div<FilterSelectContainerProps>`
@@ -27,8 +27,9 @@ const FilterSelectContainer = styled.div<FilterSelectContainerProps>`
   height: 29px;
   border: 2px solid #00ae80;
   border-radius: 100px;
-  background-color: ${(props) => (props.active ? '#00ae80' : 'white')};
-  color: ${(props) => (props.active ? 'white' : '#00ae80')};
+  background-color: ${(props) =>
+    props['data-active'] === 'true' ? '#00ae80' : 'white'};
+  color: ${(props) => (props['data-active'] === 'true' ? 'white' : '#00ae80')};
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -95,7 +96,10 @@ function FilterTab({ activeSubTab }: FilterTabProps) {
 
   return (
     <Container>
-      <FilterSelectContainer active={filter !== '전체'} onClick={toggleOptions}>
+      <FilterSelectContainer
+        data-active={filter !== '전체' ? 'true' : 'false'}
+        onClick={toggleOptions}
+      >
         <SelectedOption>{filter}</SelectedOption>
         {showOptions && (
           <OptionList>

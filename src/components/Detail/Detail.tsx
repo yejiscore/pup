@@ -1,5 +1,4 @@
 /* eslint-disable import/extensions */
-// src/components/Detail.tsx
 import React from 'react';
 import { styled } from 'styled-components';
 import { useParams } from 'react-router-dom';
@@ -10,6 +9,7 @@ import Memo from './Memo';
 import { useAppContext } from '../../context/AppContext';
 import StartButton from './StartButton';
 import DetailHeader from './DetailHeader';
+import { DataItem } from '../../types/DataItem';
 
 // basebox 복붙 배경색상만 변경
 const Container = styled.div`
@@ -34,9 +34,9 @@ function Detail() {
   const { id } = useParams<{ id: string }>();
   const { myData, likeData } = useAppContext();
 
-  const item =
-    myData.find((data) => data.id === Number(id)) ||
-    likeData.find((data) => data.id === Number(id));
+  const item: DataItem | undefined =
+    myData.find((data) => data.walkingTrailId === Number(id)) ||
+    likeData.find((data) => data.walkingTrailId === Number(id));
 
   if (!item) {
     return <div>Data not found</div>;

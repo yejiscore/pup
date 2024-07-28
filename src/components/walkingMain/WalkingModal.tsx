@@ -125,7 +125,6 @@ const WalkingModal = ({
   photoCount: number;
   dogChange: () => void;
 }) => {
-  console.log('photoCount', photoCount);
   const userData = useRecoilValue(userDataState);
 
   const formatTime = (time: number) => {

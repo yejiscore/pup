@@ -38,7 +38,7 @@ function SearchHeader() {
   return (
     <Container>
       <Title>산책로 찾기</Title>
-      <IconButton src={MeatballsIcon} onClick={handleIconClick} />
+      {/* <IconButton src={MeatballsIcon} onClick={handleIconClick} /> */}
     </Container>
   );
 }

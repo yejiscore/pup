@@ -6,7 +6,7 @@ import BackIcon from '../../assets/common/back.png';
 
 const Container = styled.div`
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   width: 100%;
   height: 49px;
@@ -24,9 +24,9 @@ const Title = styled.div`
 const IconButton = styled.img`
   width: 40px;
   height: 40px;
-  /* position: absolute; */
-  /* top: -7px; */
-  /* right: 10px; */
+  position: absolute;
+  top: 5px;
+  left: 30px;
   cursor: pointer;
 `;
 

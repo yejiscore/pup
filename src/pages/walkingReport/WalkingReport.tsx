@@ -7,6 +7,7 @@ import AWS from 'aws-sdk';
 import { v4 } from 'uuid';
 import Slider from 'react-slick';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import BaseBox from '../../styles/common/BaseBox';
 import WalkingReportHeader from '../../components/walkingReport/WalkingReportHeader';
 import WalkingReportThumbnail from '../../assets/walkingReport/walkingReportThumbnail.png';
@@ -100,33 +101,62 @@ const WalkingReport = () => {
   const handleRegister = async () => {
     console.log('uploadData:', uploadData);
     try {
-      const s3 = new AWS.S3({
-        accessKeyId: process.env.REACT_APP_MINIO_ACCESS_KEY,
-        secretAccessKey: process.env.REACT_APP_MINIO_SECRET_KEY,
-        endpoint: process.env.REACT_APP_MINIO_ENDPOINT,
-        s3ForcePathStyle: true,
-        signatureVersion: 'v4',
-      });
+      // const s3 = new AWS.S3({
+      //   accessKeyId: process.env.REACT_APP_MINIO_ACCESS_KEY,
+      //   secretAccessKey: process.env.REACT_APP_MINIO_SECRET_KEY,
+      //   endpoint: process.env.REACT_APP_MINIO_ENDPOINT,
+      //   s3ForcePathStyle: true,
+      //   signatureVersion: 'v4',
+      // });
 
       const uploadedPhotoUrls: string[] = [];
+
+      // for (let i = 0; i < uploadData.walkingPhotos.length; i++) {
+      //   const file = uploadData.walkingPhotos[i];
+
+      //   const params = {
+      //     Bucket: process.env.REACT_APP_MINIO_BUCKET_NAME || '',
+      //     Key: file.name,
+      //     Body: file,
+      //   };
+
+      //   try {
+      //     const uploadResult = await s3.upload(params).promise();
+      //     uploadedPhotoUrls.push(uploadResult.Location);
+      //   } catch (uploadError) {
+      //     console.error(`Error uploading file ${file.name}:`, uploadError);
+      //   }
+      // }
 
       for (let i = 0; i < uploadData.walkingPhotos.length; i++) {
         const file = uploadData.walkingPhotos[i];
 
-        const params = {
-          Bucket: process.env.REACT_APP_MINIO_BUCKET_NAME || '',
-          Key: file.name,
-          Body: file,
-        };
+        const formData = new FormData();
+        formData.append('file', file);
 
         try {
-          const uploadResult = await s3.upload(params).promise();
-          uploadedPhotoUrls.push(uploadResult.Location);
+          const response = await axios.post(
+            'https://web.hi-dice.com/api/file/v1/upload',
+            formData,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            }
+          );
+
+          if (response.data && response.data.data.url) {
+            uploadedPhotoUrls.push(response.data.data.url);
+          } else {
+            // console.error(
+            //   `Error uploading file ${file.name}: No URL in response`
+            // );
+          }
         } catch (uploadError) {
-          console.error(`Error uploading file ${file.name}:`, uploadError);
+          // console.error(`Error uploading file ${file.name}:`, uploadError);
         }
       }
-      console.log('uploadedPhotoUrls:', uploadedPhotoUrls);
+      // console.log('uploadedPhotoUrls:', uploadedPhotoUrls);
       for (let i = 0; i < uploadedPhotoUrls.length; i++) {
         await uploadPicture(
           {
@@ -138,12 +168,12 @@ const WalkingReport = () => {
 
           {
             onError: (error) => {
-              console.error('Error sending photo URL to backend:', error);
+              // console.error('Error sending photo URL to backend:', error);
             },
           }
         );
       }
-      console.log('uploadedPhotoUrls:', uploadedPhotoUrls);
+      // console.log('uploadedPhotoUrls:', uploadedPhotoUrls);
       const dataToSend = {
         walkingTrailUid: uploadData.walkingTrailUid,
         name,
@@ -166,13 +196,13 @@ const WalkingReport = () => {
           onSuccess: () => {
             navigate('/');
           },
-          onError: (error) => {
-            console.error('Error registering walking trail:', error);
-          },
+          // onError: (error) => {
+          //   console.error('Error registering walking trail:', error);
+          // },
         }
       );
     } catch (err) {
-      console.error('Error uploading photo or sending data:', err);
+      // console.error('Error uploading photo or sending data:', err);
     }
   };
 

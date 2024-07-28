@@ -135,7 +135,6 @@ const SearchStartWalking = () => {
     `/walking-trail/${id}`,
     {}
   );
-  console.log('trailData:', trailData);
 
   const tmapRef = useRef<HTMLDivElement | null | any>(null);
   const [map, setMap] = useState<any>(null);
@@ -196,15 +195,11 @@ const SearchStartWalking = () => {
   }, []);
 
   useEffect(() => {
-    // // console.log('map:', map);
-    // // console.log('userLocation:', userLocation);
-    // // console.log('routeCalculated:', routeCalculated);
     if (map && userLocation && !routeCalculated) {
       const headers = {
         appKey: process.env.REACT_APP_TMAP_APP_KEY,
       };
-      // // console.log('userLocation:', userLocation);
-      // // console.log('실행');
+
       axios
         .post(
           'https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1&format=json&callback=result',
@@ -243,7 +238,7 @@ const SearchStartWalking = () => {
           setRouteCalculated(true);
         })
         .catch((error) => {
-          console.error('경로 데이터를 가져오는 중 오류 발생:', error);
+          // console.error('경로 데이터를 가져오는 중 오류 발생:', error);
         });
     }
   }, [map && userLocation && !routeCalculated]);
@@ -299,7 +294,6 @@ const SearchStartWalking = () => {
 
   useEffect(() => {
     if (userLocation) {
-      // // console.log('userLocation changed:', userLocation);
       if (map) {
         const newCenter = new Tmapv2.LatLng(userLocation.lat, userLocation.lng);
         map.setCenter(newCenter);

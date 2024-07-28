@@ -78,7 +78,7 @@ export const Card = styled.div`
   /* background-color: red; */
   border-radius: 20px;
   width: 154px;
-  height: 263px;
+  height: 284px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -155,5 +155,29 @@ export const HeartIcon = styled.div<{ $isLiked: boolean }>`
   font-size: 24px;
   color: ${(props) =>
     props.$isLiked ? props.theme.colors.white : props.theme.colors.primary[5]};
+  cursor: pointer;
+`;
+
+export const BottomBtnWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  padding-top: 5px;
+  padding-bottom: 8px;
+`;
+
+export const GoTrailBtn = styled.button`
+  width: 129px;
+  height: 27px;
+  padding: 6px 31px 6px 31px;
+  gap: 10px;
+  border-radius: 100px;
+  opacity: 0px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14.52px;
+  text-align: center;
+  background-color: ${(props) => props.theme.colors.primary[5]};
+  color: ${(props) => props.theme.colors.white};
+  border: none;
   cursor: pointer;
 `;

@@ -1,11 +1,15 @@
 /* eslint-disable no-shadow */
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-no-constructed-context-values */
-/* eslint-disable react/function-component-definition */
-import React, { createContext, useState, ReactNode, useContext } from 'react';
-import { myData as initialMyData } from '../data/mydata';
-import { likeData as initialLikeData } from '../data/likedata';
+import React, {
+  createContext,
+  useState,
+  ReactNode,
+  useContext,
+  useEffect,
+} from 'react';
 import { DataItem } from '../types/DataItem';
+import { fetchData } from '../services/apiService';
+import { getCookie } from '../utils/cookiesUtils';
 
 interface AppContextProps {
   isTrashIcon: boolean;
@@ -24,19 +28,47 @@ interface AppContextProps {
   setFilter: (filter: string) => void;
   showCalendar: boolean;
   toggleCalendar: () => void;
+  isLoading: boolean;
+  isAuthenticated: boolean;
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
 const AppContext = createContext<AppContextProps | undefined>(undefined);
-
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [isTrashIcon, setIsTrashIcon] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
-  const [myData, setMyData] = useState<DataItem[]>(initialMyData);
-  const [likeData, setLikeData] = useState<DataItem[]>(initialLikeData);
+  const [myData, setMyData] = useState<DataItem[]>([]);
+  const [likeData, setLikeData] = useState<DataItem[]>([]);
   const [filter, setFilter] = useState('전체');
   const [showCalendar, setShowCalendar] = useState<boolean>(false);
-
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  useEffect(() => {
+    const loadData = async () => {
+      const accessToken = getCookie('pup_access');
+      if (!accessToken) {
+        setIsAuthenticated(false);
+        setIsLoading(false);
+        return;
+      }
+      setIsLoading(true);
+      try {
+        const myDataResponse = await fetchData('/walking-trail');
+        const likeDataResponse = await fetchData('/walking-trail/like');
+        console.log('myDataResponse:', myDataResponse);
+        console.log('likeDataResponse:', likeDataResponse);
+        setMyData(myDataResponse);
+        setLikeData(likeDataResponse);
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.error('Failed to fetch data', error);
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadData();
+  }, []);
   const toggleTrashIcon = () => {
     if (isTrashIcon && selectedItems.length === 0) {
       setIsTrashIcon(false);
@@ -44,15 +76,12 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       setIsTrashIcon(!isTrashIcon);
     }
   };
-
   const openModal = () => {
     setIsModalOpen(true);
   };
-
   const closeModal = () => {
     setIsModalOpen(false);
   };
-
   const toggleSelectItem = (id: number) => {
     setSelectedItems((prevState) =>
       prevState.includes(id)
@@ -60,44 +89,44 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         : [...prevState, id]
     );
   };
-
   const deleteSelectedItems = (activeSubTab: string) => {
     if (activeSubTab === '내 산책로') {
       setMyData((prevData) =>
-        prevData.filter((item) => !selectedItems.includes(item.id))
+        prevData.filter((item) => !selectedItems.includes(item.walkingTrailId))
       );
     } else if (activeSubTab === '찜한 산책로') {
       setLikeData((prevData) =>
-        prevData.filter((item) => !selectedItems.includes(item.id))
+        prevData.filter((item) => !selectedItems.includes(item.walkingTrailId))
       );
     }
     setSelectedItems([]);
     closeModal();
     setIsTrashIcon(false);
   };
-
   const toggleCalendar = () => {
     setShowCalendar((prevShowCalendar) => !prevShowCalendar);
   };
-
   const filterData = (data: DataItem[], filter: string) => {
     if (filter === '최신순') {
       return data
         .slice()
         .sort(
-          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+          (a, b) =>
+            new Date(b.createdDate).getTime() -
+            new Date(a.createdDate).getTime()
         );
     }
     if (filter === '과거순') {
       return data
         .slice()
         .sort(
-          (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+          (a, b) =>
+            new Date(a.createdDate).getTime() -
+            new Date(b.createdDate).getTime()
         );
     }
     return data;
   };
-
   return (
     <AppContext.Provider
       value={{
@@ -117,13 +146,15 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         setFilter,
         showCalendar,
         toggleCalendar,
+        isLoading,
+        isAuthenticated,
+        setIsAuthenticated,
       }}
     >
       {children}
     </AppContext.Provider>
   );
 };
-
 export const useAppContext = () => {
   const context = useContext(AppContext);
   if (!context) {

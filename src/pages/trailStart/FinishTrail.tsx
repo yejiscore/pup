@@ -144,7 +144,7 @@ const FinishTrail = () => {
 
   const [rating, setRating] = useState(0);
   const startTrailTime = useRecoilValue(startTrailTimeState);
-  // console.log(startTrailTime);
+
   const handleStarClick = (index: number) => {
     setRating(index + 1);
   };
@@ -161,9 +161,6 @@ const FinishTrail = () => {
   );
 
   const handleRegister = () => {
-    // console.log('산책 등록하기');
-    // console.log(rating);
-    // console.log(startTrailTime);
     addReview({
       walkingTrailUid: trailData?.data.walkingTrailUid,
       rating,
