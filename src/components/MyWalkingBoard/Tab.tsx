@@ -9,6 +9,21 @@ import Container from '../common/Container';
 import Calendar from '../Calendar/components/Calendar';
 import useFetch from '../../hooks/useFetch';
 import FriendList from './FriendList';
+import { useAppContext } from '../../context/AppContext';
+import MyInfo from '../../pages/MyInfo';
+
+const InfoContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  position: absolute;
+  top: 98px;
+  overflow-y: auto;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
 
 const TabContainer = styled.div`
   width: 100%;
@@ -57,7 +72,7 @@ function Tab({ activeTab, setActiveTab }: TabProps) {
         >
           산책로
         </Button>
-        <Button
+        {/* <Button
           active={activeTab === '친구'}
           onClick={() => setActiveTab('친구')}
         >
@@ -68,7 +83,7 @@ function Tab({ activeTab, setActiveTab }: TabProps) {
           onClick={() => setActiveTab('내정보')}
         >
           내정보
-        </Button>
+        </Button> */}
       </TabContainer>
       {/* {activeTab === '산책로' && (
         <>
@@ -98,6 +113,12 @@ function Tab({ activeTab, setActiveTab }: TabProps) {
         </Container>
       )}
       {activeTab === '내정보' && <div>내정보 내용</div>}
+      {/* {activeTab === '친구' && <div>친구 내용</div>}
+      {activeTab === '내정보' && (
+        <InfoContainer>
+          <MyInfo />
+        </InfoContainer>
+      )} */}
     </>
   );
 }

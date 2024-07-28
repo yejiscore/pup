@@ -53,12 +53,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       }
       setIsLoading(true);
       try {
-        const myDataResponse = await fetchData('/walking-trail');
-        const likeDataResponse = await fetchData('/walking-trail/like');
-        console.log('myDataResponse:', myDataResponse);
-        console.log('likeDataResponse:', likeDataResponse);
-        setMyData(myDataResponse);
-        setLikeData(likeDataResponse);
         setIsAuthenticated(true);
       } catch (error) {
         console.error('Failed to fetch data', error);

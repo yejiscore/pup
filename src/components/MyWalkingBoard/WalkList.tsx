@@ -12,6 +12,10 @@ import StarIcon from '../../assets/Star 2.png';
 import VisibilityTag from '../common/Tag';
 import CopyModal from '../Modal/CopyModal';
 import { DataItem } from '../../types/DataItem';
+import useFetch from '../../hooks/useFetch';
+import { IGetUserTrailType } from '../../types/getUserTrailType';
+import { ResIUserTrailLists } from '../../types/getUserTrailListsType';
+import { formatRating } from '../../utils/formatTime';
 
 interface ListItemProps {
   isTrashIcon: boolean;
@@ -169,6 +173,12 @@ function WalkList({ data, activeSubTab }: WalkListProps) {
     setShowModal(true);
   };
 
+  const { data: myTrailData } = useFetch<ResIUserTrailLists>(
+    'myTrailData',
+    'walking-trail',
+    {}
+  );
+
   return (
     <WalkListContainer>
       {isModalOpen && selectedItems.length > 0 && (
@@ -177,90 +187,91 @@ function WalkList({ data, activeSubTab }: WalkListProps) {
           onDelete={() => deleteSelectedItems(activeSubTab)}
         />
       )}
-      {data.map((item) => (
-        <ListItem
-          key={item.walkingTrailId}
-          isTrashIcon={isTrashIcon}
-          onClick={() => handleItemClick(item.walkingTrailId)}
-        >
-          <ItemImage src={ListImage} alt="list item" />
-          <ItemContent>
-            <Row>
-              <DateText>
-                {new Date(item.createdDate).toLocaleDateString()}
-              </DateText>
-            </Row>
-            <Title>{item.name || 'Untitled'}</Title>
-            <Row>
-              <Time>
-                시간 <span>{item.time}분</span>
-              </Time>
-              <Distance>
-                거리 <span>{item.distance.toFixed(2)} km</span>
-              </Distance>
-            </Row>
-            <Row>
-              <Visibility
-                visibility={item.openRange || 'UNKNOWN'}
-                width="56px"
-                height="16px"
-                fontSize="12px"
-              />
-              <Rating>
-                <Star src={StarIcon} alt="star" />
-                <RatingText>
-                  {item.rating !== null ? item.rating : 'N/A'}
-                </RatingText>
-              </Rating>
-            </Row>
-          </ItemContent>
-          {isTrashIcon ? (
-            <SelectCircle
-              src={
-                selectedItems.includes(item.walkingTrailId)
-                  ? SelectedCircleIcon
-                  : SelectCircleIcon
-              }
-              alt="select circle"
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleSelectItem(item.walkingTrailId);
-              }}
-            />
-          ) : (
-            <>
-              {activeSubTab === '찜한 산책로' ? (
-                <LinkCopyButton
-                  src={HeartIcon}
-                  alt="Heart Icon"
-                  onClick={(e) =>
-                    handleOptionsClick(
-                      e,
-                      `${window.location.origin}/detail/${item.walkingTrailId}`
-                    )
-                  }
+      {myTrailData &&
+        myTrailData.data.map((item) => (
+          <ListItem
+            key={item.walkingTrailUid}
+            isTrashIcon={isTrashIcon}
+            onClick={() => handleItemClick(item.walkingTrailId)}
+          >
+            <ItemImage src={ListImage} alt="list item" />
+            <ItemContent>
+              <Row>
+                <DateText>
+                  {new Date(item.createdDate).toLocaleDateString()}
+                </DateText>
+              </Row>
+              <Title>{item.name}</Title>
+              <Row>
+                <Time>
+                  시간 <span>{item.time}분</span>
+                </Time>
+                <Distance>
+                  거리 <span>{item.distance.toFixed(2)} km</span>
+                </Distance>
+              </Row>
+              <Row>
+                <Visibility
+                  visibility={item.openRange}
+                  width="56px"
+                  height="16px"
+                  fontSize="12px"
                 />
-              ) : (
-                <LinkCopyButton
-                  src={LinkCopyIcon}
-                  alt="Copy Link"
-                  onClick={(e) =>
-                    handleOptionsClick(
-                      e,
-                      `${window.location.origin}/detail/${item.walkingTrailId}`
-                    )
-                  }
-                />
-              )}
-              <CopyModal
-                show={showModal}
-                onClose={() => setShowModal(false)}
-                url={modalUrl}
+                <Rating>
+                  <Star src={StarIcon} alt="star" />
+                  <RatingText>
+                    {item.rating ? formatRating(String(item.rating)) : '0,0'}
+                  </RatingText>
+                </Rating>
+              </Row>
+            </ItemContent>
+            {isTrashIcon ? (
+              <SelectCircle
+                src={
+                  selectedItems.includes(item.walkingTrailId)
+                    ? SelectedCircleIcon
+                    : SelectCircleIcon
+                }
+                alt="select circle"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleSelectItem(item.walkingTrailId);
+                }}
               />
-            </>
-          )}
-        </ListItem>
-      ))}
+            ) : (
+              <>
+                {activeSubTab === '찜한 산책로' ? (
+                  <LinkCopyButton
+                    src={HeartIcon}
+                    alt="Heart Icon"
+                    onClick={(e) =>
+                      handleOptionsClick(
+                        e,
+                        `${window.location.origin}/detail/${item.walkingTrailId}`
+                      )
+                    }
+                  />
+                ) : (
+                  <LinkCopyButton
+                    src={LinkCopyIcon}
+                    alt="Copy Link"
+                    onClick={(e) =>
+                      handleOptionsClick(
+                        e,
+                        `${window.location.origin}/detail/${item.walkingTrailId}`
+                      )
+                    }
+                  />
+                )}
+                <CopyModal
+                  show={showModal}
+                  onClose={() => setShowModal(false)}
+                  url={modalUrl}
+                />
+              </>
+            )}
+          </ListItem>
+        ))}
     </WalkListContainer>
   );
 }
