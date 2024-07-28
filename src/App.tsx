@@ -20,9 +20,10 @@ import SignupPage from './pages/SignUpPage';
 import SignupMember from './pages/SignUpMember';
 import SignUpFinal from './components/SignUp/common/SignUpFinal';
 import SignupSocial from './pages/SignUpSocial';
-import MyBoardPage from './pages/MyBoardPage';
+
 import EditUser from './pages/EditUser';
 import EditPet from './pages/EditPet';
+import MyBoardPage from './pages/MyBoardPage';
 
 function App() {
   return (
@@ -121,17 +122,6 @@ function App() {
               </BaseLayout>
             }
           />
-
-          {/* <Route
-            path="/login"
-            element={
-              <BaseLayout>
-                <LoginMain />
-                <Footer />
-              </BaseLayout>
-            }
-          /> */}
-
           <Route
             path="/login"
             element={

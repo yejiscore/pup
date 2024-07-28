@@ -192,7 +192,7 @@ function WalkList({ data, activeSubTab }: WalkListProps) {
           <ListItem
             key={item.walkingTrailUid}
             isTrashIcon={isTrashIcon}
-            onClick={() => handleItemClick(item.walkingTrailId)}
+            // onClick={() => handleItemClick(item.walkingTrailId)}
           >
             <ItemImage src={ListImage} alt="list item" />
             <ItemContent>

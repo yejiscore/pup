@@ -7,8 +7,6 @@ import SubTab from './SubTab';
 import FilterTab from './FilterTab';
 import Container from '../common/Container';
 import Calendar from '../Calendar/components/Calendar';
-import useFetch from '../../hooks/useFetch';
-import FriendList from './FriendList';
 import { useAppContext } from '../../context/AppContext';
 import MyInfo from '../../pages/MyInfo';
 
@@ -61,7 +59,7 @@ interface TabProps {
 
 function Tab({ activeTab, setActiveTab }: TabProps) {
   const [activeSubTab, setActiveSubTab] = useState('내 산책로');
-  // const { myData, likeData, showCalendar } = useAppContext();
+  const { myData, likeData, showCalendar } = useAppContext();
 
   return (
     <>
@@ -85,7 +83,7 @@ function Tab({ activeTab, setActiveTab }: TabProps) {
           내정보
         </Button> */}
       </TabContainer>
-      {/* {activeTab === '산책로' && (
+      {activeTab === '산책로' && (
         <>
           <SubTab
             activeSubTab={activeSubTab}
@@ -106,13 +104,7 @@ function Tab({ activeTab, setActiveTab }: TabProps) {
             </Container>
           )}
         </>
-      )} */}
-      {activeTab === '친구' && (
-        <Container>
-          <FriendList />
-        </Container>
       )}
-      {activeTab === '내정보' && <div>내정보 내용</div>}
       {/* {activeTab === '친구' && <div>친구 내용</div>}
       {activeTab === '내정보' && (
         <InfoContainer>

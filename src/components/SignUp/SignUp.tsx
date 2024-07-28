@@ -7,7 +7,7 @@ import BaseBox from '../../styles/common/BaseBox';
 import uncheckedBox from '../../assets/login/uncheckbox.png';
 import checkedBox from '../../assets/login/checkedbox.png';
 import errorBox from '../../assets/login/errcheckbox.png';
-import rightIcon from '../../assets/right.png';
+import rightIcon from '../../assets/Right.png';
 import Terms from './Terms/Terms';
 import useMutate from '../../hooks/useMutate';
 

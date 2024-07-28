@@ -2,8 +2,8 @@
 // src/components/calendar/CalendarHeader.tsx
 import React from 'react';
 import styled from 'styled-components';
-import LeftArrowIcon from '../../../assets/left.png';
-import RightArrowIcon from '../../../assets/right.png';
+import LeftArrowIcon from '../../../assets/Left.png';
+import RightArrowIcon from '../../../assets/Right.png';
 import { useCalendarContext } from './useCalendarContext';
 
 const Container = styled.div`

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import MeatballsIcon from '../../assets/meatball.png';
 import TrashIcon from '../../assets/trash.png';
-import BackIcon from '../../assets/left.png';
+import BackIcon from '../../assets/Left.png';
 import { useAppContext } from '../../context/AppContext';
 import DeleteModal from '../Modal/DeleteModal';
 import { DataItem } from '../../types/DataItem';
