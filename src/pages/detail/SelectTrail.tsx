@@ -291,7 +291,7 @@ const SelectTrail = () => {
     `/walking-trail/${id}`,
     {}
   );
-  console.log('trailData', trailData);
+
   const [mainImage, setMainImage] = useState<string>('');
   const [isUserLiked, setIsUserLiked] = useState(false);
   useEffect(() => {

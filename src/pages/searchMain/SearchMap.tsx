@@ -211,6 +211,13 @@ const SearchMap = () => {
           zoomControl: false, // 확대 축소 컨트롤 제거
         });
 
+        // HTTPS로 타일 URL 변경
+        newMap.setOptions({
+          mapTypeId: 'HYBRID', // 예시로 하이브리드 타입 사용
+          tileUrl:
+            'https://topopentile1.tmap.co.kr/tms/1.0.0/hd_tile/{z}/{x}/{y}.png?version=20220406',
+        });
+
         setMap(newMap);
         isMapInitialized.current = true; // 맵이 초기화되었음을 표시
       };

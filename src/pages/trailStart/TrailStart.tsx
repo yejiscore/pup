@@ -166,6 +166,13 @@ const TrailStart = () => {
           zoom: 15,
           zoomControl: false,
         });
+
+        tmap.setOptions({
+          mapTypeId: 'HYBRID', // 예시로 하이브리드 타입 사용
+          tileUrl:
+            'https://topopentile1.tmap.co.kr/tms/1.0.0/hd_tile/{z}/{x}/{y}.png?version=20220406',
+        });
+
         setMap(tmap);
       };
       initMap();

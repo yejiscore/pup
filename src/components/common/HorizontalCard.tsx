@@ -148,15 +148,15 @@ const HorizontalCard = ({ data }: { data: IUserTrailLists }) => {
     setLinkShare({ isLinkShare: true, shareUrl: url });
   };
 
-  const onClickPage = (id: string, item: any) => {
-    selectTrail({
-      selectId: id,
-      name: data.name,
-      lat: item.length > 0 ? item[0].lat : 37.4971,
-      lng: item.length > 0 ? item[0].lng : 127.0276,
-    });
-    navigate('/search/map');
-  };
+  // const onClickPage = (id: string, item: any) => {
+  //   selectTrail({
+  //     selectId: id,
+  //     name: data.name,
+  //     lat: item.length > 0 ? item[0].lat : 37.4971,
+  //     lng: item.length > 0 ? item[0].lng : 127.0276,
+  //   });
+  //   navigate('/search/map');
+  // };
 
   const [mainImage, setMainImage] = useState(data.mainImage ?? '');
   const handeleError = () => {
@@ -208,10 +208,10 @@ const HorizontalCard = ({ data }: { data: IUserTrailLists }) => {
           )
         }
       />
-      <GoPageImg
+      {/* <GoPageImg
         src={arrowCircleIcon}
         onClick={() => onClickPage(data.walkingTrailUid, data.itemList)}
-      />
+      /> */}
     </Card>
   );
 };

@@ -9,6 +9,7 @@ const searchDataState = atom({
     limit: 10,
     total: 0,
     data: [],
+    isRefresh: false,
   },
 });
 

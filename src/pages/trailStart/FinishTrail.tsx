@@ -70,70 +70,10 @@ const Star = styled.img`
   padding-bottom: 16px;
 `;
 
-const dummyData = {
-  code: 200,
-  status: 'OK',
-  data: {
-    walkingTrailId: 4,
-    mainImage: null,
-    name: '즐거운 산책로',
-    description: '재밌는 산책로',
-    walkingTrailUid: '93e1ce84-4e96-468b-b21e-7622f9cc0e42',
-    time: 0,
-    distance: 20,
-    openRange: null,
-    createdDate: '2024-07-18T00:40:02.808216',
-    rating: 2,
-    userId: 4,
-    reviewCount: 2,
-    likeCount: 0,
-    isLike: false,
-    itemList: [
-      {
-        walkingTrailItemId: 3,
-        lat: 37.5665,
-        lng: 126.978,
-      },
-      {
-        walkingTrailItemId: 4,
-        lat: 37.5675,
-        lng: 126.979,
-      },
-      {
-        walkingTrailItemId: 5,
-        lat: 37.5685,
-        lng: 126.98,
-      },
-      {
-        walkingTrailItemId: 6,
-        lat: 37.5695,
-        lng: 126.981,
-      },
-      {
-        walkingTrailItemId: 7,
-        lat: 37.5705,
-        lng: 126.982,
-      },
-      {
-        walkingTrailItemId: 8,
-        lat: 37.5715,
-        lng: 126.983,
-      },
-      {
-        walkingTrailItemId: 9,
-        lat: 37.5725,
-        lng: 126.984,
-      },
-    ],
-    imageList: [WalkingReportThumbnail],
-  },
-  message: '산책로를 조회합니다.',
-};
-
 const settings = {
   dots: false,
   speed: 500,
-  slidesToShow: dummyData.data.imageList.length,
+  slidesToShow: 4,
   slidesToScroll: 1,
   infinite: false,
 };
@@ -195,13 +135,15 @@ const FinishTrail = () => {
         <ComBoxOne>
           <div className="firstBox">
             <Head4>이름</Head4>
-            <Input
-              type="text"
-              value={dummyData.data.name ?? ''}
-              disabled
-              $isEditing={false}
-              maxLength={13}
-            />
+            {trailData && (
+              <Input
+                type="text"
+                value={trailData.data.name ?? ''}
+                disabled
+                $isEditing={false}
+                maxLength={13}
+              />
+            )}
           </div>
         </ComBoxOne>
 
@@ -212,7 +154,9 @@ const FinishTrail = () => {
           </TimeDistance>
           <TimeDistance>
             <Head4>거리</Head4>
-            <Body3>{formatDistance(dummyData.data.distance)}</Body3>
+            <Body3>
+              {trailData ? formatDistance(trailData.data.distance) : '00.00km'}
+            </Body3>
           </TimeDistance>
         </ComBoxOne>
 
@@ -223,11 +167,15 @@ const FinishTrail = () => {
             </div>
             <ImageContainer>
               <Slider {...settings}>
-                {dummyData.data.imageList.map((photo: any, index: number) => (
-                  <ImageWrapper key={index}>
-                    <ImageBox src={photo} alt={`Walking Photo ${index + 1}`} />
-                  </ImageWrapper>
-                ))}
+                {trailData &&
+                  trailData.data.imageList.map((photo: any, index: number) => (
+                    <ImageWrapper key={index}>
+                      <ImageBox
+                        src={photo}
+                        alt={`Walking Photo ${index + 1}`}
+                      />
+                    </ImageWrapper>
+                  ))}
               </Slider>
             </ImageContainer>
           </MarginBox>
@@ -241,7 +189,7 @@ const FinishTrail = () => {
 
             <MemoTextArea
               placeholder="메모를 작성해주세요"
-              value={dummyData.data.description ?? ''}
+              value={(trailData && trailData.data.description) ?? ''}
               disabled
               maxLength={500}
             />

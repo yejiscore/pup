@@ -70,7 +70,7 @@ const WalkingReportHeader = () => {
   }, []);
 
   const onClickClose = () => {
-    navigator('/walkingReport');
+    navigator('/');
   };
   return (
     <Wrapper>

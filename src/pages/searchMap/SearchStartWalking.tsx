@@ -173,6 +173,13 @@ const SearchStartWalking = () => {
           zoom: 15,
           zoomControl: false, // 줌 컨트롤 버튼 삭제
         });
+        // HTTPS로 타일 URL 변경
+        tmap.setOptions({
+          mapTypeId: 'HYBRID', // 예시로 하이브리드 타입 사용
+          tileUrl:
+            'https://topopentile1.tmap.co.kr/tms/1.0.0/hd_tile/{z}/{x}/{y}.png?version=20220406',
+        });
+
         setMap(tmap);
       };
       initMap();
@@ -259,6 +266,12 @@ const SearchStartWalking = () => {
       });
       setMarker(newMarker);
       map.setCenter(new Tmapv2.LatLng(userLocation.lat, userLocation.lng));
+
+      map.setOptions({
+        mapTypeId: 'HYBRID', // 예시로 하이브리드 타입 사용
+        tileUrl:
+          'https://topopentile1.tmap.co.kr/tms/1.0.0/hd_tile/{z}/{x}/{y}.png?version=20220406',
+      });
 
       // 목적지까지의 거리 계산
       const distance = calculateDistance(

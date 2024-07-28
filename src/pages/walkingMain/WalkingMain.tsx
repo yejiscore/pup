@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect, ChangeEvent } from 'react';
 
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
+import Resizer from 'react-image-file-resizer';
+import EXIF from 'exif-js';
 import BaseBox from '../../styles/common/BaseBox';
 import Tmap, { TmapHandles } from '../../components/map/Tmap';
 import DogSelectModal from '../../components/walkingMain/DogSelectModal';
@@ -362,24 +364,66 @@ const WalkingMain = () => {
     }
   };
 
+  // 파일 URI를 File 객체로 변환하는 함수
+  const uriToFile = (uri: string, fileName: string, mimeType: string): File => {
+    const bstr = atob(uri.split(',')[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], fileName, { type: mimeType });
+  };
+
+  const resizeAndRemoveExif = (
+    file: any,
+    callback: (resizedFile: File) => void
+  ) => {
+    EXIF.getData(file, function (this: any) {
+      EXIF.getAllTags(this);
+    });
+
+    Resizer.imageFileResizer(
+      file,
+      800,
+      800,
+      'JPEG',
+      70,
+      0,
+      (uri: string | File | Blob | ProgressEvent<FileReader>) => {
+        if (typeof uri === 'string') {
+          const resizedFile = uriToFile(uri, file.name, file.type);
+          callback(resizedFile);
+        }
+      },
+      'base64'
+    );
+  };
+
   // 수정된 handleFileChange 함수
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setUploadData((prevData) => ({
-        ...prevData,
-        walkingPhotos: [...prevData.walkingPhotos, file],
-      }));
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (reader.result) {
-          setSelectedImage((prevData: any) => [
-            ...prevData,
-            reader.result as string,
-          ]);
-        }
-      };
-      reader.readAsDataURL(file);
+      // setUploadData((prevData) => ({
+      //   ...prevData,
+      //   walkingPhotos: [...prevData.walkingPhotos, file],
+      // }));
+      resizeAndRemoveExif(file, (resizedFile) => {
+        setUploadData((prevData) => ({
+          ...prevData,
+          walkingPhotos: [...prevData.walkingPhotos, resizedFile],
+        }));
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          if (reader.result) {
+            setSelectedImage((prevData: any) => [
+              ...prevData,
+              reader.result as string,
+            ]);
+          }
+        };
+        reader.readAsDataURL(file);
+      });
     }
   };
 

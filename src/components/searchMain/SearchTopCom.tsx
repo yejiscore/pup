@@ -1,11 +1,13 @@
 /* eslint-disable react/jsx-curly-newline */
-import React from 'react';
+import React, { useEffect } from 'react';
 import Slider from 'react-slick';
+import { useRecoilState } from 'recoil';
 import { Body1, TopCom } from '../../styles/WalkintSreachStyle/SearchTopCom';
 
 import useFetch from '../../hooks/useFetch';
 import { ResIUserTrailLists } from '../../types/getUserTrailListsType';
 import VerticalCard from '../common/VerticalCard';
+import searchDataState from '../../stores/searchDataState';
 
 const settings = {
   dots: false,
@@ -17,9 +19,10 @@ const settings = {
 };
 
 const SearchTopCom = () => {
+  const [searchData, setSearchData] = useRecoilState(searchDataState);
   const name = '';
   const type = 'RECENT';
-  const { data: trailData } = useFetch<ResIUserTrailLists>(
+  const { data: trailData, refetch } = useFetch<ResIUserTrailLists>(
     `[trailData/search/${name}${type}]`,
     '/walking-trail/search',
     {
@@ -27,6 +30,16 @@ const SearchTopCom = () => {
       type,
     }
   );
+
+  useEffect(() => {
+    if (searchData.isRefresh) {
+      refetch();
+      setSearchData((prevData) => ({
+        ...prevData,
+        isRefresh: false,
+      }));
+    }
+  }, [searchData.isRefresh, refetch]);
 
   return (
     <TopCom>

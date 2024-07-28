@@ -8,6 +8,7 @@ import { v4 } from 'uuid';
 import Slider from 'react-slick';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
 import BaseBox from '../../styles/common/BaseBox';
 import WalkingReportHeader from '../../components/walkingReport/WalkingReportHeader';
 import WalkingReportThumbnail from '../../assets/walkingReport/walkingReportThumbnail.png';
@@ -44,11 +45,14 @@ import uploadDataState from '../../stores/uploadDataState';
 import { formatDistance, formatTime } from '../../utils/formatTime';
 import useMutate from '../../hooks/useMutate';
 import selectedImageState from '../../stores/selectedImageState';
+import searchDataState from '../../stores/searchDataState';
 
 const WalkingReport = () => {
   const navigate = useNavigate();
   const [uploadData, setUploadData] = useRecoilState(uploadDataState);
   const [selectedImage, setSelectedImage] = useRecoilState(selectedImageState);
+  const [searchData, setSearchData] = useRecoilState(searchDataState);
+
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState('작성해 주세요');
   const [time, setTime] = useState(uploadData.walkingTime || 11);
@@ -101,36 +105,11 @@ const WalkingReport = () => {
   const handleRegister = async () => {
     console.log('uploadData:', uploadData);
     try {
-      // const s3 = new AWS.S3({
-      //   accessKeyId: process.env.REACT_APP_MINIO_ACCESS_KEY,
-      //   secretAccessKey: process.env.REACT_APP_MINIO_SECRET_KEY,
-      //   endpoint: process.env.REACT_APP_MINIO_ENDPOINT,
-      //   s3ForcePathStyle: true,
-      //   signatureVersion: 'v4',
-      // });
-
       const uploadedPhotoUrls: string[] = [];
-
-      // for (let i = 0; i < uploadData.walkingPhotos.length; i++) {
-      //   const file = uploadData.walkingPhotos[i];
-
-      //   const params = {
-      //     Bucket: process.env.REACT_APP_MINIO_BUCKET_NAME || '',
-      //     Key: file.name,
-      //     Body: file,
-      //   };
-
-      //   try {
-      //     const uploadResult = await s3.upload(params).promise();
-      //     uploadedPhotoUrls.push(uploadResult.Location);
-      //   } catch (uploadError) {
-      //     console.error(`Error uploading file ${file.name}:`, uploadError);
-      //   }
-      // }
 
       for (let i = 0; i < uploadData.walkingPhotos.length; i++) {
         const file = uploadData.walkingPhotos[i];
-
+        console.log('file:', file);
         const formData = new FormData();
         formData.append('file', file);
 
@@ -148,12 +127,12 @@ const WalkingReport = () => {
           if (response.data && response.data.data.url) {
             uploadedPhotoUrls.push(response.data.data.url);
           } else {
-            // console.error(
-            //   `Error uploading file ${file.name}: No URL in response`
-            // );
+            console.error(
+              `Error uploading file ${file.name}: No URL in response`
+            );
           }
         } catch (uploadError) {
-          // console.error(`Error uploading file ${file.name}:`, uploadError);
+          console.error(`Error uploading file ${file.name}:`, uploadError);
         }
       }
       // console.log('uploadedPhotoUrls:', uploadedPhotoUrls);
@@ -194,6 +173,10 @@ const WalkingReport = () => {
         { ...dataToSend },
         {
           onSuccess: () => {
+            setSearchData((prevData) => ({
+              ...prevData,
+              isRefresh: true,
+            }));
             navigate('/');
           },
           // onError: (error) => {

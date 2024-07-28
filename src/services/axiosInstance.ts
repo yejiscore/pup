@@ -37,11 +37,12 @@ const refreshAccessToken = async () => {
         refreshToken: getCookie('pup_refresh'),
       }
     );
-
+    console.log('response', response);
     const { accessToken } = response.data;
     setCookie('pup_access', accessToken); // 새로운 액세스 토큰 저장
     return accessToken;
   } catch (error) {
+    console.log('a', error);
     removeCookie('pup_access');
     removeCookie('pup_refresh');
     window.location.href = '/login'; // 로그인 페이지로 리다이렉트
@@ -54,6 +55,7 @@ APIInstance.interceptors.response.use(
   async (error) => {
     console.log('error', error);
     const originalRequest = error.config;
+    console.log('originalRequest', originalRequest);
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       const newAccessToken = await refreshAccessToken();
