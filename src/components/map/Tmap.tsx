@@ -47,13 +47,18 @@ const Tmap = forwardRef<TmapHandles>((props, ref) => {
         zoomControl: false, // 줌 컨트롤 버튼 삭제
       });
       // HTTPS로 타일 URL 변경
-      map.setOptions({
-        mapTypeId: 'HYBRID', // 예시로 하이브리드 타입 사용
-        tileUrl:
-          'https://topopentile1.tmap.co.kr/tms/1.0.0/hd_tile/{z}/{x}/{y}.png?version=20220406',
-      });
-
       mapInstanceRef.current = map;
+      // 모든 타일 URL을 HTTPS로 변경
+      mapInstanceRef.current.setOptions({
+        tileUrl: {
+          basic:
+            'https://topopentile2.tmap.co.kr/tms/1.0.0/basic/{z}/{x}/{y}.png',
+          satellite:
+            'https://topopentile2.tmap.co.kr/tms/1.0.0/satellite/{z}/{x}/{y}.png',
+          hybrid:
+            'https://topopentile2.tmap.co.kr/tms/1.0.0/hybrid/{z}/{x}/{y}.png',
+        },
+      });
     }
   }, []);
 

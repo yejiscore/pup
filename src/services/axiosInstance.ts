@@ -13,13 +13,19 @@ const APIInstance = axios.create({
   },
 });
 
-//  초기 로그인 시 사용
 APIInstance.interceptors.request.use(
   (config) => {
     const token = getCookie('pup_access');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    // 모든 HTTP 요청을 HTTPS로 변경
+    console.log('aaa', config.url);
+    if (config.url && config.url.startsWith('http://')) {
+      config.url = config.url.replace('http://', 'https://');
+    }
+
     return config;
   },
   (error) => Promise.reject(error)
@@ -38,7 +44,7 @@ const refreshAccessToken = async () => {
       }
     );
 
-    const { accessToken } = response.data;
+    const { accessToken } = response.data.data;
     setCookie('pup_access', accessToken); // 새로운 액세스 토큰 저장
     return accessToken;
   } catch (error) {
@@ -53,10 +59,10 @@ APIInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       const newAccessToken = await refreshAccessToken();
+
       if (newAccessToken) {
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return APIInstance(originalRequest);
