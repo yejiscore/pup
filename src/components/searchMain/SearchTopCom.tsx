@@ -32,6 +32,10 @@ const SearchTopCom = () => {
   );
 
   useEffect(() => {
+    refetch();
+  }, []);
+
+  useEffect(() => {
     if (searchData.isRefresh) {
       refetch();
       setSearchData((prevData) => ({

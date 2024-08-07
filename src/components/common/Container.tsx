@@ -3,13 +3,14 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   width: 100%;
-  height: calc(100% - 255px);
+  height: calc(100% - 220px);
   box-sizing: border-box;
   align-items: center;
   position: absolute;
-  top: 196px;
+  top: 156px;
   overflow-y: auto;
   overflow-y: scroll;
+
   &::-webkit-scrollbar {
     display: none;
   }

@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 
 import styled from 'styled-components';
 import SharePopup from '../components/Modal/CopyIsModal';
+import mainPng from '../assets/main.jpg';
 
 const BaseLayoutStyled = styled.div`
   background-color: ${(props) => props.theme.colors.background};
@@ -13,6 +14,8 @@ const BaseLayoutStyled = styled.div`
   align-items: center;
   overflow-y: auto; // 전체 레이아웃에 스크롤 적용
   overflow-x: hidden; // 가로 스크롤 방지
+  background-image: url(${mainPng});
+  /* background-color: red; */
 `;
 
 const Main = styled.main`

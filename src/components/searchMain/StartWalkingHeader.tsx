@@ -12,6 +12,7 @@ const Container = styled.div`
   height: 49px;
   position: relative;
   background-color: ${(props) => props.theme.colors.white};
+  /* margin-bottom: 25px; */
 `;
 
 const Title = styled.div`
@@ -19,6 +20,7 @@ const Title = styled.div`
   font-weight: 400;
   line-height: 22px;
   text-align: center;
+  margin: 20px;
 `;
 
 const IconButton = styled.img`

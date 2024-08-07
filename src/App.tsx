@@ -23,7 +23,10 @@ import SignupSocial from './pages/SignUpSocial';
 
 import EditUser from './pages/EditUser';
 import EditPet from './pages/EditPet';
-import MyBoardPage from './pages/MyBoardPage';
+import MyBoardPage from './pages/MyBoardPage/MyBoardPage';
+import ProfileEditPage from './pages/MyBoardPage/ProfileEditPage';
+import ProfileDogEditPage from './pages/MyBoardPage/ProfileDogEditPage';
+import ProtectedRoute from './layouts/ProtectedRoute';
 
 function App() {
   return (
@@ -35,17 +38,33 @@ function App() {
           <Route
             path="/"
             element={
-              <BaseLayout>
-                <MyBoardPage />
-              </BaseLayout>
+              <ProtectedRoute>
+                <BaseLayout>
+                  <MyBoardPage />
+                </BaseLayout>
+              </ProtectedRoute>
             }
           />
+
           <Route
-            path="/detail/:id"
+            path="/profile/user/edit"
             element={
-              <BaseLayout>
-                <DetailPage />
-              </BaseLayout>
+              <ProtectedRoute>
+                <BaseLayout>
+                  <ProfileEditPage />
+                </BaseLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/profile/dog/edit"
+            element={
+              <ProtectedRoute>
+                <BaseLayout>
+                  <ProfileDogEditPage />
+                </BaseLayout>
+              </ProtectedRoute>
             }
           />
 
@@ -53,17 +72,21 @@ function App() {
           <Route
             path="/walking_main"
             element={
-              <BaseLayout>
-                <WalkingMain />
-              </BaseLayout>
+              <ProtectedRoute>
+                <BaseLayout>
+                  <WalkingMain />
+                </BaseLayout>
+              </ProtectedRoute>
             }
           />
           <Route
             path="/walking_main/report"
             element={
-              <BaseLayout>
-                <WalkingReport />
-              </BaseLayout>
+              <ProtectedRoute>
+                <BaseLayout>
+                  <WalkingReport />
+                </BaseLayout>
+              </ProtectedRoute>
             }
           />
 
@@ -71,17 +94,21 @@ function App() {
           <Route
             path="/search"
             element={
-              <BaseLayout>
-                <SearchMain />
-              </BaseLayout>
+              <ProtectedRoute>
+                <BaseLayout>
+                  <SearchMain />
+                </BaseLayout>
+              </ProtectedRoute>
             }
           />
           <Route
             path="/search/map"
             element={
-              <BaseLayout>
-                <SearchMap />
-              </BaseLayout>
+              <ProtectedRoute>
+                <BaseLayout>
+                  <SearchMap />
+                </BaseLayout>
+              </ProtectedRoute>
             }
           />
 
@@ -89,9 +116,11 @@ function App() {
           <Route
             path="/trail/start/:id"
             element={
-              <BaseLayout>
-                <SearchStartWalking />
-              </BaseLayout>
+              <ProtectedRoute>
+                <BaseLayout>
+                  <SearchStartWalking />
+                </BaseLayout>
+              </ProtectedRoute>
             }
           />
 
@@ -99,9 +128,11 @@ function App() {
           <Route
             path="/trail/select/:id"
             element={
-              <BaseLayout>
-                <SelectTrail />
-              </BaseLayout>
+              <ProtectedRoute>
+                <BaseLayout>
+                  <SelectTrail />
+                </BaseLayout>
+              </ProtectedRoute>
             }
           />
 
@@ -109,17 +140,21 @@ function App() {
           <Route
             path="/trail/startTrail/:id"
             element={
-              <BaseLayout>
-                <TrailStart />
-              </BaseLayout>
+              <ProtectedRoute>
+                <BaseLayout>
+                  <TrailStart />
+                </BaseLayout>
+              </ProtectedRoute>
             }
           />
           <Route
             path="/trail/finish/:id"
             element={
-              <BaseLayout>
-                <FinishTrail />
-              </BaseLayout>
+              <ProtectedRoute>
+                <BaseLayout>
+                  <FinishTrail />
+                </BaseLayout>
+              </ProtectedRoute>
             }
           />
           <Route
