@@ -48,26 +48,14 @@ const SocialIcon = styled.img`
 `;
 
 interface SocialLoginButtonsProps {
-  handleKakaoLogin: () => void;
-  handleNaverLogin: () => void;
   handleGoogleLogin: () => void;
 }
 
 const SocialLoginButtons: React.FC<SocialLoginButtonsProps> = ({
-  handleKakaoLogin,
-  handleNaverLogin,
   handleGoogleLogin,
 }) => {
   return (
     <SocialButtonContainer>
-      <KakaoButton type="button" onClick={handleKakaoLogin}>
-        <SocialIcon src={kakaoLogo} alt="Kakao" />
-        카카오 로그인
-      </KakaoButton>
-      <NaverButton type="button" onClick={handleNaverLogin}>
-        <SocialIcon src={naverLogo} alt="Naver" />
-        네이버 로그인
-      </NaverButton>
       <GoogleButton type="button" onClick={handleGoogleLogin}>
         <SocialIcon src={googleLogo} alt="Google" />
         Sign up with Google

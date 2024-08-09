@@ -11,6 +11,7 @@ import KAKAO_JS_KEY from '../../config/kakaoConfig';
 import useMutate from '../../hooks/useMutate';
 import { setCookie } from '../../utils/cookiesUtils';
 import { authState } from '../../stores/auth/authState';
+import firebaseLogin from '../../utils/firebase-auth';
 
 type FormValues = {
   email: string;
@@ -129,6 +130,16 @@ const LoginForm: FC = () => {
   } = useForm<FormValues>();
 
   const { mutate: loginMutate } = useMutate('/login', '/auth/login', 'post');
+  const { mutate: socialLoginMutate } = useMutate(
+    '/social/login',
+    '/auth/social/login',
+    'post'
+  );
+  const { mutate: socialRegisterMutate } = useMutate(
+    '/social',
+    '/auth/social',
+    'post'
+  );
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const isValid = await trigger();
@@ -166,46 +177,85 @@ const LoginForm: FC = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (window.Kakao) {
-  //     if (!window.Kakao.isInitialized()) {
-  //       window.Kakao.init(KAKAO_JS_KEY);
-  //     }
-  //   } else {
-  //     console.error('Kakao SDK not loaded.');
-  //   }
-  // }, []);
+  const socialRegister = async (user: {
+    email: string;
+    socialToken: string;
+    userSocialTypeEnum: 'GOOGLE';
+  }) => {
+    socialRegisterMutate(user, {
+      onSuccess: ({ data }) => {
+        setAuthState({
+          userId: data.userId,
+          email: data.email,
+          nickname: data.nickname,
+          userUid: data.userUid,
+          token: {
+            accessToken: data.token.accessToken,
+            refreshToken: data.token.refreshToken,
+          },
+        });
+        setCookie('pup_access', data.token.accessToken, {
+          path: '/',
+          expires: new Date(new Date().getTime() + 30 * 60 * 1000), // 30분
+        });
+        setCookie('pup_refresh', data.token.refreshToken, {
+          path: '/',
+          expires: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // 7일
+        });
 
-  // const handleKakaoLogin = () => {
-  //   if (window.Kakao) {
-  //     window.Kakao.Auth.login({
-  //       success: (authObj) => {
-  //         console.log('카카오 로그인 성공:', authObj);
-  //         navigate('/signup_social');
-  //       },
-  //       fail: (err) => {
-  //         console.error('카카오 로그인 실패:', err);
-  //       },
-  //     });
-  //   } else {
-  //     console.error('Kakao SDK not loaded.');
-  //   }
-  // };
+        navigate('/');
+      },
+      onError: (error) => {
+        setIsError(true);
+      },
+    });
+  };
 
-  // const handleKakaoLogin = () => {
-  //   console.log('카카오 로그인 성공');
-  //   navigate('/signup_social');
-  // };
+  const socialLogin = async () => {
+    const googleUser = await firebaseLogin();
 
-  // const handleGoogleLogin = () => {
-  //   console.log('구글 로그인 성공');
-  //   navigate('/signup_social');
-  // };
+    socialLoginMutate(
+      {
+        token: googleUser.uid,
+        socialTypeEnum: 'GOOGLE',
+      },
+      {
+        onSuccess: ({ data }) => {
+          setAuthState({
+            userId: data.userId,
+            email: data.email,
+            nickname: data.nickname,
+            userUid: data.userUid,
+            token: {
+              accessToken: data.token.accessToken,
+              refreshToken: data.token.refreshToken,
+            },
+          });
+          setCookie('pup_access', data.token.accessToken, {
+            path: '/',
+            expires: new Date(new Date().getTime() + 30 * 60 * 1000), // 30분
+          });
+          setCookie('pup_refresh', data.token.refreshToken, {
+            path: '/',
+            expires: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000), // 7일
+          });
 
-  // const handleNaverLogin = () => {
-  //   console.log('네이버 로그인 성공');
-  //   navigate('/signup_social');
-  // };
+          navigate('/');
+        },
+        onError: (error: any) => {
+          if (error?.response?.data?.code === 404) {
+            socialRegister({
+              email: googleUser.email || '',
+              socialToken: googleUser.uid,
+              userSocialTypeEnum: 'GOOGLE',
+            });
+          }
+
+          setIsError(true);
+        },
+      }
+    );
+  };
 
   return (
     <BaseBox>
@@ -257,11 +307,7 @@ const LoginForm: FC = () => {
         <Text>
           <div>또는</div>
         </Text>
-        {/* <SocialLoginButtons
-          handleKakaoLogin={handleKakaoLogin}
-          handleGoogleLogin={handleGoogleLogin}
-          handleNaverLogin={handleNaverLogin}
-        /> */}
+        <SocialLoginButtons handleGoogleLogin={socialLogin} />
         <SignupLinkContainer>
           <SignupLink to="/signup">회원가입</SignupLink>
         </SignupLinkContainer>

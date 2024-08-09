@@ -3,15 +3,9 @@ import { auth } from '../../config/firebaseConfig';
 
 const firebaseLogin = async () => {
   const googleProvider = new GoogleAuthProvider();
-  const {
-    user: {
-      email: googleEmail,
-      displayName: googleDisplayName,
-      uid: googleUid,
-    },
-  } = await signInWithPopup(auth, googleProvider);
+  const { user } = await signInWithPopup(auth, googleProvider);
 
-  return googleUid;
+  return user;
 };
 
 export default firebaseLogin;
