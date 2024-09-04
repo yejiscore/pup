@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
+=======
+import React, { useEffect, useState } from 'react';
+>>>>>>> feature/develop
 import styled from 'styled-components';
 import Slider from 'react-slick';
 import { BaseBody1, BaseText3 } from '../../styles/common/textStyle';
@@ -58,14 +62,26 @@ const SearchBottomCom = () => {
 
   const { data: userData } = useFetch<UserDataType>('userData', 'user', {});
 
+<<<<<<< HEAD
   const { data: trailData } = useFetch<ResIUserTrailLists>(
+=======
+  const { data: trailData, refetch } = useFetch<ResIUserTrailLists>(
+>>>>>>> feature/develop
     `[trailData/review/${userData?.data.userId}]`,
     '/walking-trail/review',
     {
       userId: userData?.data.userId,
     }
   );
+<<<<<<< HEAD
   console.log(trailData);
+=======
+
+  useEffect(() => {
+    refetch();
+  }, []);
+
+>>>>>>> feature/develop
   return (
     <Wrapper>
       <Box>

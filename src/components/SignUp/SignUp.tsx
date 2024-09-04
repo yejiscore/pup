@@ -184,7 +184,12 @@ const SignupForm: FC = () => {
               navigate('/login');
             },
             onError: (error) => {
+<<<<<<< HEAD
               console.log('error', error);
+=======
+              alert('회원가입에 실패했습니다.');
+              // console.log('error', error);
+>>>>>>> feature/develop
             },
           }
         );

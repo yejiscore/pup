@@ -20,8 +20,11 @@ APIInstance.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
+<<<<<<< HEAD
     // 모든 HTTP 요청을 HTTPS로 변경
     console.log('aaa', config.url);
+=======
+>>>>>>> feature/develop
     if (config.url && config.url.startsWith('http://')) {
       config.url = config.url.replace('http://', 'https://');
     }
@@ -31,9 +34,12 @@ APIInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+<<<<<<< HEAD
 // API -> 토큰 만료 -> 재발급 -> 쿠기, 해더에 다시 교체 -> 재요청
 // ! 리프레쉬 토큰
 
+=======
+>>>>>>> feature/develop
 // 리프레시 토큰을 사용하여 새로운 액세스 토큰을 요청하는 함수
 const refreshAccessToken = async () => {
   try {

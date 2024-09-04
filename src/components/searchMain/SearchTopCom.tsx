@@ -32,6 +32,13 @@ const SearchTopCom = () => {
   );
 
   useEffect(() => {
+<<<<<<< HEAD
+=======
+    refetch();
+  }, []);
+
+  useEffect(() => {
+>>>>>>> feature/develop
     if (searchData.isRefresh) {
       refetch();
       setSearchData((prevData) => ({

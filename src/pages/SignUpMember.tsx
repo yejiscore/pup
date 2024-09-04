@@ -839,7 +839,11 @@ const SignupMember: FC = () => {
   const handleComplete = async () => {
     try {
       // 반려견 정보 저장 처리
+<<<<<<< HEAD
       console.log('Starting pet details save process...');
+=======
+      // console.log('Starting pet details save process...');
+>>>>>>> feature/develop
       await Promise.all(
         petDetails.map(async (pet) => {
           const petResponse = await axios.post(
@@ -851,7 +855,11 @@ const SignupMember: FC = () => {
               petImage: pet.petImage,
             }
           );
+<<<<<<< HEAD
           console.log('Pet saved successfully:', petResponse.data);
+=======
+          // console.log('Pet saved successfully:', petResponse.data);
+>>>>>>> feature/develop
         })
       );
 

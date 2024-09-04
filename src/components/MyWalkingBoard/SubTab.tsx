@@ -16,6 +16,7 @@ const SubTabContainer = styled.div`
   top: 98px;
 `;
 
+<<<<<<< HEAD
 const SubTabButton = styled.button<{ 'data-active'?: string }>`
   border: none;
   cursor: pointer;
@@ -24,6 +25,16 @@ const SubTabButton = styled.button<{ 'data-active'?: string }>`
   height: 49px;
   color: ${(props) =>
     props['data-active'] === 'true' ? '#00AE80' : '#B7CAC4'};
+=======
+const SubTabButton = styled.button<{ '$data-active'?: string }>`
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  /* weight: 100px; */
+  height: 49px;
+  color: ${(props) =>
+    props['$data-active'] === 'true' ? '#00AE80' : '#B7CAC4'};
+>>>>>>> feature/develop
   background-color: transparent;
   display: flex;
   align-items: center;
@@ -56,13 +67,21 @@ function SubTab({ activeSubTab, setActiveSubTab }: SubTabProps) {
   return (
     <SubTabContainer>
       <SubTabButton
+<<<<<<< HEAD
         data-active={activeSubTab === '내 산책로' ? 'true' : 'false'}
+=======
+        $data-active={activeSubTab === '내 산책로' ? 'true' : 'false'}
+>>>>>>> feature/develop
         onClick={() => setActiveSubTab('내 산책로')}
       >
         내 산책로
       </SubTabButton>
       <SubTabButton
+<<<<<<< HEAD
         data-active={activeSubTab === '찜한 산책로' ? 'true' : 'false'}
+=======
+        $data-active={activeSubTab === '찜한 산책로' ? 'true' : 'false'}
+>>>>>>> feature/develop
         onClick={() => setActiveSubTab('찜한 산책로')}
       >
         찜한 산책로

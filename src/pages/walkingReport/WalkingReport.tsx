@@ -103,13 +103,19 @@ const WalkingReport = () => {
   );
 
   const handleRegister = async () => {
+<<<<<<< HEAD
     console.log('uploadData:', uploadData);
+=======
+>>>>>>> feature/develop
     try {
       const uploadedPhotoUrls: string[] = [];
 
       for (let i = 0; i < uploadData.walkingPhotos.length; i++) {
         const file = uploadData.walkingPhotos[i];
+<<<<<<< HEAD
         console.log('file:', file);
+=======
+>>>>>>> feature/develop
         const formData = new FormData();
         formData.append('file', file);
 

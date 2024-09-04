@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React from 'react';
+=======
+import React, { useState } from 'react';
+>>>>>>> feature/develop
 import styled from 'styled-components';
 import Slider from 'react-slick';
 
@@ -66,7 +70,11 @@ const DogWapper = styled.div`
   }
 `;
 
+<<<<<<< HEAD
 const DohImgWrapper = styled.div`
+=======
+const DogImgWrapper = styled.div<{ selected: boolean }>`
+>>>>>>> feature/develop
   margin-top: 21px;
 
   width: 85px;
@@ -76,6 +84,14 @@ const DohImgWrapper = styled.div`
   justify-content: center;
   align-items: center;
   margin: auto;
+<<<<<<< HEAD
+=======
+  cursor: pointer;
+  img {
+    border-radius: 50%;
+    border: ${({ selected }) => (selected ? '2px solid green' : 'none')};
+  }
+>>>>>>> feature/develop
 
   .dogName {
     font-size: 17px;
@@ -109,6 +125,18 @@ const DogSelectModal = ({
     onDogSelect(dogId);
   };
 
+<<<<<<< HEAD
+=======
+  const [imageError, setImageError] = useState<{ [key: number]: boolean }>({});
+
+  const handleImageError = (dogId: number) => {
+    setImageError((prevErrors) => ({
+      ...prevErrors,
+      [dogId]: true,
+    }));
+  };
+
+>>>>>>> feature/develop
   const settings = {
     dots: false,
     speed: 500,
@@ -118,6 +146,10 @@ const DogSelectModal = ({
   };
 
   if (!isOpen) return null;
+<<<<<<< HEAD
+=======
+
+>>>>>>> feature/develop
   return (
     <ModalContainer onClick={(e) => e.stopPropagation()}>
       <TitleWrapper>
@@ -129,6 +161,7 @@ const DogSelectModal = ({
         <DogWapper>
           <Slider {...settings}>
             {dogData &&
+<<<<<<< HEAD
               dogData.data.map((dog) => (
                 <DohImgWrapper
                   key={dog.dogId}
@@ -147,6 +180,38 @@ const DogSelectModal = ({
                   <p className="dogName">{dog.name}</p>
                 </DohImgWrapper>
               ))}
+=======
+              dogData.data.map((dog) => {
+                const isSelected = selectedDogs.includes(dog.dogId);
+                const showErrorImage = imageError[dog.dogId];
+                const imgSrc = showErrorImage
+                  ? isSelected
+                    ? dogPictureOn
+                    : dogPictureOff
+                  : dog.profile
+                    ? dog.profile
+                    : isSelected
+                      ? dogPictureOn
+                      : dogPictureOff;
+
+                return (
+                  <DogImgWrapper
+                    key={dog.dogId}
+                    selected={isSelected}
+                    onClick={() => handleDogClick(dog.dogId)}
+                  >
+                    <img
+                      src={imgSrc}
+                      alt={dog.name}
+                      width={85}
+                      height={85}
+                      onError={() => handleImageError(dog.dogId)}
+                    />
+                    <p className="dogName">{dog.name}</p>
+                  </DogImgWrapper>
+                );
+              })}
+>>>>>>> feature/develop
           </Slider>
         </DogWapper>
       )}

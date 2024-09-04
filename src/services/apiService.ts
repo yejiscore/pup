@@ -24,3 +24,23 @@ export const patchData = async (url: string, data?: any) => {
   const response = await APIInstance.patch(url, data);
   return response.data;
 };
+<<<<<<< HEAD
+=======
+
+export const newDeleteData = async (url: string, params?: any) => {
+  let queryParams = '';
+
+  if (params && Array.isArray(params.walkingTrailIdList)) {
+    queryParams = params.walkingTrailIdList
+      .map((id: number) => `walkingTrailIdList=${id}`)
+      .join('&');
+  } else if (params && typeof params === 'object') {
+    queryParams = `?${Object.entries(params)
+      .map(([key, value]) => `${key}=${value}`)
+      .join('&')}`;
+  }
+
+  const response = await APIInstance.delete(`${url}?${queryParams}`);
+  return response.data;
+};
+>>>>>>> feature/develop

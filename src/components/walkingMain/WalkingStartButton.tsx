@@ -60,7 +60,10 @@ const WalkingStartButton = ({
   );
 
   const handleReChagneDog = () => {
+<<<<<<< HEAD
     console.log('reChagneDog', uploadData);
+=======
+>>>>>>> feature/develop
     reChagneDog(
       {
         walkingTrailUid: uploadData.walkingTrailUid,

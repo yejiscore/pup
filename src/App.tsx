@@ -23,7 +23,14 @@ import SignupSocial from './pages/SignUpSocial';
 
 import EditUser from './pages/EditUser';
 import EditPet from './pages/EditPet';
+<<<<<<< HEAD
 import MyBoardPage from './pages/MyBoardPage';
+=======
+import MyBoardPage from './pages/MyBoardPage/MyBoardPage';
+import ProfileEditPage from './pages/MyBoardPage/ProfileEditPage';
+import ProfileDogEditPage from './pages/MyBoardPage/ProfileDogEditPage';
+import ProtectedRoute from './layouts/ProtectedRoute';
+>>>>>>> feature/develop
 
 function App() {
   return (
@@ -35,6 +42,7 @@ function App() {
           <Route
             path="/"
             element={
+<<<<<<< HEAD
               <BaseLayout>
                 <MyBoardPage />
               </BaseLayout>
@@ -46,6 +54,35 @@ function App() {
               <BaseLayout>
                 <DetailPage />
               </BaseLayout>
+=======
+              <ProtectedRoute>
+                <BaseLayout>
+                  <MyBoardPage />
+                </BaseLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/profile/user/edit"
+            element={
+              <ProtectedRoute>
+                <BaseLayout>
+                  <ProfileEditPage />
+                </BaseLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/profile/dog/edit"
+            element={
+              <ProtectedRoute>
+                <BaseLayout>
+                  <ProfileDogEditPage />
+                </BaseLayout>
+              </ProtectedRoute>
+>>>>>>> feature/develop
             }
           />
 
@@ -53,17 +90,33 @@ function App() {
           <Route
             path="/walking_main"
             element={
+<<<<<<< HEAD
               <BaseLayout>
                 <WalkingMain />
               </BaseLayout>
+=======
+              <ProtectedRoute>
+                <BaseLayout>
+                  <WalkingMain />
+                </BaseLayout>
+              </ProtectedRoute>
+>>>>>>> feature/develop
             }
           />
           <Route
             path="/walking_main/report"
             element={
+<<<<<<< HEAD
               <BaseLayout>
                 <WalkingReport />
               </BaseLayout>
+=======
+              <ProtectedRoute>
+                <BaseLayout>
+                  <WalkingReport />
+                </BaseLayout>
+              </ProtectedRoute>
+>>>>>>> feature/develop
             }
           />
 
@@ -71,17 +124,33 @@ function App() {
           <Route
             path="/search"
             element={
+<<<<<<< HEAD
               <BaseLayout>
                 <SearchMain />
               </BaseLayout>
+=======
+              <ProtectedRoute>
+                <BaseLayout>
+                  <SearchMain />
+                </BaseLayout>
+              </ProtectedRoute>
+>>>>>>> feature/develop
             }
           />
           <Route
             path="/search/map"
             element={
+<<<<<<< HEAD
               <BaseLayout>
                 <SearchMap />
               </BaseLayout>
+=======
+              <ProtectedRoute>
+                <BaseLayout>
+                  <SearchMap />
+                </BaseLayout>
+              </ProtectedRoute>
+>>>>>>> feature/develop
             }
           />
 
@@ -89,9 +158,17 @@ function App() {
           <Route
             path="/trail/start/:id"
             element={
+<<<<<<< HEAD
               <BaseLayout>
                 <SearchStartWalking />
               </BaseLayout>
+=======
+              <ProtectedRoute>
+                <BaseLayout>
+                  <SearchStartWalking />
+                </BaseLayout>
+              </ProtectedRoute>
+>>>>>>> feature/develop
             }
           />
 
@@ -99,9 +176,17 @@ function App() {
           <Route
             path="/trail/select/:id"
             element={
+<<<<<<< HEAD
               <BaseLayout>
                 <SelectTrail />
               </BaseLayout>
+=======
+              <ProtectedRoute>
+                <BaseLayout>
+                  <SelectTrail />
+                </BaseLayout>
+              </ProtectedRoute>
+>>>>>>> feature/develop
             }
           />
 
@@ -109,17 +194,33 @@ function App() {
           <Route
             path="/trail/startTrail/:id"
             element={
+<<<<<<< HEAD
               <BaseLayout>
                 <TrailStart />
               </BaseLayout>
+=======
+              <ProtectedRoute>
+                <BaseLayout>
+                  <TrailStart />
+                </BaseLayout>
+              </ProtectedRoute>
+>>>>>>> feature/develop
             }
           />
           <Route
             path="/trail/finish/:id"
             element={
+<<<<<<< HEAD
               <BaseLayout>
                 <FinishTrail />
               </BaseLayout>
+=======
+              <ProtectedRoute>
+                <BaseLayout>
+                  <FinishTrail />
+                </BaseLayout>
+              </ProtectedRoute>
+>>>>>>> feature/develop
             }
           />
           <Route
