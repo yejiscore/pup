@@ -1,0 +1,49 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["plugin:react/recommended", "airbnb"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["react", "@typescript-eslint"],
+  "rules": {
+    "linebreak-style": "off",
+    "arrow-body-style": "off",
+    "react/function-component-definition": "off",
+    "react/jsx-filename-extension": "off",
+    "comma-dangle": "off",
+    "import/extensions": "off",
+    "import/no-unresolved": "off",
+    "react/jsx-wrap-multilines": "off",
+    "object-curly-newline": "off",
+    "no-unused-vars": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "operator-linebreak": "off",
+    "no-confusing-arrow": "off",
+    "implicit-arrow-linebreak": "off",
+    "consistent-return": "off",
+    "new-cap": "off",
+    "no-undef": "off",
+    "no-underscore-dangle": "off",
+    "no-restricted-syntax": "off",
+    "guard-for-in": "off",
+    "no-new": "off",
+    "no-nested-ternary": "off",
+    "no-await-in-loop": "off",
+    "no-plusplus": "off",
+    "function-paren-newline": "off",
+    "react/jsx-curly-newline": "off",
+    "import/no-extraneous-dependencies": "off",
+    "react/require-default-props": "off",
+    "indent": "off",
+    "no-alert": "off"
+  }
+}
